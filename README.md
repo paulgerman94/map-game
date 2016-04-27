@@ -7,7 +7,7 @@
 
 - Delivering parcels to NPCs that are located at certain GPS locations
 	- If the character is hungry, the player needs to go to a supermarket to buy food
-	- - Real-life RPG
+	- Real-life RPG
 	- Armor that suits the company's produce in your vicinity
 	- Generate monsters that you have to defeat on your way
 - Territory-based expansion game
@@ -22,3 +22,4 @@
 	- Party size constraints
 	- Random team assignment on registration
 	- POI are flag locations
+	- Visiting POIs on the way can buff the player
