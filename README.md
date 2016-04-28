@@ -23,3 +23,8 @@
 	- Random team assignment on registration
 	- POI are flag locations
 	- Visiting POIs on the way can buff the player
+	- Run away in combat; flags spawn somewhere else where the player has to go
+	- If player collects all flags of certain category ⇒ Bonus!
+	- Player headquarters (schools? home?)
+	- Items (Sling, shield, …)
+	- Human flags?
