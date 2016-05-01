@@ -1,0 +1,1 @@
+export const CUSTOM_EXTENSIONS = Symbol("[[Custom extensions]]");

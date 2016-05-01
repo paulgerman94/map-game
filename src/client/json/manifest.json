@@ -1,0 +1,24 @@
+{
+	"name": "P06 — PCGame",
+	"short_name": "Map game",
+	"start_url": "/game/",
+	"icons": [{
+		"src": "../../../img/kdex-192.png",
+		"sizes": "192x192",
+		"type": "image/png"
+	}, {
+		"src": "../../../img/kdex-256.png",
+		"sizes": "256x256",
+		"type": "image/png"
+	}, {
+		"src": "../../../img/kdex-384.png",
+		"sizes": "384x384",
+		"type": "image/png"
+	}, {
+		"src": "../../../img/kdex-512.png",
+		"sizes": "512x512",
+		"type": "image/png"
+	}],
+	"display": "fullscreen",
+	"orientation": "landscape"
+}

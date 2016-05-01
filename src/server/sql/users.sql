@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS users (
+	"uid" SERIAL PRIMARY KEY NOT NULL,
+	"account_name" TEXT NOT NULL UNIQUE,
+	"display_name" TEXT NOT NULL UNIQUE,
+	"email" TEXT NOT NULL UNIQUE,
+	"hash" TEXT NOT NULL,
+	"permissions" INTEGER NOT NULL
+);

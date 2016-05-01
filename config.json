@@ -1,0 +1,31 @@
+{
+	"client": {
+	},
+	"server": {
+		"api": {
+			"loginTimeout": 60
+		},
+		"connection": {
+			"host": "localhost",
+			"path": "/socket/map-game",
+			"port": 3001
+		},
+		"crypto": {
+			"saltRounds": 10,
+			"tokenExpirationMinutes": 4320,
+			"tokenSecret": "yourTokenSecret"
+		},
+		"rooms": {
+			"default": "Empfang",
+			"public": [
+				"Wiese"
+			]
+		},
+		"psql": {
+			"user": "kdex",
+			"port": 5432,
+			"host": "localhost",
+			"database": "map-game"
+		}
+	}
+}

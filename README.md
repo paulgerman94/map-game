@@ -1,10 +1,18 @@
 # map-game
-
+## Dependencies
+```bash
+$ pacman -S python2
+$ npm install -g cordova gulp
+```
+## Installation
+```bash
+$ npm install
+$ jspm install
+$ gulp
+```
 ## Requirement ideas
 - Should work in the forest; i. e. the users should be able to have no service
-
 ## Game ideas
-
 - Delivering parcels to NPCs that are located at certain GPS locations
 	- If the character is hungry, the player needs to go to a supermarket to buy food
 	- Real-life RPG
