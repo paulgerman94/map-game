@@ -1,14 +1,22 @@
 # map-game
 ## Dependencies
 ```bash
+# gyp requires python2
 $ pacman -S python2
+# cordova is a platform for hybrid apps
+# gulp is a task runner
 $ npm install -g cordova gulp
 ```
 ## Installation
 ```bash
+# Install all node dependencies
 $ npm install
+# Install all web dependencies
 $ jspm install
+# Transpile our source!
 $ gulp
+# Bundle dependencies for better web performance
+$ npm run bundle
 ```
 ## Requirement ideas
 - Should work in the forest; i. e. the users should be able to have no service

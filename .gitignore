@@ -23,7 +23,7 @@ node_modules
 # Optional REPL history
 .node_repl_history
 # Custom stuff
-index.html
-sw.js
-packages
-dist
+/index.html
+/sw.js
+/packages
+/dist
