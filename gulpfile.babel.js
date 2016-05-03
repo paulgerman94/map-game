@@ -138,8 +138,8 @@ gulp.task("fonts", () => {
 });
 gulp.task("watch", done => {
 	liveReload.listen({
-		key: fs.readFileSync("/etc/ssl/nginx/privkey.pem", "utf-8"),
-		cert: fs.readFileSync("/etc/ssl/nginx/fullchain.pem", "utf-8")
+		key: fs.readFileSync(process.env.NGINX_PRIVATE_KEY, "utf-8"),
+		cert: fs.readFileSync(process.env.NGINX_CERTIFICATE, "utf-8")
 	});
 	function reload(cause) {
 		gulp.src(cause)
