@@ -27,3 +27,5 @@ node_modules
 /sw.js
 /packages
 /dist
+/platforms
+/plugins
