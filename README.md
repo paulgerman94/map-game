@@ -5,7 +5,7 @@
 $ pacman -S python2
 # cordova is a platform for hybrid apps
 # gulp is a task runner
-$ npm install -g cordova gulp
+$ npm install -g cordova gulp jspm
 ```
 ## Installation
 ```bash
