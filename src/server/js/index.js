@@ -1,6 +1,7 @@
 import "babel-polyfill";
 import { log } from "./util";
-import { getNode, Node, find, execute, km } from "./api/overpass/Query";
+import { km } from "./units";
+import Point from "./Point";
 for (let event of ["unhandledRejection", "uncaughtException"]) {
 	process.on(event, e => {
 		console.error(e);
@@ -8,14 +9,11 @@ for (let event of ["unhandledRejection", "uncaughtException"]) {
 }
 (async () => {
 	try {
-		const darmstadt = new Node({
-			name: "Darmstadt"
+		const point = new Point({
+			latitude: 52.52,
+			longitude: 13.405
 		});
-		const frankfurt = new Node({
-			name: "Frankfurt"
-		});
-		const query = find(darmstadt).around(frankfurt, 50 * km);
-		const results = await execute(query);
+		const results = await point.closest(["bar", "cafe"], 5 * km);
 		log(results);
 	}
 	catch (e) {
