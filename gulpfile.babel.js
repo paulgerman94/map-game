@@ -9,6 +9,7 @@ import liveReload from "gulp-livereload";
 import fs from "fs";
 import del from "del";
 import shell from "gulp-shell";
+import username from "username";
 // import sass from "gulp-sass";
 import cleanCSS from "gulp-clean-css";
 import sourceMaps from "gulp-sourcemaps";
@@ -136,10 +137,11 @@ gulp.task("fonts", () => {
 		.pipe(googleWebFonts())
 		.pipe(gulp.dest(paths.client.css.dest));
 });
-gulp.task("watch", done => {
+gulp.task("watch", async done => {
 	liveReload.listen({
 		key: fs.readFileSync(process.env.NGINX_PRIVATE_KEY, "utf-8"),
-		cert: fs.readFileSync(process.env.NGINX_CERTIFICATE, "utf-8")
+		cert: fs.readFileSync(process.env.NGINX_CERTIFICATE, "utf-8"),
+		port: 3E3 + (await username())[0].charCodeAt(0)
 	});
 	function reload(cause) {
 		gulp.src(cause)
