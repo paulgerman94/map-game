@@ -1,8 +1,8 @@
 import "babel-polyfill";
 import fetch from "node-fetch";
 const servers = [
-	"http://overpass-api.de/api",
-// 	"http://overpass.osm.rambler.ru/cgi"
+// 	"http://overpass-api.de/api",
+	"http://overpass.osm.rambler.ru/cgi"
 ];
 export async function execute(query) {
 	const source = query.trim().replace(/\s+/g, "");

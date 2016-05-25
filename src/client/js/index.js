@@ -9,6 +9,7 @@ import UsersContainer from "./ui/UsersContainer";
 import WidgetsContainer from "./ui/WidgetsContainer";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMUITheme from "material-ui/styles/getMuiTheme";
+import client from "./Client";
 import {
 	blue300,
 	cyan500, cyan700,
@@ -50,3 +51,7 @@ render((
 		</div>
 	</MuiThemeProvider>
 ), document.querySelector("map-game"));
+(async () => {
+	await client.open();
+	console.log(await client.add(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+})();
