@@ -193,6 +193,7 @@
   "dependencies": {
     "fingerprintjs2": "^1.2.0",
     "node-fetch": "^1.5.2",
+    "passwd-user": "^2.0.0",
     "ws-promise-server": "^1.2.2"
   },
   "ava": {

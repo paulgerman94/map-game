@@ -9,7 +9,8 @@ import liveReload from "gulp-livereload";
 import fs from "fs";
 import del from "del";
 import shell from "gulp-shell";
-import username from "username";
+import getUsername from "username";
+import getUser from "passwd-user"
 // import sass from "gulp-sass";
 import cleanCSS from "gulp-clean-css";
 import sourceMaps from "gulp-sourcemaps";
@@ -23,8 +24,18 @@ import tap from "gulp-tap";
 import modularizeStyles from "gulp-style-modules";
 import path from "path";
 import minifyJSON from "gulp-jsonminify";
+let unixUsername = null;
 function transpileJS(source, destination) {
 	return gulp.src(source)
+		.pipe(replace(/<%[^%]+%>/g, match => {
+			const literal = match.substring(2, match.length - 2);
+			switch (literal) {
+				case "LINUX_USERNAME":
+					return unixUsername;
+				default:
+					return literal;
+			}
+		}))
 		.pipe(babel(babelOptions))
 		.pipe(uglify({
 			mangle: true
@@ -138,10 +149,12 @@ gulp.task("fonts", () => {
 		.pipe(gulp.dest(paths.client.css.dest));
 });
 gulp.task("watch", async done => {
+	const user = await getUser(unixUsername);
+	const port = 2000 + user.uid;
 	liveReload.listen({
+		port,
 		key: fs.readFileSync(process.env.NGINX_PRIVATE_KEY, "utf-8"),
-		cert: fs.readFileSync(process.env.NGINX_CERTIFICATE, "utf-8"),
-		port: 3E3 + (await username())[0].charCodeAt(0)
+		cert: fs.readFileSync(process.env.NGINX_CERTIFICATE, "utf-8")
 	});
 	function reload(cause) {
 		gulp.src(cause)
@@ -222,21 +235,24 @@ gulp.task("test-server", () => {
 	return gulp.src("test/server/**/*.js")
 		.pipe(ava());
 });
-gulp.task("default",
-	gulp.parallel(
-		"watch",
-		"json",
-		"sw",
-		gulp.series(
-			gulp.parallel(
-				"js",
-				"html",
-				gulp.series(
-					"fonts",
-					"css"
-				)
-			),
-			"run-server"
+(async () => {
+	unixUsername = await getUsername();
+	gulp.task("default",
+		gulp.parallel(
+			"watch",
+			"json",
+			"sw",
+			gulp.series(
+				gulp.parallel(
+					"js",
+					"html",
+					gulp.series(
+						"fonts",
+						"css"
+					)
+				),
+				"run-server"
+			)
 		)
-	)
-);
+	);
+})();
