@@ -1,0 +1,82 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": true
+	},
+	"extends": ["eslint:recommended", "plugin:react/recommended"],
+	"installedESLint": true,
+	"parser": "babel-eslint",
+	"parserOptions": {
+		"ecmaFeatures": {
+			"experimentalObjectRestSpread": true,
+			"jsx": true
+		},
+		"sourceType": "module"
+	},
+	"plugins": [
+		"react"
+	],
+	"rules": {
+		"comma-dangle": [
+			"error",
+			"never"
+		],
+		"indent": [
+			"error",
+			"tab", {
+				"SwitchCase": 1
+			}
+		],
+		"linebreak-style": [
+			"error",
+			"unix"
+		],
+		"no-cond-assign": [
+			"error"
+		],
+		"no-console": [
+			"off"
+		],
+		"no-dupe-args": [
+			"error"
+		],
+		"no-dupe-keys": [
+			"error"
+		],
+		"no-duplicate-case": [
+			"error"
+		],
+		"no-empty": [
+			"warn"
+		],
+		"no-empty-character-class": [
+			"error"
+		],
+		"no-inline-comments": [
+			"warn"
+		],
+		"no-multiple-empty-lines": [
+			"warn", {
+				"max": 0
+			}
+		],
+		"linebreak-style": [
+			"error",
+			"unix"
+		],
+		"quotes": [
+			"error",
+			"double", {
+				"allowTemplateLiterals": true
+			}
+		],
+		"react/display-name": [
+			"off"
+		],
+		"semi": [
+			"error",
+			"always"
+		]
+	}
+}
