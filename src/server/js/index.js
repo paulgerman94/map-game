@@ -1,8 +1,6 @@
-import "babel-polyfill";
 import Server from "./Server";
 import getUsername from "username";
 import getUser from "passwd-user";
-// import { log } from "./util";
 // import { km } from "./units";
 // import Point from "./Point";
 for (let event of ["unhandledRejection", "uncaughtException"]) {
@@ -10,7 +8,7 @@ for (let event of ["unhandledRejection", "uncaughtException"]) {
 		console.error(e);
 	});
 }
-// (async () => {
+(async () => {
 // 	try {
 // 		const point = new Point({
 // 		latitude: 52.52,
@@ -23,10 +21,8 @@ for (let event of ["unhandledRejection", "uncaughtException"]) {
 // 		console.error(e);
 // 		process.exit(1);
 // 	};
-// })();
-(async () => {
-	let name = await getUsername();
-	let user = await getUser(name);
+	const name = await getUsername();
+	const user = await getUser(name);
 	new Server({
 		port: 3444 + user.uid
 	});

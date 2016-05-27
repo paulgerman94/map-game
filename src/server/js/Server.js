@@ -1,40 +1,13 @@
-import WS from "ws-promise-server";
-import { log, err } from "./util";
-import * as API from "./api/index";
-export default class Server extends WS {
+import ServerCore from "./ServerCore";
+import { log } from "./util";
+export class Server extends ServerCore {
 	constructor(options) {
 		super(options);
-		log(`Server started on port "${options.port}".`);
 	}
-	onConnection(socket) {
-		log("A client has connected.");
-		socket.on("close", socket => {
-			log("A client has disconnected.");
-		});
-		socket.on("message", async message => {
-			const content = message.body;
-			if (!content.command || !content.args) {
-				throw new Error("Malformed JSON message received");
-			}
-			else {
-				const arg = {
-					args: content.args,
-					message: {
-						reply: message.reply
-					},
-					client: this
-				};
-				if (API[content.command]) {
-					await API[content.command](arg);
-				}
-				else {
-					log(`Message type not implemented: "${content.command}"`);
-				}
-				this.emit(content.command, content.body);
-			}
-		});
+	async onConnected(client) {
+		log(`Let's ask the client to multiply "1 · 2 · 3".`);
+		const [reply] = await client.multiply(1, 2, 3);
+		log(`"1 · 2 · 3 = ${reply}".`);
 	}
-	onError(error) {
-		err(error);
-	}
-};
+}
+export default Server;

@@ -1,11 +1,9 @@
 import WS from "ws-promise-client";
-class Client extends WS {
-	constructor() {
-		const isEncrypted = location.protocol === "https:";
-		super(`ws${isEncrypted ? "s" : ""}://${location.host}/socket/<%LINUX_USERNAME%>`);
-	}
-	onOpen() {
-		console.log("Connection established.");
+import ClientCore from "./ClientCore";
+class Client extends ClientCore {
+	onMultiply(message, ...args) {
+		const product = args.reduce((a, b) => a * b, 1);
+		message.reply(product);
 	}
 };
 export default new Proxy(new Client(), {
@@ -13,14 +11,11 @@ export default new Proxy(new Client(), {
 		const lookUp = target[property];
 		if (!lookUp) {
 			return async (...args) => {
-				const returnValue = await target.send({
-					command: property,
-					args
-				});
-				if (returnValue.error) {
+				const returnValue = await target.send(property, undefined, ...args);
+				if (!returnValue || returnValue && returnValue.error) {
 					throw new Error(`Error trying to proxy ${property} with arguments`, args);
 				}
-				return returnValue;
+				return returnValue.payload.args;
 			};
 		}
 		else {

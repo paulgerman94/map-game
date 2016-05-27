@@ -89,6 +89,7 @@ const config = require("./config.json");
 gulp.task("run-server", done => {
 	nodemon({
 		script: `${paths.server.js.dest}/index.js`,
+		exec: "babel-node",
 // 		env: {
 // 			NODE_ENV: "development"
 // 		},
