@@ -12,5 +12,5 @@ export class Client extends WS {
 		const { payload } = message;
 		this.emit(payload.instruction, message, ...payload.args);
 	}
-};
+}
 export default Client;

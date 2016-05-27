@@ -12,4 +12,4 @@ export default class WidgetsContainer extends Component {
 			<Widgets widgetData={this.state.widgetData}/>
 		);
 	}
-};
+}

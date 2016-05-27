@@ -1,5 +1,5 @@
 const CACHE_NAME = location.host;
-let cacheURLs = [
+const cacheURLs = [
 	"/game/"
 ];
 self.addEventListener("install", e => {
@@ -23,7 +23,7 @@ self.addEventListener("fetch", e => {
 		else {
 			return fetch(e.request);
 		}
-	}).catch(e => {
+	}).catch(() => {
 		console.log("noo");
 	}));
 });

@@ -1,7 +1,5 @@
 import { default as React, Component } from "react";
-import { Link } from "react-router";
-import { Paper, TextField, FlatButton, RaisedButton, FontIcon, AppBar, Drawer, AutoComplete, MenuItem, IconButton } from "material-ui";
-import NavigationClose from "material-ui/svg-icons/navigation/close";
+import { AppBar, Drawer, MenuItem, IconButton } from "material-ui";
 import NavigationMenu from "material-ui/svg-icons/navigation/menu";
 import FeedIcon from "material-ui/svg-icons/communication/rss-feed";
 import MessagesIcon from "material-ui/svg-icons/communication/email";
@@ -10,7 +8,6 @@ import ChatIcon from "material-ui/svg-icons/communication/chat";
 import ShopIcon from "material-ui/svg-icons/action/shopping-cart";
 import HelpCenterIcon from "material-ui/svg-icons/action/help";
 import SettingsIcon from "material-ui/svg-icons/action/settings";
-import NotificationsIcon from "material-ui/svg-icons/social/notifications";
 import SomeStore from "../stores/SomeStore";
 import { browserHistory } from "react-router";
 import { PROJECT_NAME } from "../constants";
@@ -18,6 +15,9 @@ import injectTapEventPlugin from "react-tap-event-plugin";
 injectTapEventPlugin();
 import * as actions from "../NavBarActions";
 export default class Layout extends Component {
+	propTypes = {
+		children: Object
+	};
 	constructor() {
 		super();
 		this.state = {
@@ -47,10 +47,6 @@ export default class Layout extends Component {
 					browserHistory.push("/");
 				}} iconElementRight={
 					<div>
-						{/*<AutoComplete hintText="text-value data" filter={AutoComplete.noFilter} dataSource={this.state.users}/>
-						<IconButton tooltip="Notifications">
-							<NotificationsIcon/>
-						</IconButton>*/}
 						<IconButton tooltip="Settings">
 							<SettingsIcon/>
 						</IconButton>
@@ -80,4 +76,4 @@ export default class Layout extends Component {
 			</div>
 		);
 	}
-};
+}

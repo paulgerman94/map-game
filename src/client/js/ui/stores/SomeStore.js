@@ -8,16 +8,16 @@ class SomeStore extends EventEmitter {
 		this.isMenuVisible = false;
 		this.users = [{
 			text: "some-text-value",
-			value: <MenuItem primaryText="@chiru" secondaryText="·◡·"/>,
+			value: <MenuItem primaryText="@user1" secondaryText="·◡·"/>
 		}, {
 			text: "some-text-value",
-			value: <MenuItem primaryText="@suika" secondaryText="♥"/>,
+			value: <MenuItem primaryText="@user2" secondaryText="·o·"/>
 		}];
 	}
 	addUser(username, label) {
 		this.users.push({
 			text: "some-text-value",
-			value: <MenuItem primaryText={username} secondaryText={label}/>,
+			value: <MenuItem primaryText={username} secondaryText={label}/>
 		});
 		this.emit("change");
 	}
@@ -26,13 +26,15 @@ class SomeStore extends EventEmitter {
 		this.emit("menuToggled", this.isMenuVisible);
 	}
 	handleActions(action) {
-		console.log("SomeStore received an action: ", action)
+		console.log("SomeStore received an action: ", action);
 		switch (action.type) {
 			case "ADD_USER": {
-				this.addUser(action.username, action.label)
+				this.addUser(action.username, action.label);
+				break;
 			}
 			case "TOGGLE_MENU": {
 				this.toggleMenu();
+				break;
 			}
 		}
 	}

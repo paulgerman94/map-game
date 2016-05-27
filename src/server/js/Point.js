@@ -14,4 +14,4 @@ export default class Point {
 			node(around:${radius}, ${this.latitude}, ${this.longitude})["amenity"~"${disjunction}"];
 		`);
 	}
-};
+}

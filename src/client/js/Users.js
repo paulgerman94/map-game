@@ -1,12 +1,14 @@
 import React from "react";
-import { Link } from "react-router";
-export default React.createClass({
+export default class Users extends React.Component {
+	static propTypes = {
+		users: Object
+	};
 	render() {
 		return (
 			<div>
 				<h1>Users</h1>
 				<ul>
-					{this.props.users.map((user, i) => {
+					{this.props.users.map(user => {
 						return (
 							<li key={user.id}>
 								{user.name}
@@ -17,4 +19,4 @@ export default React.createClass({
 			</div>
 		);
 	}
-});
+}

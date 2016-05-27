@@ -15,7 +15,7 @@ async function getUsers() {
 			}]);
 		}, 100 + 1000 * Math.random());
 	});
-};
+}
 export default class UsersContainer extends Component {
 	constructor() {
 		super();
@@ -30,6 +30,6 @@ export default class UsersContainer extends Component {
 		});
 	}
 	render() {
-		return <Users users={this.state.users}/>
+		return <Users users={this.state.users}/>;
 	}
-};
+}

@@ -32,17 +32,17 @@ export function print(messageStyle, title, ...args) {
 		}
 	});
 	console.log(`${chalk.bold.white(timestamp)} ${title}${messageStyle(...printArgs)}`);
-};
+}
 export function log(...args) {
 	print(chalk.white, "", ...args);
 }
 export function err(...args) {
 	print(chalk.bold.red, chalk.bold.red("Error: "), ...args);
-};
+}
 export function warn(...args) {
 	print(chalk.bold.yellow, chalk.bold.yellow("Warning: "), ...args);
-};
+}
 export function debug(...args) {
 	print(chalk.bold.magenta, chalk.bold.magenta("Debug: "), ...args);
-};
+}
 export default log;

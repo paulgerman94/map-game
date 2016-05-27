@@ -31,7 +31,7 @@ export default class Server extends WS {
 			}
 		});
 		this.emit("connected", client);
-		socket.on("close", socket => {
+		socket.on("close", () => {
 			log("A client has disconnected.");
 		});
 		socket.on("message", async msg => {
@@ -50,4 +50,4 @@ export default class Server extends WS {
 	onError(error) {
 		err(error);
 	}
-};
+}

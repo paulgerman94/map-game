@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import { TextField, Paper } from "material-ui";
-import getMUITheme from "material-ui/styles/getMuiTheme";
-const theme = getMUITheme();
+import { TextField } from "material-ui";
 export default class extends React.Component {
 	render() {
 		return (
@@ -18,4 +16,4 @@ export default class extends React.Component {
 			</div>
 		);
 	}
-};
+}

@@ -2,7 +2,6 @@
 import "babel-polyfill";
 import gulp from "gulp";
 import googleWebFonts from "gulp-google-webfonts";
-import { spawn } from "child_process";
 import ava from "gulp-ava";
 import nodemon from "gulp-nodemon";
 import liveReload from "gulp-livereload";
@@ -10,10 +9,8 @@ import fs from "fs";
 import del from "del";
 import shell from "gulp-shell";
 import getUsername from "username";
-import getUser from "passwd-user"
-// import sass from "gulp-sass";
+import getUser from "passwd-user";
 import cleanCSS from "gulp-clean-css";
-import sourceMaps from "gulp-sourcemaps";
 import concat from "gulp-concat";
 import merge from "merge2";
 import babel from "gulp-babel";
@@ -21,9 +18,12 @@ import uglify from "gulp-uglify";
 import htmlMin from "gulp-htmlmin";
 import replace from "gulp-replace";
 import tap from "gulp-tap";
-import modularizeStyles from "gulp-style-modules";
 import path from "path";
 import minifyJSON from "gulp-jsonminify";
+import esLint from "gulp-eslint";
+// import modularizeStyles from "gulp-style-modules";
+// import sass from "gulp-sass";
+// import sourceMaps from "gulp-sourcemaps";
 let unixUsername = null;
 function transpileJS(source, destination) {
 	return gulp.src(source)
@@ -85,7 +85,6 @@ const globs = {
 	}
 };
 process.env.FORCE_COLOR = true;
-const config = require("./config.json");
 gulp.task("run-server", done => {
 	nodemon({
 		script: `${paths.server.js.dest}/index.js`,
@@ -95,16 +94,6 @@ gulp.task("run-server", done => {
 // 		},
 // 		watch: ["dist/server", "config.js"]
 		ignore: [".tmp", "img", "packages", ".babelrc", "*.kate-swp", "gulpfile.*", "*.html", "package.json", "src", "dist/elements", "dist/client"]
-	});
-	done();
-});
-gulp.task("bundle-dependencies", done => {
-	// "rm dist/client/js/lib.js && jspm build -wid 'dist/client/js/**/*.js - [dist/client/js/**/*.js]' dist/client/js/lib.js"
-//
-	del("dist/client/js/lib.js*");
-	spawn("jspm", "build -wid 'dist/client/js/**/*.js - [dist/client/js/**/*.js]' dist/client/js/lib.js".split(" "));
-	jspm.on("data", data => {
-		console.log(data);
 	});
 	done();
 });
@@ -136,7 +125,7 @@ gulp.task("css", () => {
 // 		.pipe(sourceMaps.init())
 // 		.pipe(sass())
 	const fontConfiguration = gulp.src(`${paths.client.css.dest}/fonts.css`);
-	return merge(fontConfiguration, /*scssFiles*/)
+	return merge(fontConfiguration)
 		.pipe(concat("style.css"))
 		.pipe(cleanCSS({
 			keepSpecialComments: false
@@ -187,7 +176,7 @@ gulp.task("watch", async done => {
 					reload(destPath);
 				}
 			}
-		};
+		}
 	}
 	const watcherOptions = {
 		usePolling: true
@@ -203,10 +192,10 @@ gulp.task("watch", async done => {
 		retranspileJS(...args);
 	});
 	/* Retranspile SW JS files */
-	const clientSWWatcher = gulp.watch(globs.client.sw, watcherOptions, gulp.parallel("sw"));
+	gulp.watch(globs.client.sw, watcherOptions, gulp.parallel("sw"));
 	/* Re-split the config file */
 	const configWatcher = gulp.watch("config.json", watcherOptions);
-	configWatcher.on("change", srcPath => {
+	configWatcher.on("change", () => {
 		return splitConfig();
 	});
 // 	gulp.watch("src/scss/main.scss", ["css"]);
@@ -215,7 +204,7 @@ gulp.task("watch", async done => {
 });
 function splitConfig() {
 	return gulp.src("config.json")
-		.pipe(tap((file, t) => {
+		.pipe(tap(file => {
 			const json = JSON.parse(file.contents.toString("utf-8"));
 			const pub = {
 				client: json.client,
@@ -226,7 +215,7 @@ function splitConfig() {
 			file.contents = new Buffer(JSON.stringify(pub));
 		}))
 		.pipe(concat("public.json"))
-		.pipe(gulp.dest(".tmp"))
+		.pipe(gulp.dest(".tmp"));
 }
 gulp.task("split-config", () => {
 	return splitConfig();
@@ -236,6 +225,11 @@ gulp.task("test-server", () => {
 	return gulp.src("test/server/**/*.js")
 		.pipe(ava());
 });
+gulp.task("lint", () => {
+	return gulp.src(["gulpfile.babel.js", globs.server.js, `${paths.client.js.src}/**/*.js`])
+		.pipe(esLint())
+		.pipe(esLint.format());
+});
 (async () => {
 	unixUsername = await getUsername();
 	gulp.task("default",
@@ -243,6 +237,7 @@ gulp.task("test-server", () => {
 			"watch",
 			"json",
 			"sw",
+			"lint",
 			gulp.series(
 				gulp.parallel(
 					"js",

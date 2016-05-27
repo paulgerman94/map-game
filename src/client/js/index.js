@@ -1,9 +1,7 @@
-import PIXI from "pixi.js";
 import React from "react";
 import { render } from "react-dom";
 import { Router, Route, browserHistory } from "react-router";
 import Layout from "./ui/layout/Layout";
-import { Paper, TextField, FlatButton, RaisedButton, FontIcon, AppBar } from "material-ui";
 import Home from "./ui/Home";
 import UsersContainer from "./ui/UsersContainer";
 import WidgetsContainer from "./ui/WidgetsContainer";
@@ -12,8 +10,7 @@ import getMUITheme from "material-ui/styles/getMuiTheme";
 import client from "./Client";
 import {
 	blue300,
-	cyan500, cyan700,
-	grey100, grey400, grey500,
+	grey100, grey500,
 	pinkA200,
 	darkBlack, white
 } from "material-ui/styles/colors";

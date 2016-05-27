@@ -1,11 +1,10 @@
-import WS from "ws-promise-client";
 import ClientCore from "./ClientCore";
 class Client extends ClientCore {
 	onMultiply(message, ...args) {
 		const product = args.reduce((a, b) => a * b, 1);
 		message.reply(product);
 	}
-};
+}
 export default new Proxy(new Client(), {
 	get: (target, property) => {
 		const lookUp = target[property];
