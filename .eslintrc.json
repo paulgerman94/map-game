@@ -15,12 +15,17 @@
 		"sourceType": "module"
 	},
 	"plugins": [
+		"filenames",
 		"react"
 	],
 	"rules": {
 		"comma-dangle": [
 			"error",
 			"never"
+		],
+		"filenames/match-regex": [
+			"error",
+			"^[a-zA-Z.]+$"
 		],
 		"indent": [
 			"error",
