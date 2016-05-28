@@ -4,6 +4,7 @@ import babel from "gulp-babel";
 import cleanCSS from "gulp-clean-css";
 import concat from "gulp-concat";
 import del from "del";
+import esDoc from "gulp-esdoc";
 import esLint from "gulp-eslint";
 import fs from "fs";
 import getUser from "passwd-user";
@@ -170,7 +171,6 @@ gulp.task("watch", async done => {
 	* 	Chokidar's or the operating system's filesystem event type
 	* @param {string} srcPath
 	* 	The path that is associated with the event `type`
-	* @return {undefined}
 	*/
 	function retranspileJS(type, srcPath) {
 		let srcDirectory, destDirectory;
@@ -257,6 +257,15 @@ gulp.task("lint", () => {
 	return gulp.src(["gulpfile.babel.js", globs.server.js, `${paths.client.js.src}/**/*.js`])
 		.pipe(esLint())
 		.pipe(esLint.format());
+});
+gulp.task("doc", () => {
+	return gulp.src("src")
+		.pipe(esDoc({
+			destination: "doc",
+			plugins: [{
+				name: "esdoc-es7-plugin"
+			}]
+		}));
 });
 (async () => {
 	unixUsername = await getUsername();
