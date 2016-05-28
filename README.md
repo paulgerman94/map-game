@@ -13,10 +13,12 @@ $ npm install -g cordova gulp jspm
 $ npm install
 # Install all web dependencies
 $ jspm install
-# Transpile our source!
-$ gulp
-# Bundle dependencies for better web performance
+# Transpile the JavaScript
+$ gulp js
+# Bundle JavaScript for better web performance
 $ npm run bundle
+# Transpile the rest and start the game server
+$ gulp
 ```
 ## Requirement ideas
 - Should work in the forest; i. e. the users should be able to have no service
