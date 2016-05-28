@@ -10,9 +10,9 @@ export default class Point {
 	* Constructs a new point
 	* @param {object} options
 	* 	An object
-	* @param {number} [object.latitude = 0]
+	* @param {number} [object.latitude=0]
 	* 	The point's latitude on the globe
-	* @param {number} [object.longitude = 0]
+	* @param {number} [object.longitude=0]
 	* 	The point's longitude on the globe
 	*/
 	constructor({
@@ -24,9 +24,9 @@ export default class Point {
 	}
 	/**
 	* Queries an Overpass server for nearby POI seeds
-	* @param {Array} [amenities = []]
+	* @param {Array} [amenities=[]]
 	* 	A list of amenities to filter for
-	* @param {number} [radius = 1]
+	* @param {number} [radius=1]
 	* 	The radius around the point, in kilometers, to limit the query to
 	* @return {object}
 	* 	An object containing nodes, lines and polygons with their corresponding descriptions from OSM

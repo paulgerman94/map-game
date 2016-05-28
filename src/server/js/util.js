@@ -2,7 +2,7 @@ import util from "util";
 import chalk from "chalk";
 /**
 * @param {*} value A value that should be expanded
-* @param {number} [minLength = 2]
+* @param {number} [minLength=2]
 * 	The minimum length that the string, after expansion, should be
 * @return {string}
 * 	A string with content `value` that has been left-padded with zeros so that it is `minLength` characters long
