@@ -30,3 +30,7 @@ node_modules
 /platforms
 /plugins
 /doc
+# We're not working with cordova *yet*
+/config.xml
+/hooks
+/www
