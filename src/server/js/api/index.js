@@ -1,7 +1,7 @@
 /**
 * Adds an array of numbers and sends the sum back to the client.
 * @param {object} options An object
-* @param {Array} options.args
+* @param {Array.<number>} options.args
 * 	The arguments passed by the caller
 * @param {Message} options.message
 * 	An RPC message object that can be used to send a reply

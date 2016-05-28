@@ -261,6 +261,7 @@ gulp.task("lint", () => {
 gulp.task("doc", () => {
 	return gulp.src("src")
 		.pipe(esDoc({
+			title: "map-game",
 			destination: "doc",
 			plugins: [{
 				name: "esdoc-es7-plugin"

@@ -19,17 +19,25 @@ export default class Point {
 		latitude = 0,
 		longitude = 0
 	} = {}) {
+		/**
+		* The point's latitude on the globe
+		* @type {number}
+		*/
 		this.latitude = latitude;
+		/**
+		* The point's longitude on the globe
+		* @type {number}
+		*/
 		this.longitude = longitude;
 	}
 	/**
 	* Queries an Overpass server for nearby POI seeds
-	* @param {Array} [amenities=[]]
+	* @param {Array.<string>} [amenities=[]]
 	* 	A list of amenities to filter for
 	* @param {number} [radius=1]
 	* 	The radius around the point, in kilometers, to limit the query to
-	* @return {object}
-	* 	An object containing nodes, lines and polygons with their corresponding descriptions from OSM
+	* @return {Promise<object, Error>}
+	* 	An promise that resolves to the nodes, lines and polygons with their corresponding descriptions from OSM if successful
 	*/
 	async closest(amenities = [], radius = km) {
 		const disjunction = amenities.map(x => `(${x})`).join("|");

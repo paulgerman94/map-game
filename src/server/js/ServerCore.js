@@ -19,7 +19,7 @@ export default class ServerCore extends WS {
 	/**
 	* This method will fire whenever a new RPCClient connects to the server.
 	* It will then create a proxy and emit a `connected` event that derived classes can use.
-	* This enables the derived class (@see {@link Server}) to invoke functions that aren't defined here (basic RPC).
+	* This enables the derived class (see {@link Server}) to invoke functions that aren't defined here (basic RPC).
 	* @param {RPCClient} socket
 	* 	The RPCClient instance that has connected to the server
 	*/
