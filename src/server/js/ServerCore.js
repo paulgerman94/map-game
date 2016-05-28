@@ -11,8 +11,6 @@ export default class ServerCore extends WS {
 	* Constructs a new {@link ServerCore} instance
 	* @param {object} options
 	* 	A configuration object that is passed on to the constructor of `ws-promise-server`
-	* @return {ServerCore}
-	* 	An instance of {@link ServerCore}
 	*/
 	constructor(options) {
 		super(options);
@@ -24,7 +22,6 @@ export default class ServerCore extends WS {
 	* This enables the derived class (@see {@link Server}) to invoke functions that aren't defined here (basic RPC).
 	* @param {RPCClient} socket
 	* 	The RPCClient instance that has connected to the server
-	* @return {undefined}
 	*/
 	onConnection(socket) {
 		log("A client has connected.");
@@ -73,7 +70,6 @@ export default class ServerCore extends WS {
 	* Currently, it is only used for logging purposes.
 	* @param {Error} error
 	* 	The error that occurred
-	* @return {undefined}
 	*/
 	onError(error) {
 		err(error);

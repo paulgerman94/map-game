@@ -1,4 +1,5 @@
 /**
+* Adds an array of numbers and sends the sum back to the client.
 * @param {object} options An object
 * @param {Array} options.args
 * 	The arguments passed by the caller
@@ -6,8 +7,6 @@
 * 	An RPC message object that can be used to send a reply
 * @param {RPCClient} options.client
 * 	The RPC client that has called the function
-* @return {number}
-* 	The sum of all the numbers passed in `args`
 */
 export function add({
 	args,

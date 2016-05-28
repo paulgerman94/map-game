@@ -9,7 +9,6 @@ class Client extends ClientCore {
 	* 	A message object that can be used to send a reply
 	* @param {...*} args
 	* 	The arguments that are passed by the caller
-	* @return {undefined}
 	*/
 	onMultiply(message, ...args) {
 		const product = args.reduce((a, b) => a * b, 1);

@@ -1,7 +1,6 @@
 import dispatcher from "./Dispatcher";
 /**
 * This action fires an event when the menu is toggled.
-* @return {undefined}
 */
 export function toggleMenu() {
 	dispatcher.dispatch({

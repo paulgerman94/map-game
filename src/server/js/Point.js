@@ -14,8 +14,6 @@ export default class Point {
 	* 	The point's latitude on the globe
 	* @param {number} [object.longitude = 0]
 	* 	The point's longitude on the globe
-	* @return {Point}
-	* 	A new point at the given location
 	*/
 	constructor({
 		latitude = 0,

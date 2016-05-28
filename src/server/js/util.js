@@ -37,7 +37,6 @@ function getTimestamp() {
 * 	A title that will be displayed before a message to associate the colors to specific meanings
 * @param {...*} args
 * 	The arguments that should be printed in style
-* @return {undefined}
 */
 export function print(messageStyle, title, ...args) {
 	const printArgs = args.map(arg => {
@@ -59,7 +58,6 @@ export function print(messageStyle, title, ...args) {
 * Logs a message on the terminal using the `default` style
 * @param {...*} args
 * 	The arguments that should be printed using the `default` style
-* @return {undefined}
 */
 export function log(...args) {
 	print(chalk.white, "", ...args);
@@ -68,7 +66,6 @@ export function log(...args) {
 * Logs a message on the terminal using the `error` style
 * @param {...*} args
 * 	The arguments that should be printed using the `error` style
-* @return {undefined}
 */
 export function err(...args) {
 	print(chalk.bold.red, chalk.bold.red("Error: "), ...args);
@@ -77,7 +74,6 @@ export function err(...args) {
 * Logs a message on the terminal using the `warning` style
 * @param {...*} args
 * 	The arguments that should be printed using the `warning` style
-* @return {undefined}
 */
 export function warn(...args) {
 	print(chalk.bold.yellow, chalk.bold.yellow("Warning: "), ...args);
@@ -86,7 +82,6 @@ export function warn(...args) {
 * Logs a message on the terminal using the `debug` style
 * @param {...*} args
 * 	The arguments that should be printed using the `debug` style
-* @return {undefined}
 */
 export function debug(...args) {
 	print(chalk.bold.magenta, chalk.bold.magenta("Debug: "), ...args);

@@ -6,11 +6,9 @@ import { log } from "./util";
 */
 export class Server extends ServerCore {
 	/**
-	* Creates a new {@link Server}
+	* Creates a new {@link Server} instance.
 	* @param {object} options
 	* 	A configuration object that is passed to {@link ServerCore}
-	* @return {Server}
-	* 	A new {@link Server} instance
 	*/
 	constructor(options) {
 		super(options);
@@ -19,7 +17,6 @@ export class Server extends ServerCore {
 	* This method is fired when a new client connects to the server.
 	* @param {RPCClient} client
 	* 	An RPCClient that proxies function invocations via ES2015 `Promise`s to the browser
-	* @return {undefined}
 	*/
 	async onConnected(client) {
 		log(`Let's ask the client to multiply "1 · 2 · 3".`);
