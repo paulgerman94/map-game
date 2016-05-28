@@ -1,30 +1,37 @@
-"use strict";
 import "babel-polyfill";
-import gulp from "gulp";
-import googleWebFonts from "gulp-google-webfonts";
 import ava from "gulp-ava";
-import nodemon from "gulp-nodemon";
-import liveReload from "gulp-livereload";
-import fs from "fs";
-import del from "del";
-import shell from "gulp-shell";
-import getUsername from "username";
-import getUser from "passwd-user";
+import babel from "gulp-babel";
 import cleanCSS from "gulp-clean-css";
 import concat from "gulp-concat";
-import merge from "merge2";
-import babel from "gulp-babel";
-import uglify from "gulp-uglify";
-import htmlMin from "gulp-htmlmin";
-import replace from "gulp-replace";
-import tap from "gulp-tap";
-import path from "path";
-import minifyJSON from "gulp-jsonminify";
+import del from "del";
 import esLint from "gulp-eslint";
-// import modularizeStyles from "gulp-style-modules";
+import fs from "fs";
+import getUser from "passwd-user";
+import getUsername from "username";
+import googleWebFonts from "gulp-google-webfonts";
+import gulp from "gulp";
+import htmlMin from "gulp-htmlmin";
+import liveReload from "gulp-livereload";
+import merge from "merge2";
+import minifyJSON from "gulp-jsonminify";
+import nodemon from "gulp-nodemon";
+import replace from "gulp-replace";
+import shell from "gulp-shell";
+import tap from "gulp-tap";
+import uglify from "gulp-uglify";
+import path from "path";
 // import sass from "gulp-sass";
 // import sourceMaps from "gulp-sourcemaps";
 let unixUsername = null;
+/**
+* Transpiles JavaScript files
+* @param {Array|string} source
+* 	A glob or an array of globs that will be transpiled
+* @param {string} destination
+* 	The destination folder
+* @return {Stream}
+* 	A stream of the virtual files being transpiled
+*/
 function transpileJS(source, destination) {
 	return gulp.src(source)
 		.pipe(replace(/<%[^%]+%>/g, match => {
@@ -146,10 +153,25 @@ gulp.task("watch", async done => {
 		key: fs.readFileSync(process.env.NGINX_PRIVATE_KEY, "utf-8"),
 		cert: fs.readFileSync(process.env.NGINX_CERTIFICATE, "utf-8")
 	});
+	/**
+	* Reloads the browser. Usually, this function should be called whenever a client-related file changes.
+	* @param {string} cause
+	* 	The file that has caused the reload
+	* @return {Stream}
+	* 	A stream containing `cause`
+	*/
 	function reload(cause) {
-		gulp.src(cause)
+		return gulp.src(cause)
 			.pipe(liveReload());
 	}
+	/**
+	* Re-transpiles JavaScript when a filesystem change is detected.
+	* @param {string} type
+	* 	Chokidar's or the operating system's filesystem event type
+	* @param {string} srcPath
+	* 	The path that is associated with the event `type`
+	* @return {undefined}
+	*/
 	function retranspileJS(type, srcPath) {
 		let srcDirectory, destDirectory;
 		if (srcPath.includes(paths.client.js.src)) {
@@ -166,7 +188,7 @@ gulp.task("watch", async done => {
 		const destPath = path.dirname(destFile);
 		if (type === "unlink" || type === "unlinkDir") {
 			/* Deleted files should be deleted in the dist directory, too */
-			return del([destFile]);
+			del([destFile]);
 		}
 		else {
 			if (path.extname(srcPath) === ".js") {
@@ -202,6 +224,12 @@ gulp.task("watch", async done => {
 // 	gulp.watch("src/index.html", ["html"]);
 	done();
 });
+/**
+* Splits the configuration file `config.json`.
+* The configuration file is used for both public and private data (like initial seeds, database options, etc.).
+* This function splits the public part and stores it in a separate file named `public.json`.
+* @return {Stream} A stream that contains `config.json` and transforms it into `public.json`
+*/
 function splitConfig() {
 	return gulp.src("config.json")
 		.pipe(tap(file => {

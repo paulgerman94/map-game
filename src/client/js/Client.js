@@ -1,5 +1,16 @@
 import ClientCore from "./ClientCore";
+/**
+* This is a client implementation that can communicate with the server.
+* The client defines event handlers for RPC methods that the server sends and methods to query the server.
+*/
 class Client extends ClientCore {
+	/**
+	* @param {Message} message
+	* 	A message object that can be used to send a reply
+	* @param {...*} args
+	* 	The arguments that are passed by the caller
+	* @return {undefined}
+	*/
 	onMultiply(message, ...args) {
 		const product = args.reduce((a, b) => a * b, 1);
 		message.reply(product);

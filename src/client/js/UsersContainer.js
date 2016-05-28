@@ -1,5 +1,9 @@
 import { default as React, Component } from "react";
 import Users from "./Users";
+/**
+* Loads the users asynchronously in order to display them in the GUI.
+* @return {Promise} A promise that resolves once all users have been fetched
+*/
 async function getUsers() {
 	return new Promise(resolve => {
 		setTimeout(() => {
@@ -24,7 +28,7 @@ export default class UsersContainer extends Component {
 		};
 	}
 	async componentWillMount() {
-		let users = await getUsers();
+		const users = await getUsers();
 		this.setState({
 			users
 		});

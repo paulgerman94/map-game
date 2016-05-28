@@ -9,20 +9,16 @@ self.addEventListener("install", e => {
 });
 self.addEventListener("fetch", e => {
 	e.respondWith(caches.match(e.request).then(response => {
-		let isOnline = navigator.onLine;
+		const isOnline = navigator.onLine;
 		if (!isOnline) {
 			if (response) {
 				console.log(response);
 				return response;
 			}
-			else {
-				console.log("no response found:", response);
-				return fetch(e.request);
-			}
-		}
-		else {
+			console.log("no response found:", response);
 			return fetch(e.request);
 		}
+		return fetch(e.request);
 	}).catch(() => {
 		console.log("noo");
 	}));

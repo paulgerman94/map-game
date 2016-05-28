@@ -36,6 +36,8 @@ class SomeStore extends EventEmitter {
 				this.toggleMenu();
 				break;
 			}
+			default:
+				break;
 		}
 	}
 }

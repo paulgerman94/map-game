@@ -3,7 +3,7 @@ import getUsername from "username";
 import getUser from "passwd-user";
 // import { km } from "./units";
 // import Point from "./Point";
-for (let event of ["unhandledRejection", "uncaughtException"]) {
+for (const event of ["unhandledRejection", "uncaughtException"]) {
 	process.on(event, e => {
 		console.error(e);
 	});
