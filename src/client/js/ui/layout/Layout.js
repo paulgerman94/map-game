@@ -12,19 +12,41 @@ import SomeStore from "../stores/SomeStore";
 import { browserHistory } from "react-router";
 import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
-injectTapEventPlugin();
 import * as actions from "../NavBarActions";
+injectTapEventPlugin();
+/**
+* This React component is used to use a common Layout across the whole page.
+* The layout can be thought of a container that contains other components, but additionally also displays the menu or the navigation bar.
+*/
 export default class Layout extends Component {
+	/**
+	* An object that associates every React property to a type
+	* @type {object}
+	*/
 	propTypes = {
 		children: Object
 	};
+	/**
+	* Creates a new {@link Layout} instance
+	*/
 	constructor() {
 		super();
+		/**
+		* @type {Object}
+		* @property {Array.<object>} state.users
+		* 	An array of users
+		* @property {boolean} isMenuVisible
+		* 	Whether or not the menu is visible right now
+		*/
 		this.state = {
 			users: SomeStore.users,
 			isMenuVisible: SomeStore.isMenuVisible
 		};
 	}
+	/**
+	* Fires before a React component mounts and sets up event listeners for the store.
+	* Whenever the store changes, this component will update its state.
+	*/
 	componentWillMount() {
 		SomeStore.on("change", () => {
 			this.setState({
@@ -37,9 +59,18 @@ export default class Layout extends Component {
 			});
 		});
 	}
+	/**
+	* If the menu is invisible, this function will make it visible.
+	* If the menu is visible, this function will make it invisible.
+	*/
 	toggleMenu() {
 		actions.toggleMenu();
 	}
+	/**
+	* Renders a {@link Layout} component with a menu, the navigation bar and all components that this component contains.
+	* @return {ReactComponent}
+	* 	The component that will be displayed
+	*/
 	render() {
 		return (
 			<div>
