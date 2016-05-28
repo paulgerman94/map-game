@@ -11,6 +11,7 @@ import getUser from "passwd-user";
 import getUsername from "username";
 import googleWebFonts from "gulp-google-webfonts";
 import gulp from "gulp";
+import gutil from "gulp-util";
 import htmlMin from "gulp-htmlmin";
 import liveReload from "gulp-livereload";
 import merge from "merge2";
@@ -50,8 +51,15 @@ function transpileJS(source, destination) {
 		}))
 		.pipe(gulp.dest(destination));
 }
-const babelOptionsPlugins = ["transform-es2015-modules-umd"];
-const babelOptionsPresets = ["es2015", "stage-0"];
+const babelOptionsPlugins = [
+	"transform-es2015-modules-umd",
+	"transform-simplify-comparison-operators"
+];
+const babelOptionsPresets = [
+	"es2015",
+	"react",
+	"stage-0"
+];
 const babelOptions = {
 	plugins: babelOptionsPlugins,
 	presets: babelOptionsPresets
@@ -95,8 +103,8 @@ const globs = {
 process.env.FORCE_COLOR = true;
 gulp.task("run-server", done => {
 	nodemon({
-		script: `${paths.server.js.dest}/index.js`,
-		exec: "babel-node",
+		script: `${paths.server.js.dest}/polyfill.js`,
+		exec: "node",
 // 		env: {
 // 			NODE_ENV: "development"
 // 		},
@@ -194,8 +202,9 @@ gulp.task("watch", async done => {
 			if (path.extname(srcPath) === ".js") {
 				if (type === "add" || type === "change") {
 					/* New/modified/renamed JS files should be transpiled */
+					gutil.log(gutil.colors.yellow(`Retranspiling: ${srcPath}`));
 					transpileJS(srcPath, destPath);
-					reload(destPath);
+					reload(destFile);
 				}
 			}
 		}
@@ -203,18 +212,32 @@ gulp.task("watch", async done => {
 	const watcherOptions = {
 		usePolling: true
 	};
-	/* Retranspile client JS files */
-	const clientJSWatcher = gulp.watch(globs.client.js, watcherOptions);
+	/* Retranspile and client JS files and lint them */
+	const clientJSWatcher = gulp.watch(globs.client.js, watcherOptions, gulp.parallel(
+		"lint"
+	));
 	clientJSWatcher.on("all", (...args) => {
 		retranspileJS(...args);
 	});
-	/* Retranspile server JS files */
-	const serverJSWatcher = gulp.watch(paths.server.js.src, watcherOptions);
+	/* Retranspile server JS files and line them */
+	const serverJSWatcher = gulp.watch(paths.server.js.src, watcherOptions, gulp.parallel(
+		"lint"
+	));
 	serverJSWatcher.on("all", (...args) => {
 		retranspileJS(...args);
 	});
-	/* Retranspile SW JS files */
-	gulp.watch(globs.client.sw, watcherOptions, gulp.parallel("sw"));
+	/* Retranspile SW JS files and lint them */
+	const serviceWorkerWatcher = gulp.watch(globs.client.sw, watcherOptions, gulp.parallel(
+		"sw",
+		"lint"
+	));
+	/* Re-lint the gulpfile */
+	gulp.watch("gulpfile.babel.js", watcherOptions, gulp.parallel(
+		"lint"
+	));
+	serviceWorkerWatcher.on("all", (...args) => {
+		retranspileJS(...args);
+	});
 	/* Re-split the config file */
 	const configWatcher = gulp.watch("config.json", watcherOptions);
 	configWatcher.on("change", () => {
