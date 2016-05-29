@@ -2,8 +2,7 @@ SystemJS.config({
   baseURL: "/kdex",
   paths: {
     "github:": "packages/github/",
-    "npm:": "packages/npm/",
-    "map-game/": "dist/client/js/"
+    "npm:": "packages/npm/"
   },
   bundles: {
     "map-game/lib.js": [

@@ -163,7 +163,7 @@ SystemJS.config({
     "flux": "npm:flux@2.1.1",
     "Polymer/polymer": "github:Polymer/polymer@1.4.0",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
-    "babel-polyfill": "npm:babel-polyfill@6.9.0",
+    "babel-polyfill": "npm:babel-polyfill@6.9.1",
     "bcrypt": "npm:bcrypt@0.8.6",
     "bcrypt-nodejs": "npm:bcrypt-nodejs@0.0.3",
     "buffer": "github:jspm/nodelibs-buffer@0.2.0-alpha",
@@ -222,7 +222,7 @@ SystemJS.config({
     },
     "npm:babel-code-frame@6.8.0": {
       "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.0",
+        "babel-runtime": "npm:babel-runtime@6.9.1",
         "chalk": "npm:chalk@1.1.3",
         "esutils": "npm:esutils@2.0.2",
         "js-tokens": "npm:js-tokens@1.0.3"
@@ -230,15 +230,15 @@ SystemJS.config({
     },
     "npm:babel-messages@6.8.0": {
       "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.0"
+        "babel-runtime": "npm:babel-runtime@6.9.1"
       }
     },
     "npm:babel-traverse@6.9.0": {
       "map": {
         "babel-code-frame": "npm:babel-code-frame@6.8.0",
         "babel-messages": "npm:babel-messages@6.8.0",
-        "babel-runtime": "npm:babel-runtime@6.9.0",
-        "babel-types": "npm:babel-types@6.9.0",
+        "babel-runtime": "npm:babel-runtime@6.9.1",
+        "babel-types": "npm:babel-types@6.9.1",
         "babylon": "npm:babylon@6.8.0",
         "debug": "npm:debug@2.2.0",
         "globals": "npm:globals@8.18.0",
@@ -248,7 +248,7 @@ SystemJS.config({
     },
     "npm:babylon@6.8.0": {
       "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.0"
+        "babel-runtime": "npm:babel-runtime@6.9.1"
       }
     },
     "npm:loose-envify@1.2.0": {
@@ -261,18 +261,6 @@ SystemJS.config({
         "bn.js": "npm:bn.js@4.11.3",
         "inherits": "npm:inherits@2.0.1",
         "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
-      }
-    },
-    "npm:babel-polyfill@6.9.0": {
-      "map": {
-        "babel-regenerator-runtime": "npm:babel-regenerator-runtime@6.5.0",
-        "babel-runtime": "npm:babel-runtime@6.9.0",
-        "core-js": "npm:core-js@2.4.0"
-      }
-    },
-    "npm:babel-runtime@6.9.0": {
-      "map": {
-        "core-js": "npm:core-js@2.4.0"
       }
     },
     "npm:readable-stream@2.1.4": {
@@ -813,7 +801,7 @@ SystemJS.config({
     },
     "npm:stilr@1.2.4": {
       "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.0",
+        "babel-runtime": "npm:babel-runtime@6.9.1",
         "react": "npm:react@15.1.0"
       }
     },
@@ -1012,15 +1000,6 @@ SystemJS.config({
         "bowser": "npm:bowser@1.3.0"
       }
     },
-    "npm:babel-types@6.9.0": {
-      "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.0",
-        "babel-traverse": "npm:babel-traverse@6.9.0",
-        "esutils": "npm:esutils@2.0.2",
-        "lodash": "npm:lodash@4.13.1",
-        "to-fast-properties": "npm:to-fast-properties@1.0.2"
-      }
-    },
     "npm:node-fetch@1.5.3": {
       "map": {
         "encoding": "npm:encoding@0.1.12",
@@ -1031,6 +1010,27 @@ SystemJS.config({
       "map": {
         "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
         "uuid": "npm:uuid@2.0.2"
+      }
+    },
+    "npm:babel-polyfill@6.9.1": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.1",
+        "core-js": "npm:core-js@2.4.0",
+        "regenerator-runtime": "npm:regenerator-runtime@0.9.5"
+      }
+    },
+    "npm:babel-runtime@6.9.1": {
+      "map": {
+        "core-js": "npm:core-js@2.4.0"
+      }
+    },
+    "npm:babel-types@6.9.1": {
+      "map": {
+        "babel-traverse": "npm:babel-traverse@6.9.0",
+        "esutils": "npm:esutils@2.0.2",
+        "lodash": "npm:lodash@4.13.1",
+        "to-fast-properties": "npm:to-fast-properties@1.0.2",
+        "babel-runtime": "npm:babel-runtime@6.9.1"
       }
     }
   }
