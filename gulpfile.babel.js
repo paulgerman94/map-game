@@ -10,7 +10,6 @@ import fs from "fs";
 import getUser from "passwd-user";
 import getUsername from "username";
 import googleWebFonts from "gulp-google-webfonts";
-import gif from "gulp-if";
 import gulp from "gulp";
 import gutil from "gulp-util";
 import htmlMin from "gulp-htmlmin";
