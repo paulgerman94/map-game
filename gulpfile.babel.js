@@ -10,6 +10,7 @@ import fs from "fs";
 import getUser from "passwd-user";
 import getUsername from "username";
 import googleWebFonts from "gulp-google-webfonts";
+import gif from "gulp-if";
 import gulp from "gulp";
 import gutil from "gulp-util";
 import htmlMin from "gulp-htmlmin";
@@ -19,11 +20,11 @@ import minifyJSON from "gulp-jsonminify";
 import nodemon from "gulp-nodemon";
 import replace from "gulp-replace";
 import shell from "gulp-shell";
+import sourceMaps from "gulp-sourcemaps";
 import tap from "gulp-tap";
 import uglify from "gulp-uglify";
 import path from "path";
 // import sass from "gulp-sass";
-// import sourceMaps from "gulp-sourcemaps";
 let unixUsername = null;
 /**
 * Transpiles JavaScript files
@@ -36,6 +37,7 @@ let unixUsername = null;
 */
 function transpileJS(source, destination) {
 	return gulp.src(source)
+		.pipe(sourceMaps.init())
 		.pipe(replace(/<%[^%]+%>/g, match => {
 			const literal = match.substring(2, match.length - 2);
 			switch (literal) {
@@ -45,25 +47,21 @@ function transpileJS(source, destination) {
 					return literal;
 			}
 		}))
-		.pipe(babel(babelOptions))
-		.pipe(uglify({
-			mangle: true
+		.pipe(babel())
+		.pipe(uglify())
+		.pipe(sourceMaps.write(".", {
+			includeContent: true,
+			sourceRoot(e) {
+				if (e.dirname.includes("server")) {
+					return e.dirname;
+				}
+				else {
+					return undefined;
+				}
+			}
 		}))
 		.pipe(gulp.dest(destination));
 }
-const babelOptionsPlugins = [
-	"transform-es2015-modules-umd",
-	"transform-simplify-comparison-operators"
-];
-const babelOptionsPresets = [
-	"es2015",
-	"react",
-	"stage-0"
-];
-const babelOptions = {
-	plugins: babelOptionsPlugins,
-	presets: babelOptionsPresets
-};
 const paths = {
 	client: {
 		css: {

@@ -1,6 +1,6 @@
 import WS from "ws-promise-client";
 /**
-* Thie base class is the protocol part of the client.
+* This base class is the protocol part of the client.
 * It is derived in {@link Client} and is supposed to connect to other `RPCClient`s.
 */
 export class ClientCore extends WS {

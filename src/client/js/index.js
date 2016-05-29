@@ -4,7 +4,6 @@ import { Router, Route, browserHistory } from "react-router";
 import Layout from "./ui/layout/Layout";
 import Home from "./ui/Home";
 import UsersContainer from "./ui/UsersContainer";
-import WidgetsContainer from "./ui/WidgetsContainer";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMUITheme from "material-ui/styles/getMuiTheme";
 import client from "./Client";
@@ -40,7 +39,6 @@ render((
 				<Router history={browserHistory}>
 					<Route component={Layout}>
 						<Route path="/" component={Home}/>
-						<Route path="/widgets" component={WidgetsContainer}/>
 						<Route path="/users" component={UsersContainer}/>
 					</Route>
 				</Router>

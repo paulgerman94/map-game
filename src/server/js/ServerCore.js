@@ -14,6 +14,7 @@ export default class ServerCore extends WS {
 	*/
 	constructor(options) {
 		super(options);
+		throw new Error("okaaay");
 		log(`Server started on port "${options.port}".`);
 	}
 	/**

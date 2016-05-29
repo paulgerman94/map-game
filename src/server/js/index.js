@@ -3,11 +3,6 @@ import getUsername from "username";
 import getUser from "passwd-user";
 // import { km } from "./units";
 // import Point from "./Point";
-for (const event of ["unhandledRejection", "uncaughtException"]) {
-	process.on(event, e => {
-		console.error(e);
-	});
-}
 (async () => {
 // 	try {
 // 		const point = new Point({
@@ -23,6 +18,7 @@ for (const event of ["unhandledRejection", "uncaughtException"]) {
 // 	};
 	const name = await getUsername();
 	const user = await getUser(name);
+	/* Listen */
 	new Server({
 		port: 3444 + user.uid
 	});
