@@ -207,7 +207,7 @@ SystemJS.config({
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
     "vm": "github:jspm/nodelibs-vm@0.2.0-alpha",
-    "ws-promise-client": "npm:ws-promise-client@3.0.0",
+    "ws-promise-client": "npm:ws-promise-client@3.0.1",
     "zlib": "github:jspm/nodelibs-zlib@0.2.0-alpha"
   },
   packages: {
@@ -222,7 +222,7 @@ SystemJS.config({
     },
     "npm:babel-code-frame@6.8.0": {
       "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.1",
+        "babel-runtime": "npm:babel-runtime@6.9.2",
         "chalk": "npm:chalk@1.1.3",
         "esutils": "npm:esutils@2.0.2",
         "js-tokens": "npm:js-tokens@1.0.3"
@@ -230,14 +230,14 @@ SystemJS.config({
     },
     "npm:babel-messages@6.8.0": {
       "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.1"
+        "babel-runtime": "npm:babel-runtime@6.9.2"
       }
     },
     "npm:babel-traverse@6.9.0": {
       "map": {
         "babel-code-frame": "npm:babel-code-frame@6.8.0",
         "babel-messages": "npm:babel-messages@6.8.0",
-        "babel-runtime": "npm:babel-runtime@6.9.1",
+        "babel-runtime": "npm:babel-runtime@6.9.2",
         "babel-types": "npm:babel-types@6.9.1",
         "babylon": "npm:babylon@6.8.0",
         "debug": "npm:debug@2.2.0",
@@ -248,7 +248,7 @@ SystemJS.config({
     },
     "npm:babylon@6.8.0": {
       "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.1"
+        "babel-runtime": "npm:babel-runtime@6.9.2"
       }
     },
     "npm:loose-envify@1.2.0": {
@@ -801,7 +801,7 @@ SystemJS.config({
     },
     "npm:stilr@1.2.4": {
       "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.1",
+        "babel-runtime": "npm:babel-runtime@6.9.2",
         "react": "npm:react@15.1.0"
       }
     },
@@ -849,11 +849,6 @@ SystemJS.config({
         "xtend": "npm:xtend@4.0.1"
       }
     },
-    "npm:typedarray-to-buffer@3.1.2": {
-      "map": {
-        "is-typedarray": "npm:is-typedarray@1.0.0"
-      }
-    },
     "npm:url@0.11.0": {
       "map": {
         "punycode": "npm:punycode@1.3.2",
@@ -863,14 +858,6 @@ SystemJS.config({
     "npm:warning@2.1.0": {
       "map": {
         "loose-envify": "npm:loose-envify@1.2.0"
-      }
-    },
-    "npm:websocket@1.0.23": {
-      "map": {
-        "debug": "npm:debug@2.2.0",
-        "nan": "npm:nan@2.3.3",
-        "typedarray-to-buffer": "npm:typedarray-to-buffer@3.1.2",
-        "yaeti": "npm:yaeti@0.0.4"
       }
     },
     "npm:xtend@2.1.2": {
@@ -884,13 +871,6 @@ SystemJS.config({
         "bn.js": "npm:bn.js@4.11.3",
         "hash.js": "npm:hash.js@1.0.3",
         "brorand": "npm:brorand@1.0.5"
-      }
-    },
-    "npm:ws-promise-client@3.0.0": {
-      "map": {
-        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
-        "ws-rpc-client": "npm:ws-rpc-client@1.0.5",
-        "websocket": "npm:websocket@1.0.23"
       }
     },
     "npm:material-ui@0.15.0-beta.2": {
@@ -1006,22 +986,11 @@ SystemJS.config({
         "is-stream": "npm:is-stream@1.1.0"
       }
     },
-    "npm:ws-rpc-client@1.0.5": {
-      "map": {
-        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
-        "uuid": "npm:uuid@2.0.2"
-      }
-    },
     "npm:babel-polyfill@6.9.1": {
       "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.1",
+        "babel-runtime": "npm:babel-runtime@6.9.2",
         "core-js": "npm:core-js@2.4.0",
         "regenerator-runtime": "npm:regenerator-runtime@0.9.5"
-      }
-    },
-    "npm:babel-runtime@6.9.1": {
-      "map": {
-        "core-js": "npm:core-js@2.4.0"
       }
     },
     "npm:babel-types@6.9.1": {
@@ -1030,7 +999,41 @@ SystemJS.config({
         "esutils": "npm:esutils@2.0.2",
         "lodash": "npm:lodash@4.13.1",
         "to-fast-properties": "npm:to-fast-properties@1.0.2",
-        "babel-runtime": "npm:babel-runtime@6.9.1"
+        "babel-runtime": "npm:babel-runtime@6.9.2"
+      }
+    },
+    "npm:babel-runtime@6.9.2": {
+      "map": {
+        "regenerator-runtime": "npm:regenerator-runtime@0.9.5",
+        "core-js": "npm:core-js@2.4.0"
+      }
+    },
+    "npm:websocket@1.0.23": {
+      "map": {
+        "nan": "npm:nan@2.3.3",
+        "debug": "npm:debug@2.2.0",
+        "typedarray-to-buffer": "npm:typedarray-to-buffer@3.1.2",
+        "yaeti": "npm:yaeti@0.0.4"
+      }
+    },
+    "npm:typedarray-to-buffer@3.1.2": {
+      "map": {
+        "is-typedarray": "npm:is-typedarray@1.0.0"
+      }
+    },
+    "npm:ws-promise-client@3.0.1": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "ws-rpc-client": "npm:ws-rpc-client@1.0.7",
+        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
+        "websocket": "npm:websocket@1.0.23"
+      }
+    },
+    "npm:ws-rpc-client@1.0.7": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
+        "uuid": "npm:uuid@2.0.2"
       }
     }
   }

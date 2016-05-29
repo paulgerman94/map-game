@@ -100,7 +100,7 @@ const globs = {
 process.env.FORCE_COLOR = true;
 gulp.task("run-server", done => {
 	nodemon({
-		script: `${paths.server.js.dest}/polyfill.js`,
+		script: `${paths.server.js.dest}/index.js`,
 		exec: "node",
 // 		env: {
 // 			NODE_ENV: "development"

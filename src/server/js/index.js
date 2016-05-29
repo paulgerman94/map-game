@@ -1,8 +1,16 @@
+import "babel-polyfill";
+import "source-map-support/register";
 import Server from "./Server";
 import getUsername from "username";
 import getUser from "passwd-user";
+import { err } from "./util";
 // import { km } from "./units";
 // import Point from "./Point";
+for (const event of ["unhandledRejection", "uncaughtException"]) {
+	process.on(event, error => {
+		err(error);
+	});
+}
 (async () => {
 // 	try {
 // 		const point = new Point({
