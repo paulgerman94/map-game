@@ -1,5 +1,9 @@
 {
-	"plugins": [
+	"plugins": [[
+		"module-alias", [{
+			"src": "./src/client/js",
+			"expose": "client"
+		}]],
 		"transform-simplify-comparison-operators",
 		"transform-property-literals",
 		"transform-minify-booleans",

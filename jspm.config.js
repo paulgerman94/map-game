@@ -1,6 +1,7 @@
 SystemJS.config({
   paths: {
-    "map-game/": "dist/client/js/"
+    "map-game/": "dist/client/js/",
+    "server/": "dist/server/js/"
   },
   devConfig: {
     "map": {
@@ -8,8 +9,12 @@ SystemJS.config({
     }
   },
   packages: {
-    "map-game": {
+    "map-game/": {
       "main": "index.js"
+    },
+    "server/": {
+      "main": "index.js",
+      "defaultExtension": "js"
     },
     "npm:snapsvg@0.4.0": {
       "map": {
@@ -207,7 +212,7 @@ SystemJS.config({
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
     "vm": "github:jspm/nodelibs-vm@0.2.0-alpha",
-    "ws-promise-client": "npm:ws-promise-client@3.0.1",
+    "ws-promise-client": "npm:ws-promise-client@3.0.2",
     "zlib": "github:jspm/nodelibs-zlib@0.2.0-alpha"
   },
   packages: {
@@ -1021,19 +1026,19 @@ SystemJS.config({
         "is-typedarray": "npm:is-typedarray@1.0.0"
       }
     },
-    "npm:ws-promise-client@3.0.1": {
-      "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.2",
-        "ws-rpc-client": "npm:ws-rpc-client@1.0.7",
-        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
-        "websocket": "npm:websocket@1.0.23"
-      }
-    },
     "npm:ws-rpc-client@1.0.7": {
       "map": {
         "babel-runtime": "npm:babel-runtime@6.9.2",
         "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
         "uuid": "npm:uuid@2.0.2"
+      }
+    },
+    "npm:ws-promise-client@3.0.2": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "ws-rpc-client": "npm:ws-rpc-client@1.0.7",
+        "websocket": "npm:websocket@1.0.23",
+        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3"
       }
     }
   }

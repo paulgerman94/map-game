@@ -1,4 +1,14 @@
 /**
+* The unit used to denote milliseconds
+* @type {number}
+*/
+export const ms = 1;
+/**
+* The unit used to denote seconds
+* @type {number}
+*/
+export const s = 1000 * ms;
+/**
 * The unit used to denote meters
 * @type {number}
 */

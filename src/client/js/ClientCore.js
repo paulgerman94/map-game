@@ -1,4 +1,5 @@
 import WS from "ws-promise-client";
+import { s } from "server/units";
 /**
 * This base class is the protocol part of the client.
 * It is derived in {@link Client} and is supposed to connect to other `RPCClient`s.
@@ -11,7 +12,11 @@ export class ClientCore extends WS {
 	*/
 	constructor() {
 		const isEncrypted = location.protocol === "https:";
-		super(`ws${isEncrypted ? "s" : ""}://${location.host}/socket/<%LINUX_USERNAME%>`);
+		super(`ws${isEncrypted ? "s" : ""}://${location.host}/socket/<%LINUX_USERNAME%>`, undefined, {
+			rpcOptions: {
+				timeout: 20 * s
+			}
+		});
 	}
 	/**
 	* This method fires whenever the connection is (re-)established.
