@@ -21,7 +21,7 @@ export function add({
 /**
 * @param {object} options An object
 * @param {Array.<number>} options.args
-* 	The arguments provided by the caller. Here, the arguments are expected to contain at least one object that matches the properties of a `Position` (GeoLocation API) object.
+* 	The arguments provided by the caller. Here, the arguments are expected to contain at least one object that matches the properties of a {@link Position} (GeoLocation API) object.
 * @param {Message} options.message
 * 	An RPC message object that can be used to send a reply
 * @param {RPCClient} options.client
