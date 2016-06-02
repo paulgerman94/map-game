@@ -9,7 +9,7 @@ import { defer } from "./fs";
 * @return {Promise}
 * 	A {@link Promise} that resolves to a string which represents a cryptographically secure salt
 */
-function generateSalt(rounds) {
+function generateSalt(rounds = config.server.crypto.saltRounds) {
 	return new Promise((resolve, reject) => {
 		bcrypt.genSalt(rounds, defer(resolve, reject));
 	});
@@ -107,7 +107,7 @@ export function createToken(data) {
 */
 export async function hash(password) {
 	try {
-		const salt = await generateSalt(config.server.crypto.saltRounds);
+		const salt = await generateSalt();
 		return generateHash(password, salt);
 	}
 	catch (e) {
