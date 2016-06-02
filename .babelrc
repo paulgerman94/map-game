@@ -3,6 +3,9 @@
 		"module-alias", [{
 			"src": "./src/client/js",
 			"expose": "client"
+		}, {
+			"src": "./",
+			"expose": "map-game"
 		}]],
 		"transform-simplify-comparison-operators",
 		"transform-property-literals",
