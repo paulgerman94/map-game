@@ -9,11 +9,18 @@ import * as API from "./api/index";
 export default class ServerCore extends WS {
 	/**
 	* Constructs a new {@link ServerCore} instance
+	* @param {object} database
+	* 	The PostgreSQL pg-promise database instance
 	* @param {object} options
 	* 	A configuration object that is passed on to the constructor of `ws-promise-server`
 	*/
-	constructor(options) {
+	constructor(database, options) {
 		super(options);
+		/**
+		* @property {object} db
+		* 	The PostgreSQL pg-promise database instance
+		*/
+		this.db = database;
 		log(`Server started on port "${options.port}".`);
 	}
 	/**

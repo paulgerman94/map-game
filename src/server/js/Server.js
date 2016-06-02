@@ -7,11 +7,13 @@ import { log } from "./util";
 export class Server extends ServerCore {
 	/**
 	* Creates a new {@link Server} instance.
+	* @param {object} database
+	* 	The PostgreSQL pg-promise database instance
 	* @param {object} options
 	* 	A configuration object that is passed to {@link ServerCore}
 	*/
-	constructor(options) {
-		super(options);
+	constructor(database, options) {
+		super(database, options);
 	}
 	/**
 	* This method is fired when a new client connects to the server.
