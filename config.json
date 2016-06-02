@@ -15,12 +15,6 @@
 			"tokenExpirationMinutes": 4320,
 			"tokenSecret": "yourTokenSecret"
 		},
-		"rooms": {
-			"default": "Empfang",
-			"public": [
-				"Wiese"
-			]
-		},
 		"psql": {
 			"user": "kdex",
 			"port": 5432,
