@@ -1,6 +1,11 @@
 import WS from "ws-promise-server";
 import { log, err } from "./util";
+import { checkToken } from "./crypto";
 import * as API from "./api/index";
+const guestFunctions = {
+	register: API.register,
+	login: API.login
+};
 /**
 * This class is the protocol part that the server uses to communicate with.
 * Deep inside, it extends `ws-promise-server` and is thus a fully-fledged RPCClient.
@@ -22,6 +27,34 @@ export default class ServerCore extends WS {
 		*/
 		this.db = database;
 		log(`Server started on port "${options.port}".`);
+	}
+	/**
+	* Handles a client request if the server knows the instruction
+	* @param {object} options
+	* 	An object that contains the options listed below
+	* @param {Array} options.args
+	* 	The arguments provided by the caller
+	* @param {string} options.instruction
+	* 	The instruction to execute
+	* @param {Message} options.message
+	* 	An RPC message object that can be used to send a reply
+	* @param {RPCClient} options.socket
+	* 	The RPC client that has called the function
+	*/
+	handleRequest({
+		args,
+		instruction,
+		message,
+		socket
+	}) {
+		if (API[instruction]) {
+			API[instruction]({
+				args,
+				db: this.db,
+				client: socket,
+				message
+			});
+		}
 	}
 	/**
 	* This method will fire whenever a new RPCClient connects to the server.
@@ -58,18 +91,47 @@ export default class ServerCore extends WS {
 		socket.on("close", () => {
 			log("A client has disconnected.");
 		});
-		socket.on("message", msg => {
+		socket.on("message", async msg => {
 			const message = socket.readMessage(msg.data);
 			const { payload } = message;
 			const { instruction, args } = payload;
-			/* If the server knows the instruction, run it */
-			if (API[instruction]) {
-				API[instruction]({
-					args,
-					db: this.db,
-					client: socket,
-					message
-				});
+			const [metadata] = args;
+			const { token } = metadata;
+			/* If there is a token… */
+			if (token) {
+				/* …check if it is valid. */
+				const isValid = await checkToken(token);
+				if (isValid) {
+					if (instruction === "login") {
+						message.reply(token);
+					}
+					else {
+						/* If this is not a `login` instruction, run it */
+						this.handleRequest({
+							args,
+							instruction,
+							message,
+							socket
+						});
+					}
+				}
+				else {
+					message.reply(false);
+				}
+			}
+			else {
+				/* If there is no token, limit the executable functions */
+				if (guestFunctions[instruction]) {
+					this.handleRequest({
+						args,
+						instruction,
+						message,
+						socket
+					});
+				}
+				else {
+					message.reply(false);
+				}
 			}
 		});
 	}

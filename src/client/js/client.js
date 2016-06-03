@@ -1,4 +1,8 @@
 import ClientCore from "./ClientCore";
+import {
+	default as store,
+	TOKEN
+} from "./store";
 /**
 * This is a client implementation that can communicate with the server.
 * The client defines event handlers for RPC methods that the server sends and methods to query the server.
@@ -20,11 +24,15 @@ export default new Proxy(new Client(), {
 		const lookUp = target[property];
 		if (!lookUp) {
 			return async (...args) => {
-				const returnValue = await target.send(property, undefined, ...args);
-				if (!returnValue || returnValue && returnValue.error) {
+				args.unshift({
+					token: store.load(TOKEN)
+				});
+				const message = await target.send(property, undefined, ...args);
+				const [firstValue] = message.payload.args;
+				if (!firstValue || firstValue && firstValue.error) {
 					throw new Error(`Error trying to proxy ${property} with arguments`, args);
 				}
-				return returnValue.payload.args;
+				return message.payload.args;
 			};
 		}
 		else {
