@@ -62,17 +62,7 @@ render((
 		displayName: "exOmni",
 		password: "password123"
 	};
-// 	client.register({
-// 		accountName: "exomni",
-// 		email: "ex@om.ni",
-// 		displayName: "exOmni",
-// 		password: "password123"
-// 	});
 // 	const [token] = await client.login(exOmni);
 	const token = await API.login(exOmni);
 	console.log(token);
-// 	setTimeout(async () => {
-// 		const [secondToken] = await client.login(exOmni);
-// 		store.save("token", secondToken);
-// 	}, 1000);
 })();
