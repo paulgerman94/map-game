@@ -63,8 +63,9 @@ export async function createTable(db, table) {
 export async function connect(retry = 0) {
 	const db = pgpDB(config.server.psql);
 	try {
-		await db.connect();
+		const connection = await db.connect();
 		log("Database connection established.");
+		connection.done();
 		if (retry > 0) {
 			/* On our first try, there was no database */
 			await createTable(db, "users");
