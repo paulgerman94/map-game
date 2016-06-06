@@ -197,9 +197,6 @@
 		"no-implied-eval": [
 			"error"
 		],
-		"no-invalid-this": [
-			"error"
-		],
 		"no-iterator": [
 			"error"
 		],
