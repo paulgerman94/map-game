@@ -29,7 +29,6 @@ async function getToken(data) {
 		}
 	}
 	catch (e) {
-		console.error(e);
 		return false;
 	}
 }
@@ -86,7 +85,9 @@ export async function login(data = {}) {
 	}
 }
 /**
-* Logs out a user
+* Logs a user out by removing the JWT token from the store.
+* Note that JWT tokens are not designed to be invalidated; the token might still work for a third party that tries to session-hijack the user session.
+* The general approach to this issue is to choose relatively short token expiration times.
 */
 export function logout() {
 	store.remove(TOKEN);

@@ -12,8 +12,8 @@ import SomeStore from "../stores/SomeStore";
 import { browserHistory } from "react-router";
 import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
-import * as actions from "../NavBarActions";
 injectTapEventPlugin();
+import * as actions from "../NavBarActions";
 /**
 * This React component is used to use a common Layout across the whole page.
 * The layout can be thought of a container that contains other components, but additionally also displays the menu or the navigation bar.
@@ -23,7 +23,7 @@ export default class Layout extends Component {
 	* An object that associates every React property to a type
 	* @type {object}
 	*/
-	propTypes = {
+	static propTypes = {
 		children: Object
 	};
 	/**
@@ -74,7 +74,9 @@ export default class Layout extends Component {
 	render() {
 		return (
 			<div>
-				<AppBar title={PROJECT_NAME} onTitleTouchTap={() => {
+				<AppBar title={PROJECT_NAME} style={{
+					cursor: "pointer"
+				}} onTitleTouchTap={() => {
 					browserHistory.push("/");
 				}} iconElementRight={
 					<div>
