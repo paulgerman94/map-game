@@ -5,7 +5,7 @@
   "main": "gulpfile.babel.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "touch dist/client/js/lib.js; rm dist/client/js/lib.js*; jspm bundle 'dist/client/js/**/*.js - [dist/client/js/**/*.js]' dist/client/js/lib.js"
+    "bundle": "touch dist/client/js/lib.js; rm dist/client/js/lib.js*; jspm bundle -d 'dist/client/js/**/*.js - [dist/client/js/**/*.js]' dist/client/js/lib.js"
   },
   "author": "kdex",
   "license": "GPL-3.0",
@@ -86,7 +86,7 @@
       "ip-regex": "npm:ip-regex@^1.0.3",
       "json": "github:systemjs/plugin-json@^0.1.0",
       "jsonwebtoken": "npm:jsonwebtoken@^5.4.0",
-      "material-ui": "npm:material-ui@0.15.0-beta.2",
+      "material-ui": "npm:material-ui@0.15.0",
       "pg": "npm:pg@^4.4.2",
       "pg-native": "npm:pg-native@^1.9.0",
       "pg-promise": "npm:pg-promise@^2.0.6",
@@ -165,10 +165,28 @@
           "_stream_transform": "readable-stream/transform"
         }
       },
+      "npm:debug@2.2.0": {
+        "main": "browser.js",
+        "jspmNodeConversion": false,
+        "format": "cjs",
+        "map": {
+          "./browser.js": {
+            "node": "./node.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
+        }
+      },
       "npm:inherits@2.0.1": {
         "ignore": [
           "test.js"
         ]
+      },
+      "npm:ms@0.7.1": {
+        "jspmNodeConversion": false,
+        "format": "cjs"
       },
       "npm:readable-stream@1.0.34": {
         "map": {

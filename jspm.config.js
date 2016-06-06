@@ -1,7 +1,7 @@
 SystemJS.config({
   paths: {
-    "map-game/": "dist/client/js/",
-    "server/": "dist/server/js/"
+    "server/": "dist/server/js/",
+    "map-game/": "dist/client/js/"
   },
   devConfig: {
     "map": {
@@ -166,7 +166,7 @@ SystemJS.config({
     "babel-types": "npm:babel-types@6.7.7",
     "react-flexr": "npm:react-flexr@2.1.0-beta",
     "flux": "npm:flux@2.1.1",
-    "Polymer/polymer": "github:Polymer/polymer@1.4.0",
+    "Polymer/polymer": "github:Polymer/polymer@1.5.0",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
     "babel-polyfill": "npm:babel-polyfill@6.9.1",
     "bcrypt": "npm:bcrypt@0.8.6",
@@ -188,12 +188,12 @@ SystemJS.config({
     "ip-regex": "npm:ip-regex@1.0.3",
     "json": "github:systemjs/plugin-json@0.1.2",
     "jsonwebtoken": "npm:jsonwebtoken@5.7.0",
-    "material-ui": "npm:material-ui@0.15.0-beta.2",
+    "material-ui": "npm:material-ui@0.15.0",
     "module": "github:jspm/nodelibs-module@0.2.0-alpha",
     "net": "github:jspm/nodelibs-net@0.2.0-alpha",
     "os": "github:jspm/nodelibs-os@0.2.0-alpha",
     "path": "github:jspm/nodelibs-path@0.2.0-alpha",
-    "pg": "npm:pg@4.5.5",
+    "pg": "npm:pg@4.5.6",
     "pg-native": "npm:pg-native@1.10.0",
     "pg-promise": "npm:pg-promise@2.9.5",
     "pgtools": "npm:pgtools@0.0.2",
@@ -259,13 +259,6 @@ SystemJS.config({
     "npm:loose-envify@1.2.0": {
       "map": {
         "js-tokens": "npm:js-tokens@1.0.3"
-      }
-    },
-    "npm:asn1.js@4.6.0": {
-      "map": {
-        "bn.js": "npm:bn.js@4.11.3",
-        "inherits": "npm:inherits@2.0.1",
-        "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
       }
     },
     "npm:readable-stream@2.1.4": {
@@ -433,17 +426,17 @@ SystemJS.config({
     },
     "npm:browserify-rsa@4.0.1": {
       "map": {
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "randombytes": "npm:randombytes@2.0.3"
       }
     },
     "npm:browserify-sign@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "browserify-rsa": "npm:browserify-rsa@4.0.1",
         "create-hash": "npm:create-hash@1.1.2",
         "create-hmac": "npm:create-hmac@1.1.4",
-        "elliptic": "npm:elliptic@6.2.7",
+        "elliptic": "npm:elliptic@6.2.8",
         "inherits": "npm:inherits@2.0.1",
         "parse-asn1": "npm:parse-asn1@5.0.0"
       }
@@ -489,8 +482,8 @@ SystemJS.config({
     },
     "npm:create-ecdh@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.11.3",
-        "elliptic": "npm:elliptic@6.2.7"
+        "bn.js": "npm:bn.js@4.11.4",
+        "elliptic": "npm:elliptic@6.2.8"
       }
     },
     "npm:create-hash@1.1.2": {
@@ -534,7 +527,7 @@ SystemJS.config({
     },
     "npm:diffie-hellman@5.0.2": {
       "map": {
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "miller-rabin": "npm:miller-rabin@4.0.0",
         "randombytes": "npm:randombytes@2.0.3"
       }
@@ -660,13 +653,13 @@ SystemJS.config({
     },
     "npm:miller-rabin@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "brorand": "npm:brorand@1.0.5"
       }
     },
     "npm:parse-asn1@5.0.0": {
       "map": {
-        "asn1.js": "npm:asn1.js@4.6.0",
+        "asn1.js": "npm:asn1.js@4.6.2",
         "browserify-aes": "npm:browserify-aes@1.0.6",
         "create-hash": "npm:create-hash@1.1.2",
         "evp_bytestokey": "npm:evp_bytestokey@1.0.0",
@@ -687,7 +680,7 @@ SystemJS.config({
     },
     "npm:pg-promise@2.9.5": {
       "map": {
-        "pg": "npm:pg@4.5.5",
+        "pg": "npm:pg@4.5.6",
         "pg-minify": "npm:pg-minify@0.1.5",
         "spex": "npm:spex@0.4.4"
       }
@@ -700,7 +693,7 @@ SystemJS.config({
     "npm:pgtools@0.0.2": {
       "map": {
         "bluebird": "npm:bluebird@2.10.2",
-        "pg": "npm:pg@4.5.5"
+        "pg": "npm:pg@4.5.6"
       }
     },
     "npm:pixi.js@3.0.11": {
@@ -721,7 +714,7 @@ SystemJS.config({
     },
     "npm:public-encrypt@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "browserify-rsa": "npm:browserify-rsa@4.0.1",
         "create-hash": "npm:create-hash@1.1.2",
         "parse-asn1": "npm:parse-asn1@5.0.0",
@@ -870,29 +863,6 @@ SystemJS.config({
         "object-keys": "npm:object-keys@0.4.0"
       }
     },
-    "npm:elliptic@6.2.7": {
-      "map": {
-        "inherits": "npm:inherits@2.0.1",
-        "bn.js": "npm:bn.js@4.11.3",
-        "hash.js": "npm:hash.js@1.0.3",
-        "brorand": "npm:brorand@1.0.5"
-      }
-    },
-    "npm:material-ui@0.15.0-beta.2": {
-      "map": {
-        "lodash.merge": "npm:lodash.merge@4.4.0",
-        "react-addons-create-fragment": "npm:react-addons-create-fragment@15.1.0",
-        "lodash.throttle": "npm:lodash.throttle@4.0.1",
-        "react-addons-transition-group": "npm:react-addons-transition-group@15.1.0",
-        "react-addons-update": "npm:react-addons-update@15.1.0",
-        "warning": "npm:warning@2.1.0",
-        "react-event-listener": "npm:react-event-listener@0.1.2",
-        "recompose": "npm:recompose@0.17.0",
-        "simple-assign": "npm:simple-assign@0.1.0",
-        "keycode": "npm:keycode@2.1.1",
-        "inline-style-prefixer": "npm:inline-style-prefixer@1.0.4"
-      }
-    },
     "npm:resource-loader@1.6.5": {
       "map": {
         "async": "npm:async@0.9.2",
@@ -913,17 +883,6 @@ SystemJS.config({
         "warning": "npm:warning@2.1.0",
         "query-string": "npm:query-string@3.0.3",
         "deep-equal": "npm:deep-equal@1.0.1"
-      }
-    },
-    "npm:pg@4.5.5": {
-      "map": {
-        "generic-pool": "npm:generic-pool@2.1.1",
-        "semver": "npm:semver@4.3.6",
-        "pg-connection-string": "npm:pg-connection-string@0.1.3",
-        "packet-reader": "npm:packet-reader@0.2.0",
-        "pgpass": "npm:pgpass@0.0.3",
-        "buffer-writer": "npm:buffer-writer@1.0.1",
-        "pg-types": "npm:pg-types@1.11.0"
       }
     },
     "npm:react@15.1.0": {
@@ -961,7 +920,7 @@ SystemJS.config({
     },
     "npm:libpq@1.8.2": {
       "map": {
-        "nan": "npm:nan@2.3.3",
+        "nan": "npm:nan@2.3.5",
         "bindings": "npm:bindings@1.2.1"
       }
     },
@@ -1015,7 +974,7 @@ SystemJS.config({
     },
     "npm:websocket@1.0.23": {
       "map": {
-        "nan": "npm:nan@2.3.3",
+        "nan": "npm:nan@2.3.5",
         "debug": "npm:debug@2.2.0",
         "typedarray-to-buffer": "npm:typedarray-to-buffer@3.1.2",
         "yaeti": "npm:yaeti@0.0.4"
@@ -1039,6 +998,47 @@ SystemJS.config({
         "ws-rpc-client": "npm:ws-rpc-client@1.0.7",
         "websocket": "npm:websocket@1.0.23",
         "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3"
+      }
+    },
+    "npm:material-ui@0.15.0": {
+      "map": {
+        "react-addons-transition-group": "npm:react-addons-transition-group@15.1.0",
+        "recompose": "npm:recompose@0.17.0",
+        "lodash.merge": "npm:lodash.merge@4.4.0",
+        "react-addons-update": "npm:react-addons-update@15.1.0",
+        "react-addons-create-fragment": "npm:react-addons-create-fragment@15.1.0",
+        "simple-assign": "npm:simple-assign@0.1.0",
+        "lodash.throttle": "npm:lodash.throttle@4.0.1",
+        "react-event-listener": "npm:react-event-listener@0.1.2",
+        "keycode": "npm:keycode@2.1.2",
+        "warning": "npm:warning@2.1.0",
+        "inline-style-prefixer": "npm:inline-style-prefixer@1.0.4"
+      }
+    },
+    "npm:elliptic@6.2.8": {
+      "map": {
+        "inherits": "npm:inherits@2.0.1",
+        "hash.js": "npm:hash.js@1.0.3",
+        "brorand": "npm:brorand@1.0.5",
+        "bn.js": "npm:bn.js@4.11.4"
+      }
+    },
+    "npm:asn1.js@4.6.2": {
+      "map": {
+        "inherits": "npm:inherits@2.0.1",
+        "minimalistic-assert": "npm:minimalistic-assert@1.0.0",
+        "bn.js": "npm:bn.js@4.11.4"
+      }
+    },
+    "npm:pg@4.5.6": {
+      "map": {
+        "packet-reader": "npm:packet-reader@0.2.0",
+        "semver": "npm:semver@4.3.6",
+        "pg-connection-string": "npm:pg-connection-string@0.1.3",
+        "buffer-writer": "npm:buffer-writer@1.0.1",
+        "pgpass": "npm:pgpass@0.0.3",
+        "pg-types": "npm:pg-types@1.11.0",
+        "generic-pool": "npm:generic-pool@2.4.2"
       }
     }
   }
