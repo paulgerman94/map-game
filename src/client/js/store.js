@@ -3,7 +3,7 @@
 */
 export const TOKEN = "token";
 /**
-* This class models a store, i. e. an object that simplifies cache access. Since cookies are dead, this project makes heavy use of WebStorage. This class offers a simple API to load, save, and remove properties or assign them to values.
+* This class models a store, i. e. an object that simplifies cache access. Since cookies are dead, this project makes heavy use of WebStorage. This class offers a simple API to load, save, and remove properties or assign values to them.
 */
 class Store {
 	/**
