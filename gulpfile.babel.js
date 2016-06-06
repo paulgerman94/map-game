@@ -47,6 +47,9 @@ function transpileJS(source, destination) {
 			}
 		}))
 		.pipe(babel())
+		.on("error", function() {
+			this.emit("end");
+		})
 		.pipe(uglify())
 		.pipe(sourceMaps.write(".", {
 			includeContent: true,
