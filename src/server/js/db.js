@@ -157,7 +157,7 @@ export async function register({
 * 	The string in camelcase
 */
 export function toCamelCase(string) {
-	return string.replace(/_\w/g, match => match.charAt(1).toUpperCase());
+	return pgpDB.utils.camelize(string);
 }
 /**
 * Transforms a camelcase-cased string to underscore-case
