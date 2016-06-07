@@ -3,10 +3,9 @@ import dispatcher from "../Dispatcher";
 import { EventEmitter } from "events";
 import { MenuItem } from "material-ui";
 /**
-* This class is a Redux store that keeps a global view of a (not yet clearly defined) part of the app state.
-* Right now, this store encompasses all the state information.
+* This class is a flux store that keeps a global view of the layout state.
 */
-class SomeStore extends EventEmitter {
+class LayoutStore extends EventEmitter {
 	/**
 	* @type {boolean}
 	* 	Whether or not the menu is visible
@@ -45,12 +44,12 @@ class SomeStore extends EventEmitter {
 		this.emit("menuToggled", this.isMenuVisible);
 	}
 	/**
-	* Handles a Redux action and manipulates the store depending on the action
+	* Handles a flux action and manipulates the store depending on the action
 	* @param {string} action
 	* 	The name of the action that the store should invoke
 	*/
 	handleActions(action) {
-		console.log("SomeStore received an action: ", action);
+		console.log("LayoutStore received an action: ", action);
 		switch (action.type) {
 			case "ADD_USER": {
 				this.addUser(action.username, action.label);
@@ -65,6 +64,6 @@ class SomeStore extends EventEmitter {
 		}
 	}
 }
-const someStore = new SomeStore();
-dispatcher.register(::someStore.handleActions);
-export default someStore;
+const layoutStore = new LayoutStore();
+dispatcher.register(::layoutStore.handleActions);
+export default layoutStore;

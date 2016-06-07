@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "react-dom";
 import { Router, Route, browserHistory } from "react-router";
 import Layout from "./ui/layout/Layout";
-import Home from "./ui/Home";
+import Home from "./ui/views/Home";
 import UsersContainer from "./ui/UsersContainer";
 import Register from "./ui/views/Register";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router";
 import { TextField, RaisedButton, CircularProgress } from "material-ui";
 import { login } from "client/api/index";
+import * as actions from "../actions/LoginActions";
 /**
 * This component contains the home view that the user should see when entering the app.
 * It should a simple login/registration menu if the user isn't logged in.
@@ -26,6 +27,7 @@ export default class Login extends React.Component {
 		}
 		else {
 			/* If it is a keydown event for ↲ or a click event, try to login */
+			let isLoginSuccessful = false;
 			if (this.isLoginValid) {
 				this.setState({
 					isLoggingIn: true
@@ -36,9 +38,11 @@ export default class Login extends React.Component {
 						accountName,
 						password
 					});
+					/* We have successfully logged in! */
 					this.setState({
 						errorText: null
 					});
+					isLoginSuccessful = true;
 				}
 				catch (e) {
 					/* Don't differentiate errors for now */
@@ -50,6 +54,9 @@ export default class Login extends React.Component {
 					this.setState({
 						isLoggingIn: false
 					});
+					if (isLoginSuccessful) {
+						actions.login();
+					}
 				}
 			}
 		}

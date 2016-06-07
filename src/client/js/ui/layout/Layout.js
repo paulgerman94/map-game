@@ -8,12 +8,12 @@ import ChatIcon from "material-ui/svg-icons/communication/chat";
 import ShopIcon from "material-ui/svg-icons/action/shopping-cart";
 import HelpCenterIcon from "material-ui/svg-icons/action/help";
 import SettingsIcon from "material-ui/svg-icons/action/settings";
-import SomeStore from "../stores/SomeStore";
 import { browserHistory } from "react-router";
 import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
+import LayoutStore from "../stores/LayoutStore";
+import * as actions from "../actions/LayoutActions";
 injectTapEventPlugin();
-import * as actions from "../NavBarActions";
 /**
 * This React component is used to use a common Layout across the whole page.
 * The layout can be thought of a container that contains other components, but additionally also displays the menu or the navigation bar.
@@ -39,8 +39,8 @@ export default class Layout extends Component {
 		* 	Whether or not the menu is visible right now
 		*/
 		this.state = {
-			users: SomeStore.users,
-			isMenuVisible: SomeStore.isMenuVisible
+			users: LayoutStore.users,
+			isMenuVisible: LayoutStore.isMenuVisible
 		};
 	}
 	/**
@@ -48,14 +48,14 @@ export default class Layout extends Component {
 	* Whenever the store changes, this component will update its state.
 	*/
 	componentWillMount() {
-		SomeStore.on("change", () => {
+		LayoutStore.on("change", () => {
 			this.setState({
-				users: SomeStore.users
+				users: LayoutStore.users
 			});
 		});
-		SomeStore.on("menuToggled", () => {
+		LayoutStore.on("menuToggled", () => {
 			this.setState({
-				isMenuVisible: SomeStore.isMenuVisible
+				isMenuVisible: LayoutStore.isMenuVisible
 			});
 		});
 	}
