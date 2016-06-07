@@ -58,19 +58,19 @@ export async function getPOIs({
 * Registers a user on the server and add him to the database.
 * @param {object} options
 * 	An object
-* @param {object} args
+* @param {object} options.args
 * 	A description of a user object
-* @param {string} args.accountName
+* @param {string} options.args.accountName
 * 	The user's account name
-* @param {string} args.displayName
+* @param {string} options.args.displayName
 * 	The user's display name
-* @param {string} args.email
+* @param {string} options.args.email
 * 	The user's email address
-* @param {string} args.password
+* @param {string} options.args.password
 * 	The user's password
-* @param {object} db
+* @param {object} options.db
 * 	A `pg-promise` instance of a database connection
-* @param {Message} message
+* @param {Message} options.message
 * 	A message object to reply to
 */
 export async function register({
@@ -107,19 +107,19 @@ export async function register({
 * Logs in a user by checking if his password matches the salted hash in the database. If it does, this function returns a JWT session token.
 * @param {object} options
 * 	An object
-* @param {object} args
+* @param {object} options.args
 * 	A description of a user object
-* @param {string} args.accountName
+* @param {string} options.args.accountName
 * 	The user's account name
-* @param {string} args.email
+* @param {string} options.args.email
 * 	The user's email address
-* @param {string} args.token
+* @param {string} options.args.token
 * 	The user's session token
-* @param {string} args.password
+* @param {string} options.args.password
 * 	The user's password
-* @param {object} db
+* @param {object} options.db
 * 	A `pg-promise` instance of a database connection
-* @param {Message} message
+* @param {Message} options.message
 * 	A message object to reply to
 */
 export async function login({

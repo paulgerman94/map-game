@@ -97,17 +97,17 @@ export async function connect(retry = 0) {
 * Registers a new user and adds him to the database.
 * @param {object} user
 * 	The user object to be added
-* @param {object} db
+* @param {object} user.db
 * 	A `pg-promise` database instance
-* @param {string} accountName
+* @param {string} user.accountName
 * 	The user's account name to login with
-* @param {string} email
+* @param {string} user.email
 * 	The user's email address
-* @param {string} displayName
+* @param {string} user.displayName
 * 	The user's display name
-* @param {string} password
+* @param {string} user.password
 * 	The user's password
-* @param {number} permissions
+* @param {number} user.permissions
 * 	The user's permission mask
 * @return {Promise}
 * 	A {@link Promise} that resolves to whether or not the registration was successful
@@ -212,11 +212,11 @@ export async function isFree(obj) {
 * Logs in a user by checking his password
 * @param {object} user
 * 	The user object to be logged in
-* @param {string} accountName
+* @param {string} user.accountName
 * 	The user's account name
-* @param {object} db
+* @param {object} user.db
 * 	The `pg-promise` database instance
-* @param {string} password
+* @param {string} user.password
 * 	The user's password
 * @return {Promise}
 * 	A {@link Promise} that resolves to whether the user can be logged in using the provided data or not
