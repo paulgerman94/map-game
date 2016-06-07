@@ -3,7 +3,6 @@ import { render } from "react-dom";
 import { Router, Route, browserHistory } from "react-router";
 import Layout from "./ui/layout/Layout";
 import Home from "./ui/views/Home";
-import UsersContainer from "./ui/UsersContainer";
 import Register from "./ui/views/Register";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMUITheme from "material-ui/styles/getMuiTheme";
@@ -31,9 +30,9 @@ const muiTheme = getMUITheme({
 		height: 50
 	}
 });
-if (navigator.serviceWorker) {
-	navigator.serviceWorker.register("sw.js");
-}
+// if (navigator.serviceWorker) {
+// 	navigator.serviceWorker.register("sw.js");
+// }
 (async () => {
 	try {
 		await client.open();
@@ -57,7 +56,6 @@ if (navigator.serviceWorker) {
 						<Router history={browserHistory}>
 							<Route component={Layout}>
 								<Route path="/" component={Home}/>
-								<Route path="/users" component={UsersContainer}/>
 								<Route path="/register" component={Register}/>
 							</Route>
 						</Router>

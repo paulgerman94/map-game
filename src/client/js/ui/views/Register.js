@@ -4,7 +4,7 @@ import { default as React, Component } from "react";
 */
 export default class Register extends Component {
 	/**
-	* Renders a {@link Users} component and injects a list of example users into it.
+	* Renders a {@link Register} component where users are supposed to register accounts
 	* @return {ReactComponent}
 	* 	The component that will be displayed
 	*/

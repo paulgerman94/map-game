@@ -182,7 +182,6 @@ SystemJS.config({
     "domain": "github:jspm/nodelibs-domain@0.2.0-alpha",
     "events": "github:jspm/nodelibs-events@0.2.0-alpha",
     "fetch": "npm:whatwg-fetch@0.9.0",
-    "fingerprintjs2": "npm:fingerprintjs2@1.3.0",
     "fs": "github:jspm/nodelibs-fs@0.2.0-alpha",
     "http": "github:jspm/nodelibs-http@0.2.0-alpha",
     "https": "github:jspm/nodelibs-https@0.2.0-alpha",

@@ -24,7 +24,7 @@ export default class Layout extends Component {
 	* @type {object}
 	*/
 	static propTypes = {
-		children: Object
+		children: React.PropTypes.node
 	};
 	/**
 	* Creates a new {@link Layout} instance

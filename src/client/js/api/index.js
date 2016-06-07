@@ -92,3 +92,4 @@ export async function login(data = {}) {
 export function logout() {
 	store.remove(TOKEN);
 }
+export default from "./getPOIs";
