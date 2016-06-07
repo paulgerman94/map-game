@@ -11,7 +11,7 @@ import SettingsIcon from "material-ui/svg-icons/action/settings";
 import { browserHistory } from "react-router";
 import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
-import LayoutStore from "../stores/LayoutStore";
+import { default as LayoutStore, MENU_TOGGLED } from "../stores/LayoutStore";
 import * as actions from "../actions/LayoutActions";
 injectTapEventPlugin();
 /**
@@ -48,12 +48,7 @@ export default class Layout extends Component {
 	* Whenever the store changes, this component will update its state.
 	*/
 	componentWillMount() {
-		LayoutStore.on("change", () => {
-			this.setState({
-				users: LayoutStore.users
-			});
-		});
-		LayoutStore.on("menuToggled", () => {
+		LayoutStore.on(MENU_TOGGLED, () => {
 			this.setState({
 				isMenuVisible: LayoutStore.isMenuVisible
 			});

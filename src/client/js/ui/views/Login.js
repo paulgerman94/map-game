@@ -55,7 +55,9 @@ export default class Login extends React.Component {
 						isLoggingIn: false
 					});
 					if (isLoginSuccessful) {
-						actions.login();
+						actions.login({
+							accountName
+						});
 					}
 				}
 			}

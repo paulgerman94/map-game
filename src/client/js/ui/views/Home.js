@@ -2,7 +2,7 @@ import React from "react";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import { login } from "client/api/index";
-import UserStore from "../stores/UserStore";
+import { default as UserStore, LOGIN } from "../stores/UserStore";
 /**
 * This component contains the home view that the user should see when entering the app.
 * It should a simple login/registration menu if the user isn't logged in.
@@ -21,7 +21,7 @@ export default class Home extends React.Component {
 	*/
 	async componentWillMount() {
 		/* If the user logs in via the sub-view <Login>, change the state to transfer him to his <Dashboard> */
-		UserStore.on("login", () => {
+		UserStore.on(LOGIN, () => {
 			this.setState({
 				isLoggedIn: true,
 				isLoginDataAvailable: true

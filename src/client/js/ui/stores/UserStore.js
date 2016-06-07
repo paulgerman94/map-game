@@ -1,25 +1,25 @@
 import dispatcher from "../Dispatcher";
-import { EventEmitter } from "events";
+import { LOGIN_SUCCESSFUL } from "../actions/LoginActions";
+import { EventEmitter } from "crystal-event-emitter";
+export const LOGIN = Symbol("Login");
 /**
 * This class is a flux store that keeps a global view of the user identification state.
 * It encompasses information about when the user registers, logs in, etc.
 */
 class UserStore extends EventEmitter {
 	/**
-	* Whether or not the user is logged in
-	* @property {boolean} [isLoggedIn=false]
+	* The user that is logged in
+	* @property {object} [user=null]
 	*/
-	isLoggedIn = false;
+	user = null;
 	/**
 	* Adds a user to the store
-	* @param {string} username
-	* 	The user's username
-	* @param {string} label
-	* 	The label that should be attached to the users
+	* @param {string} user
+	* 	The user's user
 	*/
-	login(username) {
-		this.isLoggedIn = true;
-		this.emit("login");
+	login(user) {
+		this.user = user;
+		this.emit(LOGIN, user);
 	}
 	/**
 	* Handles a flux action and manipulates the store depending on the action
@@ -27,9 +27,8 @@ class UserStore extends EventEmitter {
 	* 	The name of the action that the store should invoke
 	*/
 	handleActions(action) {
-		console.log("New action received:", action);
 		switch (action.type) {
-			case "LOGIN_SUCCESSFUL": {
+			case LOGIN_SUCCESSFUL: {
 				this.login(action.username);
 				break;
 			}
