@@ -112,7 +112,7 @@ export default class Login extends React.Component {
 				/* This is a flexboxgrid workaround; 6.3.0 is broken */
 				margin: 0
 			}}>
-				<div className="col-sm-3 col-lg-3">
+				<div className="col-md-3 col-lg-3">
 					<CircularProgress style={{
 						visibility: this.state.isLoggingIn ? "visible" : "hidden"
 					}}/>
@@ -124,7 +124,8 @@ export default class Login extends React.Component {
 						<TextField onKeyDown={::this.login} errorText={this.state.errorText} onChange={::this.updatePassword} floatingLabelText="Password" type="password"/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg" style={{
-						marginTop: "2rem"
+						marginTop: "1rem",
+						marginBottom: "1rem"
 					}}>
 						<RaisedButton label="Register" containerElement={
 							<Link to="register"/>
