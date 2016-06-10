@@ -195,14 +195,16 @@ export async function isFree(obj) {
 	}
 	const result = {
 		property: toCamelCase(type),
-		value: selected,
-		success: false
+		value: selected
 	};
 	try {
 		await db.none(`SELECT * FROM users WHERE ${type} = $[selected]`, {
 			selected
 		});
 		result.success = true;
+	}
+	catch (e) {
+		result.success = false;
 	}
 	finally {
 		return result;

@@ -1,7 +1,8 @@
 import Point from "../Point";
 import {
 	register as registerUser,
-	login as loginUser
+	login as loginUser,
+	isFree as isDataFree
 } from "../db";
 import { km } from "../units";
 import { log, err } from "../util";
@@ -85,7 +86,6 @@ export async function register({
 		displayName,
 		password
 	} = user;
-	/* Due to a babel bug, `register`'s await is not correctly resolved. Thus, we have to use an anonymous `async` block here. Sorry about that. */
 	(async () => {
 		const isSuccessful = await registerUser({
 			db,
@@ -136,7 +136,6 @@ export async function login({
 	if (!password) {
 		message.reply("Neither token nor password is present");
 	}
-	/* Due to a babel bug, `register`'s await is not correctly resolved. Thus, we have to use an anonymous `async` block here. Sorry about that. */
 	(async () => {
 		const isSuccessful = await loginUser({
 			accountName,
@@ -155,5 +154,39 @@ export async function login({
 			err(`A user tried to login "${accountName}" but failed.`);
 			message.reply(false);
 		}
+	})();
+}
+/**
+* Checks if certain information is still available for registration in the database
+* @param {object} options
+* 	An object
+* @param {object} options.args
+* 	A description of a user object
+* @param {string} options.args.accountName
+* 	The user's account name
+* @param {string} options.args.email
+* 	The user's email address
+* @param {object} options.db
+* 	A `pg-promise` instance of a database connection
+* @param {Message} options.message
+* 	A message object to reply to
+*/
+export async function isFree({
+	args,
+	db,
+	message
+}) {
+	const [, data] = args;
+	const {
+		accountName,
+		email
+	} = data;
+	(async () => {
+		const isFree = await isDataFree({
+			accountName,
+			db,
+			email
+		});
+		message.reply(isFree);
 	})();
 }

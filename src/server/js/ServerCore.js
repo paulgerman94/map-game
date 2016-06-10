@@ -3,8 +3,9 @@ import { log, err } from "./util";
 import { checkToken } from "./crypto";
 import * as API from "./api/index";
 const guestFunctions = {
-	register: API.register,
-	login: API.login
+	isFree: API.isFree,
+	login: API.login,
+	register: API.register
 };
 /**
 * This class is the protocol part that the server uses to communicate with.
