@@ -37,3 +37,4 @@ node_modules
 *.map
 # Dynamically generated configuration file for clients
 .tmp
+packages.js

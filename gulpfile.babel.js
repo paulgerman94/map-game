@@ -23,8 +23,17 @@ import sourceMaps from "gulp-sourcemaps";
 import tap from "gulp-tap";
 import uglify from "gulp-uglify";
 import path from "path";
-// import sass from "gulp-sass";
+import sass from "gulp-sass";
 let unixUsername = null;
+function replacer(match) {
+	const literal = match.substring(2, match.length - 2);
+	switch (literal) {
+		case "LINUX_USERNAME":
+			return unixUsername;
+		default:
+			return literal;
+	}
+}
 /**
 * Transpiles JavaScript files
 * @param {Array|string} source
@@ -37,15 +46,7 @@ let unixUsername = null;
 function transpileJS(source, destination) {
 	return gulp.src(source)
 		.pipe(sourceMaps.init())
-		.pipe(replace(/<%[^%]+%>/g, match => {
-			const literal = match.substring(2, match.length - 2);
-			switch (literal) {
-				case "LINUX_USERNAME":
-					return unixUsername;
-				default:
-					return literal;
-			}
-		}))
+		.pipe(replace(/<%[^%]+%>/g, replacer))
 		.pipe(babel())
 		.on("error", function() {
 			this.emit("end");
@@ -123,10 +124,18 @@ gulp.task("html", () => {
 		}))
 		.pipe(gulp.dest("."));
 });
+function transformJSPM() {
+	return gulp.src(["packages/system.js", "jspm.browser.js", "jspm.config.js", "dist/client/js/lib.js"])
+		.pipe(replace(/<%[^%]+%>/g, replacer))
+		.pipe(concat("packages.js"))
+// 		.pipe(uglify())
+		.pipe(gulp.dest("."));
+}
 gulp.task("js", () => {
 	const client = transpileJS(globs.client.js, paths.client.js.dest);
 	const server = transpileJS(globs.server.js, paths.server.js.dest);
-	return merge(client, server);
+	const jspm = transformJSPM();
+	return merge(client, server, jspm);
 });
 gulp.task("sw", () => {
 	return transpileJS(globs.client.sw, paths.client.sw.dest);
@@ -137,11 +146,11 @@ gulp.task("json", () => {
 		.pipe(gulp.dest(paths.client.json.dest));
 });
 gulp.task("css", () => {
-// 	const scssFiles = gulp.src(`${paths.client.css.src}/main.scss`)
-// 		.pipe(sourceMaps.init())
-// 		.pipe(sass())
+	const scssFiles = gulp.src(`${paths.client.css.src}/main.scss`)
+		.pipe(sourceMaps.init())
+		.pipe(sass());
 	const fontConfiguration = gulp.src(`${paths.client.css.dest}/fonts.css`);
-	return merge(fontConfiguration)
+	return merge(scssFiles, fontConfiguration)
 		.pipe(concat("style.css"))
 		.pipe(cleanCSS({
 			keepSpecialComments: false

@@ -1,5 +1,5 @@
 SystemJS.config({
-  baseURL: "/kdex",
+  baseURL: "/<%LINUX_USERNAME%>",
   paths: {
     "github:": "packages/github/",
     "npm:": "packages/npm/"
