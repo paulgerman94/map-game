@@ -1,5 +1,6 @@
 import { default as React, Component } from "react";
 import { AppBar, Drawer, MenuItem, IconButton } from "material-ui";
+import ExitIcon from "material-ui/svg-icons/action/exit-to-app";
 import NavigationMenu from "material-ui/svg-icons/navigation/menu";
 import FeedIcon from "material-ui/svg-icons/communication/rss-feed";
 import MessagesIcon from "material-ui/svg-icons/communication/email";
@@ -11,8 +12,9 @@ import SettingsIcon from "material-ui/svg-icons/action/settings";
 import { browserHistory } from "react-router";
 import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
-import { default as LayoutStore, MENU_TOGGLED } from "../stores/LayoutStore";
+import { default as LayoutStore, MENU_TOGGLED, LOGIN_SUCCESSFUL, LOGOUT_SUCCESSFUL } from "../stores/LayoutStore";
 import * as actions from "../actions/LayoutActions";
+import * as API from "client/api/index";
 injectTapEventPlugin();
 /**
 * This React component is used to use a common Layout across the whole page.
@@ -40,7 +42,8 @@ export default class Layout extends Component {
 		*/
 		this.state = {
 			users: LayoutStore.users,
-			isMenuVisible: LayoutStore.isMenuVisible
+			isMenuVisible: LayoutStore.isMenuVisible,
+			isLoggedIn: false
 		};
 	}
 	/**
@@ -48,6 +51,16 @@ export default class Layout extends Component {
 	* Whenever the store changes, this component will update its state.
 	*/
 	componentWillMount() {
+		LayoutStore.on(LOGIN_SUCCESSFUL, () => {
+			this.setState({
+				isLoggedIn: LayoutStore.isLoggedIn
+			});
+		});
+		LayoutStore.on(LOGOUT_SUCCESSFUL, () => {
+			this.setState({
+				isLoggedIn: LayoutStore.isLoggedIn
+			});
+		});
 		LayoutStore.on(MENU_TOGGLED, () => {
 			this.setState({
 				isMenuVisible: LayoutStore.isMenuVisible
@@ -67,6 +80,13 @@ export default class Layout extends Component {
 	* 	The component that will be displayed
 	*/
 	render() {
+		let logoutButton;
+		if (this.state.isLoggedIn || API.isLoggedIn()) {
+			logoutButton =
+			<IconButton onClick={API.logout} tooltip="Logout">
+				<ExitIcon/>
+			</IconButton>;
+		}
 		return (
 			<div>
 				<AppBar title={PROJECT_NAME} style={{
@@ -78,6 +98,7 @@ export default class Layout extends Component {
 						<IconButton tooltip="Settings">
 							<SettingsIcon/>
 						</IconButton>
+						{logoutButton}
 					</div>
 				}
 				iconElementLeft={

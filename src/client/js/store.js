@@ -64,5 +64,15 @@ class Store {
 	load(property) {
 		return this.data[property];
 	}
+	/**
+	* Determines if the store has a property or not
+	* @param {*} property
+	* 	The property name to look up
+	* @return {boolean}
+	* 	Whether the property is in the store or not
+	*/
+	has(property) {
+		return this.data.hasOwnProperty(property);
+	}
 }
 export default new Store();

@@ -4,6 +4,7 @@ import emailRegEx from "email-regex";
 import { default as React, Component } from "react";
 import { TextField, RaisedButton, CircularProgress } from "material-ui";
 import { browserHistory } from "react-router";
+import * as actions from "../actions/LoginActions";
 const emailChecker = emailRegEx({
 	exact: true
 });
@@ -230,6 +231,9 @@ export default class Register extends Component {
 				accountName,
 				email,
 				password: password[0]
+			});
+			actions.login({
+				accountName
 			});
 			isRegistrationSuccessful = true;
 		}

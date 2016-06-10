@@ -1,4 +1,5 @@
 import client from "../client";
+import * as loginActions from "client/ui/actions/LoginActions";
 import {
 	default as store,
 	TOKEN
@@ -85,11 +86,22 @@ export async function login(data = {}) {
 	}
 }
 /**
+* Determines if the user is logged in without checking the token expiration. This can be useful if the intent is to synchronously render certain elements depending on whether the user is logged in or not, without contacting the server at all.
+* @return {boolean}
+* 	Whether or not the user is logged in judging by a (non-validated!) token
+*/
+export function isLoggedIn() {
+	return store.has(TOKEN);
+}
+/**
 * Logs a user out by removing the JWT token from the store.
 * Note that JWT tokens are not designed to be invalidated; the token might still work for a third party that tries to session-hijack the user session.
 * The general approach to this issue is to choose relatively short token expiration times.
 */
 export function logout() {
 	store.remove(TOKEN);
+	setTimeout(() => {
+		loginActions.logout();
+	}, 0);
 }
 export default from "./getPOIs";

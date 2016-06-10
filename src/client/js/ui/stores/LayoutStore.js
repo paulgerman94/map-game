@@ -1,11 +1,18 @@
 import dispatcher from "../Dispatcher";
 import EventEmitter from "crystal-event-emitter";
 import { TOGGLE_MENU } from "../actions/LayoutActions";
+import { LOGIN_SUCCESSFUL, LOGOUT_SUCCESSFUL } from "../actions/LoginActions";
+export { LOGIN_SUCCESSFUL, LOGOUT_SUCCESSFUL } from "../actions/LoginActions";
 export const MENU_TOGGLED = Symbol("Menu toggled");
 /**
 * This class is a flux store that keeps a global view of the layout state.
 */
 class LayoutStore extends EventEmitter {
+	/**
+	* @type {boolean}
+	* 	Whether or not the user is logged in
+	*/
+	isLoggedIn = false;
 	/**
 	* @type {boolean}
 	* 	Whether or not the menu is visible
@@ -29,6 +36,14 @@ class LayoutStore extends EventEmitter {
 				this.toggleMenu();
 				break;
 			}
+			case LOGIN_SUCCESSFUL:
+				this.isLoggedIn = true;
+				this.emit(LOGIN_SUCCESSFUL);
+				break;
+			case LOGOUT_SUCCESSFUL:
+				this.isLoggedIn = false;
+				this.emit(LOGOUT_SUCCESSFUL);
+				break;
 			default:
 				break;
 		}
