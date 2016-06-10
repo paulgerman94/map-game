@@ -209,43 +209,49 @@ export default class Register extends Component {
 	/**
 	* Registers a user using the form data and automatically logs him in on success
 	*/
-	async register() {
-		let isRegistrationSuccessful = false;
-		this.setState({
-			isRegistering: true
-		});
-		const {
-			accountName,
-			displayName,
-			email,
-			password
-		} = this.state;
-		try {
-			await client.register({
+	async register(e) {
+		if (e.type === "keydown" && e.key !== "Enter") {
+			/* If this is a keydown event for any other key than ↲, ignore it*/
+			return;
+		}
+		if (this.isRegistrationValid) {
+			let isRegistrationSuccessful = false;
+			this.setState({
+				isRegistering: true
+			});
+			const {
 				accountName,
 				displayName,
 				email,
-				password: password[0]
-			});
-			await API.login({
-				accountName,
-				email,
-				password: password[0]
-			});
-			actions.login({
-				accountName
-			});
-			isRegistrationSuccessful = true;
-		}
-		catch (e) {
-			console.info("Registration failed.");
-		}
-		finally {
-			this.setState({
-				isRegistering: false
-			});
-			if (isRegistrationSuccessful) {
-				browserHistory.push("/");
+				password
+			} = this.state;
+			try {
+				await client.register({
+					accountName,
+					displayName,
+					email,
+					password: password[0]
+				});
+				await API.login({
+					accountName,
+					email,
+					password: password[0]
+				});
+				actions.login({
+					accountName
+				});
+				isRegistrationSuccessful = true;
+			}
+			catch (e) {
+				console.info("Registration failed.");
+			}
+			finally {
+				this.setState({
+					isRegistering: false
+				});
+				if (isRegistrationSuccessful) {
+					browserHistory.push("/");
+				}
 			}
 		}
 	}
@@ -265,19 +271,19 @@ export default class Register extends Component {
 						visibility: this.state.isRegistering ? "visible" : "hidden"
 					}}/>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Account name" onChange={::this.updateAccountName} errorText={this.state.errors.accountName}/>
+						<TextField floatingLabelText="Account name" onChange={::this.updateAccountName} onKeyDown={::this.register} errorText={this.state.errors.accountName}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Display name" onChange={::this.updateDisplayName} errorText={this.state.errors.displayName}/>
+						<TextField floatingLabelText="Display name" onChange={::this.updateDisplayName} onKeyDown={::this.register} errorText={this.state.errors.displayName}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Email" onChange={::this.updateEmail} errorText={this.state.errors.email}/>
+						<TextField floatingLabelText="Email" onChange={::this.updateEmail} onKeyDown={::this.register} errorText={this.state.errors.email}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Password" type="password" onChange={::this.updatePassword} errorText={this.state.errors.password}/>
+						<TextField floatingLabelText="Password" type="password" onChange={::this.updatePassword} onKeyDown={::this.register} errorText={this.state.errors.password}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Repeat password" type="password" onChange={::this.updateRepeatedPassword} errorText={this.state.errors.password}/>
+						<TextField floatingLabelText="Repeat password" type="password" onChange={::this.updateRepeatedPassword} onKeyDown={::this.register} errorText={this.state.errors.password}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
 						<RaisedButton disabled={!this.isRegistrationValid} primary onClick={::this.register} style={{
