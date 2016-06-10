@@ -1,7 +1,9 @@
 import client from "client/client";
+import * as API from "client/api/index";
 import emailRegEx from "email-regex";
 import { default as React, Component } from "react";
 import { TextField, RaisedButton, CircularProgress } from "material-ui";
+import { browserHistory } from "react-router";
 const emailChecker = emailRegEx({
 	exact: true
 });
@@ -13,6 +15,7 @@ export default class Register extends Component {
 		accountName: "",
 		displayName: "",
 		email: "",
+		isRegistering: false,
 		errors: {
 			accountName: null,
 			displayName: null,
@@ -182,7 +185,14 @@ export default class Register extends Component {
 				}
 			}
 			if (Array.isArray(value)) {
+				/* Every password should be set */
 				if (!value.every(x => x.length)) {
+					return false;
+				}
+			}
+			if (typeof value === "boolean") {
+				/* `state.isRegistering` should be false */
+				if (value) {
 					return false;
 				}
 			}
@@ -196,6 +206,46 @@ export default class Register extends Component {
 		return true;
 	}
 	/**
+	* Registers a user using the form data and automatically logs him in on success
+	*/
+	async register() {
+		let isRegistrationSuccessful = false;
+		this.setState({
+			isRegistering: true
+		});
+		const {
+			accountName,
+			displayName,
+			email,
+			password
+		} = this.state;
+		try {
+			await client.register({
+				accountName,
+				displayName,
+				email,
+				password: password[0]
+			});
+			await API.login({
+				accountName,
+				email,
+				password: password[0]
+			});
+			isRegistrationSuccessful = true;
+		}
+		catch (e) {
+			console.info("Registration failed.");
+		}
+		finally {
+			this.setState({
+				isRegistering: false
+			});
+			if (isRegistrationSuccessful) {
+				browserHistory.push("/");
+			}
+		}
+	}
+	/**
 	* Renders a {@link Register} component displaying a form that the user can use to register a new account
 	* @return {ReactComponent}
 	* 	The component that will be displayed
@@ -207,6 +257,9 @@ export default class Register extends Component {
 				margin: 0
 			}}>
 				<div className="col-md-3 col-lg-3">
+					<CircularProgress size={0.5} style={{
+						visibility: this.state.isRegistering ? "visible" : "hidden"
+					}}/>
 					<div className="row center-xs center-sm center-md center-lg">
 						<TextField floatingLabelText="Account name" onChange={::this.updateAccountName} errorText={this.state.errors.accountName}/>
 					</div>
@@ -223,7 +276,7 @@ export default class Register extends Component {
 						<TextField floatingLabelText="Repeat password" type="password" onChange={::this.updateRepeatedPassword} errorText={this.state.errors.password}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<RaisedButton disabled={!this.isRegistrationValid} style={{
+						<RaisedButton disabled={!this.isRegistrationValid} primary onClick={::this.register} style={{
 							marginTop: "1rem",
 							marginBottom: "1rem"
 						}} label="Register"/>

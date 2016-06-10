@@ -52,7 +52,6 @@ class Store {
 	save(property, value) {
 		const currentValue = this.data;
 		currentValue[property] = value;
-		console.log(`Overwriting ${property} with value ${value}.`);
 		this.update(currentValue);
 	}
 	/**

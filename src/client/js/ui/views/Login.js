@@ -124,8 +124,8 @@ export default class Login extends React.Component {
 						<TextField onKeyDown={::this.login} errorText={this.state.errorText} onChange={::this.updatePassword} floatingLabelText="Password" type="password"/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg" style={{
-						marginTop: "1rem",
-						marginBottom: "1rem"
+						marginTop: "2rem",
+						marginBottom: "2rem"
 					}}>
 						<RaisedButton label="Register" containerElement={
 							<Link to="register"/>
