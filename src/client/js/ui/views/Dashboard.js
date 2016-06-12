@@ -6,13 +6,17 @@ import { Map, Marker, Popup, TileLayer } from "react-leaflet";
 * It should a simple map as well as the main game components.
 */
 export default class Dashboard extends React.Component {
+	/**
+	* Fires once this React component mounts and starts rendering a Leaflet map
+	*/
 	componentDidMount() {
 		const position = [51.505, -0.09];
+		/* TODO: Fix positioning so that no scrollbar appears */
 		const map = (
 			<Map center={position} zoom={13} style={{
 				width: "calc(100vw)",
 				height: "calc(100vh - 50px)",
-				display: "block",
+				display: "block"
 			}}>
 				<TileLayer url="//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
 				<Marker position={position}>
