@@ -164,6 +164,7 @@ SystemJS.config({
   ],
   map: {
     "leaflet": "npm:leaflet@0.7.7",
+    "react-leaflet": "npm:react-leaflet@0.11.6",
     "email-regex": "npm:email-regex@1.0.0",
     "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
     "babel-types": "npm:babel-types@6.7.7",
@@ -1041,6 +1042,17 @@ SystemJS.config({
         "pgpass": "npm:pgpass@0.0.3",
         "pg-types": "npm:pg-types@1.11.0",
         "generic-pool": "npm:generic-pool@2.4.2"
+      }
+    },
+    "npm:react-leaflet@0.11.6": {
+      "map": {
+        "warning": "npm:warning@3.0.0",
+        "lodash": "npm:lodash@4.13.1"
+      }
+    },
+    "npm:warning@3.0.0": {
+      "map": {
+        "loose-envify": "npm:loose-envify@1.2.0"
       }
     }
   }

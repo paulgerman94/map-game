@@ -117,9 +117,7 @@ export default class Layout extends Component {
 					<MenuItem onClick={actions.toggleMenu} leftIcon={<ShopIcon/>} primaryText="Shop"/>
 					<MenuItem onClick={actions.toggleMenu} leftIcon={<HelpCenterIcon/>} primaryText="Help center"/>
 				</Drawer>
-				<main style={{
-					marginTop: "2rem"
-				}}>
+				<main>
 					{this.props.children}
 				</main>
 			</div>
