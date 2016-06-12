@@ -22,8 +22,6 @@ export default class Dashboard extends React.Component {
 				</Marker>
 			</Map>
 		);
-		// render(map, document.getElementById("map-container"));
-		// console.log(map);
 		const mapContainer = ReactDOM.findDOMNode(this).querySelector("map-container");
 		render(map, mapContainer);
 	}
