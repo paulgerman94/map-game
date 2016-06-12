@@ -25,6 +25,13 @@ import uglify from "gulp-uglify";
 import path from "path";
 import sass from "gulp-sass";
 let unixUsername = null;
+/**
+* Replaces custom literals by values in the build process. This is needed so that every developer can work on his own build without interfering with the others.
+* @param {string} match
+* 	The literal to substitute
+* @return {string}
+* 	The replacement string, if the substitution is successful, otherwise the unchanged input match
+*/
 function replacer(match) {
 	const literal = match.substring(2, match.length - 2);
 	switch (literal) {
@@ -33,6 +40,18 @@ function replacer(match) {
 		default:
 			return literal;
 	}
+}
+/**
+* Transforms all jspm-related files to a single bundle
+* @return {Stream}
+* 	A stream of the virtual files being transformed
+*/
+function transformJSPM() {
+	return gulp.src(["packages/system.js", "jspm.browser.js", "jspm.config.js", "dist/client/js/lib.js"])
+		.pipe(replace(/<%[^%]+%>/g, replacer))
+		.pipe(concat("packages.js"))
+// 		.pipe(uglify())
+		.pipe(gulp.dest("."));
 }
 /**
 * Transpiles JavaScript files
@@ -124,13 +143,6 @@ gulp.task("html", () => {
 		}))
 		.pipe(gulp.dest("."));
 });
-function transformJSPM() {
-	return gulp.src(["packages/system.js", "jspm.browser.js", "jspm.config.js", "dist/client/js/lib.js"])
-		.pipe(replace(/<%[^%]+%>/g, replacer))
-		.pipe(concat("packages.js"))
-// 		.pipe(uglify())
-		.pipe(gulp.dest("."));
-}
 gulp.task("js", () => {
 	const client = transpileJS(globs.client.js, paths.client.js.dest);
 	const server = transpileJS(globs.server.js, paths.server.js.dest);

@@ -163,6 +163,7 @@ SystemJS.config({
     "github:*/*.json"
   ],
   map: {
+    "leaflet": "npm:leaflet@0.7.7",
     "email-regex": "npm:email-regex@1.0.0",
     "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
     "babel-types": "npm:babel-types@6.7.7",

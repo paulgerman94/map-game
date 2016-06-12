@@ -89,6 +89,7 @@
       "ip-regex": "npm:ip-regex@^1.0.3",
       "json": "github:systemjs/plugin-json@^0.1.0",
       "jsonwebtoken": "npm:jsonwebtoken@^5.4.0",
+      "leaflet": "npm:leaflet@^0.7.7",
       "material-ui": "npm:material-ui@0.15.0",
       "pg": "npm:pg@^4.4.2",
       "pg-native": "npm:pg-native@^1.9.0",
@@ -186,6 +187,9 @@
         "ignore": [
           "test.js"
         ]
+      },
+      "npm:leaflet@0.7.7": {
+        "jspmNodeConversion": false
       },
       "npm:ms@0.7.1": {
         "jspmNodeConversion": false,

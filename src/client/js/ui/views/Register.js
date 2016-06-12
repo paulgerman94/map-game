@@ -208,6 +208,8 @@ export default class Register extends Component {
 	}
 	/**
 	* Registers a user using the form data and automatically logs him in on success
+	* @param {SyntheticEvent} e
+	* 	A `material-ui` event that behaves like a `KeyboardEvent` or a `MouseEvent`
 	*/
 	async register(e) {
 		if (e.type === "keydown" && e.key !== "Enter") {
