@@ -27,7 +27,7 @@ L.AwesomeMarkers.Icon = L.Icon.extend({
 			div.innerHTML = this.createInner();
 		}
 		if (this.options.bgPos) {
-			div.style.backgroundPosition = `${-this.options.bgPos.x} px ${-this.options.bgPos.y} px`;
+			div.style.backgroundPosition = `${-this.options.bgPos.x}px ${-this.options.bgPos.y}px`;
 		}
 		this.setIconStyles(div, `icon-${this.options.markerColor}`);
 		return div;

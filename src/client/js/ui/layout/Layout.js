@@ -1,5 +1,5 @@
 import { default as React, Component } from "react";
-import { AppBar, Drawer, MenuItem, IconButton } from "material-ui";
+import { AppBar, Drawer, Dialog, MenuItem, IconButton, RaisedButton } from "material-ui";
 import ExitIcon from "material-ui/svg-icons/action/exit-to-app";
 import NavigationMenu from "material-ui/svg-icons/navigation/menu";
 import FeedIcon from "material-ui/svg-icons/communication/rss-feed";
@@ -12,8 +12,16 @@ import SettingsIcon from "material-ui/svg-icons/action/settings";
 import { browserHistory } from "react-router";
 import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
-import { default as LayoutStore, MENU_TOGGLED, LOGIN_SUCCESSFUL, LOGOUT_SUCCESSFUL } from "../stores/LayoutStore";
+import {
+	default as LayoutStore,
+	MENU_TOGGLED,
+	LOGIN_SUCCESSFUL,
+	LOGOUT_SUCCESSFUL,
+	REQUEST_LOCATION,
+	REQUEST_LOCATION_SETUP
+} from "../stores/LayoutStore";
 import * as actions from "../actions/LayoutActions";
+import { grantLocation } from "../actions/GPSActions";
 import * as API from "client/api/index";
 injectTapEventPlugin();
 /**
@@ -43,8 +51,23 @@ export default class Layout extends Component {
 		this.state = {
 			users: LayoutStore.users,
 			isMenuVisible: LayoutStore.isMenuVisible,
-			isLoggedIn: false
+			isLoggedIn: false,
+			isLocationRequested: false,
+			isLocationSetupRequested: false
 		};
+	}
+	acceptLocation() {
+		grantLocation();
+		this.setState({
+			isLocationRequested: false
+		});
+	}
+	cancelLocation() {
+		this.setState({
+			isLocationRequested: false,
+			isLocationSetupRequested: false
+		});
+		API.logout();
 	}
 	/**
 	* Fires before a React component mounts and sets up event listeners for the store.
@@ -64,6 +87,16 @@ export default class Layout extends Component {
 		LayoutStore.on(MENU_TOGGLED, () => {
 			this.setState({
 				isMenuVisible: LayoutStore.isMenuVisible
+			});
+		});
+		LayoutStore.on(REQUEST_LOCATION, () => {
+			this.setState({
+				isLocationRequested: true
+			});
+		});
+		LayoutStore.on(REQUEST_LOCATION_SETUP, () => {
+			this.setState({
+				isLocationSetupRequested: true
 			});
 		});
 	}
@@ -89,6 +122,21 @@ export default class Layout extends Component {
 		}
 		return (
 			<div>
+				<Dialog title="Location needed" modal={true} open={this.state.isLocationRequested} actions={
+					<div>
+						<RaisedButton label="Cancel" onClick={::this.cancelLocation}/>
+						<RaisedButton label="Accept" primary onClick={::this.acceptLocation}/>
+					</div>
+				}>
+					In order to play, you must share your location with {PROJECT_NAME}.
+				</Dialog>
+				<Dialog title="Location setup needed" modal={true} open={this.state.isLocationSetupRequested} actions={
+					<div>
+						<RaisedButton label="Exit" onClick={::this.cancelLocation}/>
+					</div>
+				}>
+					Sorry, but it seems as if you can't play {PROJECT_NAME}. Please unblock your GeoLocation permission for {PROJECT_NAME} if you want to play.
+				</Dialog>
 				<AppBar title={PROJECT_NAME} style={{
 					cursor: "pointer"
 				}} onTitleTouchTap={() => {
