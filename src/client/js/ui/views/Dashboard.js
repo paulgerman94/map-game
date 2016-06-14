@@ -1,33 +1,39 @@
 import React from "react";
-import { default as ReactDOM, render } from "react-dom";
-import { Map, Marker, Popup, TileLayer } from "react-leaflet";
+import { default as ReactDOM } from "react-dom";
+import L from "client/ui/LeafletWrapper";
+import { coffeeMarker } from "../markers";
 /**
 * This component contains the dashboard view that the user should see when entering the app as a logged in user.
 * It should a simple map as well as the main game components.
 */
 export default class Dashboard extends React.Component {
+	state = {
+		markers: [{
+			latitude: 51.505,
+			longitude: -0.09,
+			popup: "hello"
+		}, {
+			latitude: 51.525,
+			longitude: -0.09,
+			popup: "nothing here"
+		}]
+	};
 	/**
 	* Fires once this React component mounts and starts rendering a Leaflet map
 	*/
 	componentDidMount() {
-		const position = [51.505, -0.09];
-		/* TODO: Fix positioning so that no scrollbar appears */
-		const map = (
-			<Map center={position} zoom={13} style={{
-				width: "calc(100vw)",
-				height: "calc(100vh - 50px)",
-				display: "block"
-			}}>
-				<TileLayer url="//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-				<Marker position={position}>
-					<Popup>
-						<span>A pretty CSS3 popup.<br/>Easily customizable.</span>
-					</Popup>
-				</Marker>
-			</Map>
-		);
 		const mapContainer = ReactDOM.findDOMNode(this).querySelector("map-container");
-		render(map, mapContainer);
+		const position = [51.505, -0.09];
+		const map = L.map(mapContainer)
+			.setView(position, 13);
+		L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+		for (const item of this.state.markers) {
+			const marker = L.marker([item.latitude, item.longitude], {
+				icon: coffeeMarker
+			});
+			marker.addTo(map)
+				.bindPopup(item.popup);
+		}
 	}
 	/**
 	* Renders a component with a simple login menu
@@ -36,13 +42,8 @@ export default class Dashboard extends React.Component {
 	*/
 	render() {
 		return (
-			<div className="row center-xs center-sm center-md center-lg" style={{
-				/* This is a flexboxgrid workaround; 6.3.0 is broken */
-				margin: 0
-			}}>
-				<div className="col-sm-12 col-lg-12">
-					<map-container/>
-				</div>
+			<div>
+				<map-container/>
 			</div>
 		);
 	}

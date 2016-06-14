@@ -114,7 +114,8 @@ export default class Login extends React.Component {
 			}}>
 				<div className="col-md-3 col-lg-3">
 					<CircularProgress style={{
-						visibility: this.state.isLoggingIn ? "visible" : "hidden"
+						visibility: this.state.isLoggingIn ? "visible" : "hidden",
+						margin: "2rem auto"
 					}}/>
 					<p>Please log in to continue.</p>
 					<div className="row center-xs center-sm center-md center-lg">

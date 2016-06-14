@@ -38,3 +38,5 @@ node_modules
 # Dynamically generated configuration file for clients
 .tmp
 packages.js
+# Bower
+components

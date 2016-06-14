@@ -1,0 +1,8 @@
+.leaflet-control-attribution, .leaflet-control-zoom {
+	display: none;
+}
+map-container {
+	display: block;
+	width: 100%;
+	height: calc(100vh - 50px);
+}

@@ -1,4 +1,5 @@
 @import "material";
+@import "leaflet";
 $foucTime: 0.4s;
 * {
 	padding: 0;
@@ -24,6 +25,3 @@ body[invisible] {
 	opacity: 0;
 	transition: opacity $foucTime;
 }
-/*chat-renderer {
-	margin-bottom: 1em;
-}*/

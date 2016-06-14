@@ -1,0 +1,18 @@
+{
+  "name": "map-game",
+  "description": "",
+  "main": "gulpfile.babel.js",
+  "authors": [
+    "kdex"
+  ],
+  "license": "GPL-3.0",
+  "homepage": "https://github.com/kdex/map-game",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
