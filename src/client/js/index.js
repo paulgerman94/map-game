@@ -7,7 +7,6 @@ import Register from "./ui/views/Register";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMUITheme from "material-ui/styles/getMuiTheme";
 import client from "./client";
-// import getPOIs from "./getPOIs";
 import {
 	blue300,
 	grey100, grey500,
@@ -36,8 +35,6 @@ const muiTheme = getMUITheme({
 (async () => {
 	try {
 		await client.open();
-		// 	const pois = await getPOIs(client);
-		// 	console.log(pois);
 		// const exOmni = {
 		// 	accountName: "exomni",
 		// 	email: "ex@om.ni",

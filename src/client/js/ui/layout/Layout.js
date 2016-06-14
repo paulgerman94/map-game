@@ -56,6 +56,9 @@ export default class Layout extends Component {
 			isLocationSetupRequested: false
 		};
 	}
+	/**
+	* Runs when the user presses the `Accept` button when asked whether he'd like to share his location and either logs the user out or fires a success, depending on what the user decides to do.
+	*/
 	acceptLocation() {
 		navigator.geolocation.getCurrentPosition(() => {
 			this.setState({
@@ -69,6 +72,9 @@ export default class Layout extends Component {
 			API.logout();
 		});
 	}
+	/**
+	* Runs when the user presses the `Cancel` button when asked whether he'd like to share his location and logs the user out.
+	*/
 	cancelLocation() {
 		this.setState({
 			isLocationRequested: false,

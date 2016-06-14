@@ -12,9 +12,11 @@ import { Restaurant } from "../flags/Restaurant";
 */
 export default class Dashboard extends React.Component {
 	map = null;
+	/**
+	* Watches the user coordinates in an interval and sends them to the server. Once the server replies with the corresponding flags, the flags are added to the map.
+	*/
 	async receiveUserCoordinates() {
 		navigator.geolocation.watchPosition(async position => {
-			console.log(position);
 			const { coords } = position;
 			const {
 				latitude,
@@ -38,6 +40,9 @@ export default class Dashboard extends React.Component {
 			}
 		});
 	}
+	/**
+	* Sets up all event listeners
+	*/
 	componentWillMount() {
 		DashboardStore.on(GRANT_LOCATION, () => {
 			::this.receiveUserCoordinates();
