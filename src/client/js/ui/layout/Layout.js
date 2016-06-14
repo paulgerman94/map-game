@@ -57,9 +57,16 @@ export default class Layout extends Component {
 		};
 	}
 	acceptLocation() {
-		grantLocation();
-		this.setState({
-			isLocationRequested: false
+		navigator.geolocation.getCurrentPosition(() => {
+			this.setState({
+				isLocationRequested: false
+			});
+			grantLocation();
+		}, () => {
+			this.setState({
+				isLocationRequested: false
+			});
+			API.logout();
 		});
 	}
 	cancelLocation() {
