@@ -5,10 +5,14 @@
 $ pacman -S python2
 # cordova is a platform for hybrid apps
 # gulp is a task runner
-$ npm install -g cordova gulp jspm
+# jspm is a module transformer
+# bower is a package manager for web assets
+$ npm install -g cordova gulp jspm bower
 ```
 ## Installation
 ```bash
+# Install all web assets
+$ bower install
 # Install all node dependencies
 $ npm install
 # Install all web dependencies
