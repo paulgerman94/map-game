@@ -7,15 +7,9 @@ import {
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED
 } from "../actions/ConnectionActions";
-export {
-	LOGIN,
-	LOGIN_FAILED,
-	LOGOUT,
-	CONNECTION_DISRUPTED,
-	CONNECTION_ESTABLISHED
-} from "../actions/ConnectionActions";
+export * from "../actions/ConnectionActions";
 /**
-* This class is a flux store that keeps a global view of the user identification state.
+* This class is a flux store that keeps a global view of the connection state.
 * It encompasses information about when the user registers, logs in, etc.
 */
 class ConnectionStore extends EventEmitter {

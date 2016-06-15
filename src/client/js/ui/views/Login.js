@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router";
 import { TextField, RaisedButton, CircularProgress } from "material-ui";
 import * as API from "client/api/index";
-import * as connectionActions from "../actions/ConnectionActions";
 import {
 	default as ConnectionStore,
+	signalLogin,
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED,
 	LOGIN_FAILED
@@ -58,7 +58,7 @@ export default class Login extends React.Component {
 						isLoggingIn: false
 					});
 					if (isLoginSuccessful) {
-						connectionActions.signalLogin({
+						signalLogin({
 							accountName
 						});
 					}

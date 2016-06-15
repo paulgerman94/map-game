@@ -5,11 +5,7 @@ import {
 	LOCATION_REQUESTED,
 	LOCATION_SETUP_REQUESTED
 } from "../actions/LocationActions";
-export {
-	LOCATION_GRANTED,
-	LOCATION_REQUESTED,
-	LOCATION_SETUP_REQUESTED
-} from "../actions/LocationActions";
+export * from "../actions/LocationActions";
 /**
 * This class is a flux store that keeps a global view of the user location and its associated permissions.
 */

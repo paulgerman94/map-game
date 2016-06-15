@@ -2,8 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import L from "client/ui/LeafletWrapper";
 import client from "client/client";
-import { signalLocationRequested, signalLocationSetupRequested } from "../actions/LocationActions";
-import { default as LocationStore, LOCATION_GRANTED } from "../stores/LocationStore";
+import {
+	default as LocationStore,
+	signalLocationRequested,
+	signalLocationSetupRequested,
+	LOCATION_GRANTED
+} from "../stores/LocationStore";
 import { Flag } from "../flags/Flag";
 import { Restaurant } from "../flags/Restaurant";
 /**

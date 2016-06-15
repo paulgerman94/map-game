@@ -14,21 +14,22 @@ import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import {
 	default as LayoutStore,
+	signalMenuToggled,
 	MENU_TOGGLED
 } from "../stores/LayoutStore";
 import {
 	default as LocationStore,
+	signalLocationGranted,
 	LOCATION_REQUESTED,
 	LOCATION_SETUP_REQUESTED
 } from "../stores/LocationStore";
 import {
 	default as ConnectionStore,
+	signalConnectionDisruption,
+	signalConnectionEstablished,
 	LOGIN,
 	LOGOUT
 } from "../stores/ConnectionStore";
-import * as actions from "../actions/LayoutActions";
-import { signalLocationGranted } from "../actions/LocationActions";
-import { signalConnectionDisruption, signalConnectionEstablished } from "../actions/ConnectionActions";
 import * as API from "client/api/index";
 import { s } from "server/units";
 injectTapEventPlugin();
@@ -134,7 +135,7 @@ export default class Layout extends Component {
 	* If the menu is visible, this function will make it invisible.
 	*/
 	toggleMenu() {
-		actions.signalMenuToggled();
+		signalMenuToggled();
 	}
 	/**
 	* Renders a {@link Layout} component with a menu, the navigation bar and all components that this component contains.
