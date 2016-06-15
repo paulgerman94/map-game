@@ -164,7 +164,7 @@ SystemJS.config({
   ],
   map: {
     "leaflet": "npm:leaflet@0.7.7",
-    "react-leaflet": "npm:react-leaflet@0.11.6",
+    "react-leaflet": "npm:react-leaflet@0.11.7",
     "email-regex": "npm:email-regex@1.0.0",
     "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
     "babel-types": "npm:babel-types@6.7.7",
@@ -173,7 +173,7 @@ SystemJS.config({
     "Polymer/polymer": "github:Polymer/polymer@1.5.0",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
     "babel-polyfill": "npm:babel-polyfill@6.9.1",
-    "bcrypt": "npm:bcrypt@0.8.6",
+    "bcrypt": "npm:bcrypt@0.8.7",
     "bcrypt-nodejs": "npm:bcrypt-nodejs@0.0.3",
     "buffer": "github:jspm/nodelibs-buffer@0.2.0-alpha",
     "chalk": "npm:chalk@1.1.3",
@@ -246,17 +246,12 @@ SystemJS.config({
         "babel-code-frame": "npm:babel-code-frame@6.8.0",
         "babel-messages": "npm:babel-messages@6.8.0",
         "babel-runtime": "npm:babel-runtime@6.9.2",
-        "babel-types": "npm:babel-types@6.9.1",
-        "babylon": "npm:babylon@6.8.0",
+        "babel-types": "npm:babel-types@6.10.0",
+        "babylon": "npm:babylon@6.8.1",
         "debug": "npm:debug@2.2.0",
         "globals": "npm:globals@8.18.0",
         "invariant": "npm:invariant@2.2.1",
         "lodash": "npm:lodash@4.13.1"
-      }
-    },
-    "npm:babylon@6.8.0": {
-      "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.2"
       }
     },
     "npm:loose-envify@1.2.0": {
@@ -313,7 +308,7 @@ SystemJS.config({
     },
     "npm:recompose@0.17.0": {
       "map": {
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.0.6",
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.1.0",
         "lodash": "npm:lodash@4.13.1"
       }
     },
@@ -439,7 +434,7 @@ SystemJS.config({
         "browserify-rsa": "npm:browserify-rsa@4.0.1",
         "create-hash": "npm:create-hash@1.1.2",
         "create-hmac": "npm:create-hmac@1.1.4",
-        "elliptic": "npm:elliptic@6.2.8",
+        "elliptic": "npm:elliptic@6.3.1",
         "inherits": "npm:inherits@2.0.1",
         "parse-asn1": "npm:parse-asn1@5.0.0"
       }
@@ -486,7 +481,7 @@ SystemJS.config({
     "npm:create-ecdh@4.0.0": {
       "map": {
         "bn.js": "npm:bn.js@4.11.4",
-        "elliptic": "npm:elliptic@6.2.8"
+        "elliptic": "npm:elliptic@6.3.1"
       }
     },
     "npm:create-hash@1.1.2": {
@@ -685,7 +680,7 @@ SystemJS.config({
       "map": {
         "pg": "npm:pg@4.5.6",
         "pg-minify": "npm:pg-minify@0.1.5",
-        "spex": "npm:spex@0.4.4"
+        "spex": "npm:spex@0.4.5"
       }
     },
     "npm:pgpass@0.0.3": {
@@ -877,7 +872,7 @@ SystemJS.config({
         "history": "npm:history@2.1.2",
         "invariant": "npm:invariant@2.2.1",
         "warning": "npm:warning@2.1.0",
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.0.6"
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.1.0"
       }
     },
     "npm:history@2.1.2": {
@@ -913,12 +908,6 @@ SystemJS.config({
         "lodash.rest": "npm:lodash.rest@4.0.3",
         "lodash.isplainobject": "npm:lodash.isplainobject@4.0.4",
         "lodash._root": "npm:lodash._root@3.0.1"
-      }
-    },
-    "npm:bcrypt@0.8.6": {
-      "map": {
-        "nan": "npm:nan@2.2.1",
-        "bindings": "npm:bindings@1.2.1"
       }
     },
     "npm:libpq@1.8.2": {
@@ -958,15 +947,6 @@ SystemJS.config({
         "babel-runtime": "npm:babel-runtime@6.9.2",
         "core-js": "npm:core-js@2.4.0",
         "regenerator-runtime": "npm:regenerator-runtime@0.9.5"
-      }
-    },
-    "npm:babel-types@6.9.1": {
-      "map": {
-        "babel-traverse": "npm:babel-traverse@6.9.0",
-        "esutils": "npm:esutils@2.0.2",
-        "lodash": "npm:lodash@4.13.1",
-        "to-fast-properties": "npm:to-fast-properties@1.0.2",
-        "babel-runtime": "npm:babel-runtime@6.9.2"
       }
     },
     "npm:babel-runtime@6.9.2": {
@@ -1018,14 +998,6 @@ SystemJS.config({
         "inline-style-prefixer": "npm:inline-style-prefixer@1.0.4"
       }
     },
-    "npm:elliptic@6.2.8": {
-      "map": {
-        "inherits": "npm:inherits@2.0.1",
-        "hash.js": "npm:hash.js@1.0.3",
-        "brorand": "npm:brorand@1.0.5",
-        "bn.js": "npm:bn.js@4.11.4"
-      }
-    },
     "npm:asn1.js@4.6.2": {
       "map": {
         "inherits": "npm:inherits@2.0.1",
@@ -1044,15 +1016,43 @@ SystemJS.config({
         "generic-pool": "npm:generic-pool@2.4.2"
       }
     },
-    "npm:react-leaflet@0.11.6": {
+    "npm:warning@3.0.0": {
+      "map": {
+        "loose-envify": "npm:loose-envify@1.2.0"
+      }
+    },
+    "npm:bcrypt@0.8.7": {
+      "map": {
+        "bindings": "npm:bindings@1.2.1",
+        "nan": "npm:nan@2.3.5"
+      }
+    },
+    "npm:react-leaflet@0.11.7": {
       "map": {
         "warning": "npm:warning@3.0.0",
         "lodash": "npm:lodash@4.13.1"
       }
     },
-    "npm:warning@3.0.0": {
+    "npm:babel-types@6.10.0": {
       "map": {
-        "loose-envify": "npm:loose-envify@1.2.0"
+        "babel-traverse": "npm:babel-traverse@6.9.0",
+        "lodash": "npm:lodash@4.13.1",
+        "to-fast-properties": "npm:to-fast-properties@1.0.2",
+        "esutils": "npm:esutils@2.0.2",
+        "babel-runtime": "npm:babel-runtime@6.9.2"
+      }
+    },
+    "npm:babylon@6.8.1": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2"
+      }
+    },
+    "npm:elliptic@6.3.1": {
+      "map": {
+        "bn.js": "npm:bn.js@4.11.4",
+        "inherits": "npm:inherits@2.0.1",
+        "brorand": "npm:brorand@1.0.5",
+        "hash.js": "npm:hash.js@1.0.3"
       }
     }
   }
