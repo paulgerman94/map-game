@@ -1,8 +1,14 @@
 import React from "react";
 import { Link } from "react-router";
 import { TextField, RaisedButton, CircularProgress } from "material-ui";
-import { login } from "client/api/index";
-import * as actions from "../actions/LoginActions";
+import * as API from "client/api/index";
+import * as loginActions from "../actions/LoginActions";
+import {
+	default as ConnectionStore,
+	CONNECTION_DISRUPTED,
+	CONNECTION_ESTABLISHED,
+	LOGIN_FAILED
+} from "../stores/ConnectionStore";
 /**
 * This component contains the home view that the user should see when entering the app.
 * It should a simple login/registration menu if the user isn't logged in.
@@ -34,7 +40,7 @@ export default class Login extends React.Component {
 				});
 				const { accountName, password } = this.state;
 				try {
-					await login({
+					await API.login({
 						accountName,
 						password
 					});
@@ -45,23 +51,35 @@ export default class Login extends React.Component {
 					isLoginSuccessful = true;
 				}
 				catch (e) {
-					/* Don't differentiate errors for now */
-					this.setState({
-						errorText: "Login failed. Please check your credentials."
-					});
+					/* All errors are covered by ConnectionStore events */
 				}
 				finally {
 					this.setState({
 						isLoggingIn: false
 					});
 					if (isLoginSuccessful) {
-						actions.login({
+						loginActions.login({
 							accountName
 						});
 					}
 				}
 			}
 		}
+	}
+	assumeServerDown() {
+		this.setState({
+			errorText: "The server is currently down."
+		});
+	}
+	assumeServerUp() {
+		this.setState({
+			errorText: null
+		});
+	}
+	assumeBadCredentials() {
+		this.setState({
+			errorText: "Login failed. Please check your credentials."
+		});
 	}
 	/**
 	* Updates the state's account name and determines if it is valid or not
@@ -100,6 +118,16 @@ export default class Login extends React.Component {
 	*/
 	get isLoginValid() {
 		return this.state.isAccountNameValid && this.state.isPasswordValid && !this.state.isLoggingIn;
+	}
+	componentWillMount() {
+		ConnectionStore.on(CONNECTION_DISRUPTED, ::this.assumeServerDown);
+		ConnectionStore.on(CONNECTION_ESTABLISHED, ::this.assumeServerUp);
+		ConnectionStore.on(LOGIN_FAILED, ::this.assumeBadCredentials);
+	}
+	componentWillUnmount() {
+		ConnectionStore.off(CONNECTION_DISRUPTED, ::this.assumeServerDown);
+		ConnectionStore.off(CONNECTION_ESTABLISHED, ::this.assumeServerUp);
+		ConnectionStore.off(LOGIN_FAILED, ::this.assumeBadCredentials);
 	}
 	/**
 	* Renders a component with a simple login menu

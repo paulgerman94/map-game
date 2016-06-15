@@ -1,17 +1,34 @@
 import dispatcher from "../Dispatcher";
 import { EventEmitter } from "crystal-event-emitter";
-import { LOGIN_SUCCESSFUL, LOGOUT_SUCCESSFUL } from "../actions/LoginActions";
-export { LOGIN_SUCCESSFUL, LOGOUT_SUCCESSFUL } from "../actions/LoginActions";
+import {
+	LOGIN_SUCCESSFUL,
+	LOGIN_FAILED,
+	LOGOUT_SUCCESSFUL,
+	CONNECTION_DISRUPTED,
+	CONNECTION_ESTABLISHED
+} from "../actions/LoginActions";
+export {
+	LOGIN_SUCCESSFUL,
+	LOGIN_FAILED,
+	LOGOUT_SUCCESSFUL,
+	CONNECTION_DISRUPTED,
+	CONNECTION_ESTABLISHED
+} from "../actions/LoginActions";
 /**
 * This class is a flux store that keeps a global view of the user identification state.
 * It encompasses information about when the user registers, logs in, etc.
 */
-class UserStore extends EventEmitter {
+class ConnectionStore extends EventEmitter {
 	/**
 	* The user that is logged in
 	* @property {object} [user=null]
 	*/
 	user = null;
+	/**
+	* States whether the client is connected to the server or not
+	* @property {boolean} isConnected
+	*/
+	isConnected;
 	/**
 	* Adds a user to the store
 	* @param {string} user
@@ -48,14 +65,30 @@ class UserStore extends EventEmitter {
 			case LOGIN_SUCCESSFUL:
 				this.login(action.username);
 				break;
+			case LOGIN_FAILED:
+				this.user = null;
+				this.emit(action.type);
+				break;
 			case LOGOUT_SUCCESSFUL:
 				this.logout();
+				break;
+			case CONNECTION_DISRUPTED:
+				if (this.isConnected !== false) {
+					this.isConnected = false;
+					this.emit(action.type);
+				}
+				break;
+			case CONNECTION_ESTABLISHED:
+				if (this.isConnected !== true) {
+					this.isConnected = true;
+					this.emit(action.type);
+				}
 				break;
 			default:
 				break;
 		}
 	}
 }
-const userStore = new UserStore();
-dispatcher.register(::userStore.handleActions);
-export default userStore;
+const connectionStore = new ConnectionStore();
+dispatcher.register(::connectionStore.handleActions);
+export default connectionStore;

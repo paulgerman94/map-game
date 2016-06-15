@@ -77,6 +77,7 @@ export async function login(data = {}) {
 			return true;
 		}
 		else {
+			loginActions.signalLoginFailed();
 			throw new Error("There was a login data error.");
 		}
 	}
@@ -92,6 +93,14 @@ export async function login(data = {}) {
 */
 export function isLoggedIn() {
 	return store.has(TOKEN);
+}
+/**
+* Determines if the WebSocket connection to the server is open
+* @return {boolean}
+* 	Whether or not the WebSocket connection to the server is open
+*/
+export function isConnectionOpen() {
+	return client.ws && client.ws.readyState === WebSocket.OPEN;
 }
 /**
 * Logs a user out by removing the JWT token from the store.

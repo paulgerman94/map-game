@@ -1,8 +1,12 @@
 import React from "react";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
-import { login } from "client/api/index";
-import { default as UserStore, LOGIN_SUCCESSFUL, LOGOUT_SUCCESSFUL } from "../stores/UserStore";
+import * as API from "client/api/index";
+import {
+	default as ConnectionStore,
+	LOGIN_SUCCESSFUL,
+	LOGOUT_SUCCESSFUL
+} from "../stores/ConnectionStore";
 /**
 * This component contains the home view that the user should see when entering the app.
 * It should a simple login/registration menu if the user isn't logged in.
@@ -39,12 +43,12 @@ export default class Home extends React.Component {
 	*/
 	async componentWillMount() {
 		/* If the user logs out, change the state to transfer him to his <Login> view again */
-		UserStore.on(LOGOUT_SUCCESSFUL, ::this.logout);
+		ConnectionStore.on(LOGOUT_SUCCESSFUL, ::this.logout);
 		/* If the user logs in via the sub-view <Login>, change the state to transfer him to his <Dashboard> */
-		UserStore.on(LOGIN_SUCCESSFUL, ::this.login);
+		ConnectionStore.on(LOGIN_SUCCESSFUL, ::this.login);
 		try {
 			/* If we can log in by just using the session token, we can show the dashboard */
-			await login();
+			await API.login();
 			this.login();
 		}
 		catch (e) {
@@ -57,8 +61,8 @@ export default class Home extends React.Component {
 	*/
 	async componentWillUnmount() {
 		/* Unregister event listeners */
-		UserStore.off(LOGOUT_SUCCESSFUL, ::this.logout);
-		UserStore.off(LOGIN_SUCCESSFUL, ::this.login);
+		ConnectionStore.off(LOGOUT_SUCCESSFUL, ::this.logout);
+		ConnectionStore.off(LOGIN_SUCCESSFUL, ::this.login);
 	}
 	/**
 	* Renders a component with a simple login menu

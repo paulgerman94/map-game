@@ -13,6 +13,8 @@ export class ClientCore extends WS {
 	constructor() {
 		const isEncrypted = location.protocol === "https:";
 		super(`ws${isEncrypted ? "s" : ""}://${location.host}/socket/<%LINUX_USERNAME%>`, undefined, {
+			reconnectionMinimum: 1000,
+			reconnectionFactor: 1.0,
 			rpcOptions: {
 				timeout: 20 * s
 			}

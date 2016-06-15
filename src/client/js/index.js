@@ -34,13 +34,8 @@ const muiTheme = getMUITheme({
 // }
 (async () => {
 	try {
+		/* The first rendering of the page should also try to establish a WebSocket connection */
 		await client.open();
-		// const exOmni = {
-		// 	accountName: "exomni",
-		// 	email: "ex@om.ni",
-		// 	displayName: "exOmni",
-		// 	password: "password123"
-		// };
 	}
 	catch (e) {
 		console.info("Server is currently offline.");

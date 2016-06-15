@@ -22,7 +22,9 @@ import {
 } from "../stores/LayoutStore";
 import * as actions from "../actions/LayoutActions";
 import { grantLocation } from "../actions/GPSActions";
+import { signalConnectionDisruption, signalConnectionEstablished } from "../actions/LoginActions";
 import * as API from "client/api/index";
+import { s } from "server/units";
 injectTapEventPlugin();
 /**
 * This React component is used to use a common Layout across the whole page.
@@ -112,6 +114,15 @@ export default class Layout extends Component {
 				isLocationSetupRequested: true
 			});
 		});
+		setInterval(::this.checkConnection, s);
+	}
+	checkConnection() {
+		if (!API.isConnectionOpen()) {
+			signalConnectionDisruption();
+		}
+		else {
+			signalConnectionEstablished();
+		}
 	}
 	/**
 	* If the menu is invisible, this function will make it visible.
