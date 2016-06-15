@@ -1,13 +1,25 @@
 import dispatcher from "../Dispatcher";
 import { EventEmitter } from "crystal-event-emitter";
-import {
-	LOGIN,
-	LOGIN_FAILED,
-	LOGOUT,
-	CONNECTION_DISRUPTED,
-	CONNECTION_ESTABLISHED
-} from "../actions/ConnectionActions";
-export * from "../actions/ConnectionActions";
+/**
+* A symbol that denotes a login
+*/
+export const LOGIN = Symbol("Login");
+/**
+* A symbol that denotes a failed login
+*/
+export const LOGIN_FAILED = Symbol("Login failed");
+/**
+* A symbol that denotes a logout
+*/
+export const LOGOUT = Symbol("Logout");
+/**
+* A symbol that denotes a disrupted connection
+*/
+export const CONNECTION_DISRUPTED = Symbol("Connection disrupted");
+/**
+* A symbol that denotes an established
+*/
+export const CONNECTION_ESTABLISHED = Symbol("Connection established");
 /**
 * This class is a flux store that keeps a global view of the connection state.
 * It encompasses information about when the user registers, logs in, etc.

@@ -4,12 +4,13 @@ import L from "client/ui/LeafletWrapper";
 import client from "client/client";
 import {
 	default as LocationStore,
-	signalLocationRequested,
-	signalLocationSetupRequested,
+	LOCATION_REQUESTED,
+	LOCATION_SETUP_REQUESTED,
 	LOCATION_GRANTED
 } from "../stores/LocationStore";
 import { Flag } from "../flags/Flag";
 import { Restaurant } from "../flags/Restaurant";
+import { publish } from "../Dispatcher";
 /**
 * This component contains the dashboard view that the user should see when entering the app as a logged in user.
 * It should a simple map as well as the main game components.
@@ -73,10 +74,10 @@ export default class Dashboard extends React.Component {
 			::this.receiveUserCoordinates();
 		}
 		else if (result.state === "prompt") {
-			signalLocationRequested();
+			publish(LOCATION_REQUESTED);
 		}
 		else if (result.state === "denied") {
-			signalLocationSetupRequested();
+			publish(LOCATION_SETUP_REQUESTED);
 		}
 	}
 	/**

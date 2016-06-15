@@ -1,7 +1,9 @@
 import dispatcher from "../Dispatcher";
 import EventEmitter from "crystal-event-emitter";
-import { MENU_TOGGLED } from "../actions/LayoutActions";
-export { MENU_TOGGLED } from "../actions/LayoutActions";
+/**
+* A symbol that denotes that the menu was toggled
+*/
+export const MENU_TOGGLED = Symbol("Menu toggled");
 /**
 * This class is a flux store that keeps a global view of the layout state.
 */

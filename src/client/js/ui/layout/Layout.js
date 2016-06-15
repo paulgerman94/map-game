@@ -14,24 +14,24 @@ import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import {
 	default as LayoutStore,
-	signalMenuToggled,
 	MENU_TOGGLED
 } from "../stores/LayoutStore";
 import {
 	default as LocationStore,
-	signalLocationGranted,
+	LOCATION_GRANTED,
 	LOCATION_REQUESTED,
 	LOCATION_SETUP_REQUESTED
 } from "../stores/LocationStore";
 import {
 	default as ConnectionStore,
-	signalConnectionDisruption,
-	signalConnectionEstablished,
+	CONNECTION_DISRUPTED,
+	CONNECTION_ESTABLISHED,
 	LOGIN,
 	LOGOUT
 } from "../stores/ConnectionStore";
 import * as API from "client/api/index";
 import { s } from "server/units";
+import { publish } from "../Dispatcher";
 injectTapEventPlugin();
 /**
 * This React component is used to use a common Layout across the whole page.
@@ -72,7 +72,7 @@ export default class Layout extends Component {
 			this.setState({
 				isLocationRequested: false
 			});
-			signalLocationGranted();
+			publish(LOCATION_GRANTED);
 		}, () => {
 			this.setState({
 				isLocationRequested: false
@@ -124,10 +124,10 @@ export default class Layout extends Component {
 	}
 	checkConnection() {
 		if (!API.isConnectionOpen()) {
-			signalConnectionDisruption();
+			publish(CONNECTION_DISRUPTED);
 		}
 		else {
-			signalConnectionEstablished();
+			publish(CONNECTION_ESTABLISHED);
 		}
 	}
 	/**
@@ -135,7 +135,7 @@ export default class Layout extends Component {
 	* If the menu is visible, this function will make it invisible.
 	*/
 	toggleMenu() {
-		signalMenuToggled();
+		publish(MENU_TOGGLED);
 	}
 	/**
 	* Renders a {@link Layout} component with a menu, the navigation bar and all components that this component contains.

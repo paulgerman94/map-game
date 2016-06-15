@@ -4,11 +4,12 @@ import { TextField, RaisedButton, CircularProgress } from "material-ui";
 import * as API from "client/api/index";
 import {
 	default as ConnectionStore,
-	signalLogin,
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED,
+	LOGIN,
 	LOGIN_FAILED
 } from "../stores/ConnectionStore";
+import { publish } from "../Dispatcher";
 /**
 * This component contains the home view that the user should see when entering the app.
 * It should a simple login/registration menu if the user isn't logged in.
@@ -58,7 +59,7 @@ export default class Login extends React.Component {
 						isLoggingIn: false
 					});
 					if (isLoginSuccessful) {
-						signalLogin({
+						publish(LOGIN, {
 							accountName
 						});
 					}

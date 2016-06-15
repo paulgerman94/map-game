@@ -1,11 +1,17 @@
 import dispatcher from "../Dispatcher";
 import { EventEmitter } from "crystal-event-emitter";
-import {
-	LOCATION_GRANTED,
-	LOCATION_REQUESTED,
-	LOCATION_SETUP_REQUESTED
-} from "../actions/LocationActions";
-export * from "../actions/LocationActions";
+/**
+* A symbol that denotes that the browser registers that the location permission has been granted
+*/
+export const LOCATION_GRANTED = Symbol("Location granted");
+/**
+* A symbol that denotes that the browser tries to request the user's GeoLocation
+*/
+export const LOCATION_REQUESTED = Symbol("Location requested");
+/**
+* A symbol that denotes that the browser tries to ask the user to unblock GeoLocation
+*/
+export const LOCATION_SETUP_REQUESTED = Symbol("Location setup requested");
 /**
 * This class is a flux store that keeps a global view of the user location and its associated permissions.
 */

@@ -1,9 +1,13 @@
 import client from "../client";
-import * as connectionActions from "client/ui/actions/ConnectionActions";
 import {
 	default as cache,
 	TOKEN
 } from "../cache";
+import {
+	LOGOUT,
+	LOGIN_FAILED
+} from "client/ui/stores/ConnectionStore";
+import { publish } from "client/ui/Dispatcher";
 /**
 * Tries to login the client and caches the resulting session token if successful
 * @param {object} data
@@ -77,7 +81,7 @@ export async function login(data = {}) {
 			return true;
 		}
 		else {
-			connectionActions.signalLoginFailed();
+			publish(LOGIN_FAILED);
 			throw new Error("There was a login data error.");
 		}
 	}
@@ -110,7 +114,7 @@ export function isConnectionOpen() {
 export function logout() {
 	cache.remove(TOKEN);
 	setTimeout(() => {
-		connectionActions.signalLogout();
+		publish(LOGOUT);
 	}, 0);
 }
 export default from "./getPOIs";
