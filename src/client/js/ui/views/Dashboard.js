@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import L from "client/ui/LeafletWrapper";
 import client from "client/client";
-import { requestLocation, requestLocationSetup } from "../actions/DashboardActions";
-import { default as DashboardStore, GRANT_LOCATION } from "../stores/DashboardStore";
+import { signalLocationRequested, signalLocationSetupRequested } from "../actions/LocationActions";
+import { default as LocationStore, LOCATION_GRANTED } from "../stores/LocationStore";
 import { Flag } from "../flags/Flag";
 import { Restaurant } from "../flags/Restaurant";
 /**
@@ -44,9 +44,13 @@ export default class Dashboard extends React.Component {
 	* Sets up all event listeners
 	*/
 	componentWillMount() {
-		DashboardStore.on(GRANT_LOCATION, () => {
-			::this.receiveUserCoordinates();
-		});
+		LocationStore.on(LOCATION_GRANTED, ::this.receiveUserCoordinates);
+	}
+	/**
+	* Removes all event listeners
+	*/
+	componentWillUnmount() {
+		LocationStore.off(LOCATION_GRANTED, ::this.receiveUserCoordinates);
 	}
 	/**
 	* Fires once this React component mounts and starts rendering a Leaflet map
@@ -65,10 +69,10 @@ export default class Dashboard extends React.Component {
 			::this.receiveUserCoordinates();
 		}
 		else if (result.state === "prompt") {
-			requestLocation();
+			signalLocationRequested();
 		}
 		else if (result.state === "denied") {
-			requestLocationSetup();
+			signalLocationSetupRequested();
 		}
 	}
 	/**

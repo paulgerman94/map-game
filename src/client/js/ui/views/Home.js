@@ -4,8 +4,8 @@ import Dashboard from "./Dashboard";
 import * as API from "client/api/index";
 import {
 	default as ConnectionStore,
-	LOGIN_SUCCESSFUL,
-	LOGOUT_SUCCESSFUL
+	LOGIN,
+	LOGOUT
 } from "../stores/ConnectionStore";
 /**
 * This component contains the home view that the user should see when entering the app.
@@ -20,7 +20,7 @@ export default class Home extends React.Component {
 	/**
 	* Updates the state of this component such that only the state is displayed that users should see when they're logged out
 	*/
-	logout() {
+	showLogin() {
 		this.setState({
 			isLoggedIn: false,
 			isLoginDataAvailable: true
@@ -29,7 +29,7 @@ export default class Home extends React.Component {
 	/**
 	* Updates the state of this component such that only the state is displayed that users should see when they're logged in
 	*/
-	login() {
+	showDashboard() {
 		this.setState({
 			isLoggedIn: true,
 			isLoginDataAvailable: true
@@ -42,18 +42,18 @@ export default class Home extends React.Component {
 	* Additionally, it will set up all the listeners for the flux store.
 	*/
 	async componentWillMount() {
-		/* If the user logs out, change the state to transfer him to his <Login> view again */
-		ConnectionStore.on(LOGOUT_SUCCESSFUL, ::this.logout);
 		/* If the user logs in via the sub-view <Login>, change the state to transfer him to his <Dashboard> */
-		ConnectionStore.on(LOGIN_SUCCESSFUL, ::this.login);
+		ConnectionStore.on(LOGIN, ::this.showDashboard);
+		/* If the user logs out, change the state to transfer him to his <Login> view again */
+		ConnectionStore.on(LOGOUT, ::this.showLogin);
 		try {
 			/* If we can log in by just using the session token, we can show the dashboard */
 			await API.login();
-			this.login();
+			this.showDashboard();
 		}
 		catch (e) {
 			/* If not, we'll have to render the login/register screen */
-			this.logout();
+			this.showLogin();
 		}
 	}
 	/**
@@ -61,8 +61,8 @@ export default class Home extends React.Component {
 	*/
 	async componentWillUnmount() {
 		/* Unregister event listeners */
-		ConnectionStore.off(LOGOUT_SUCCESSFUL, ::this.logout);
-		ConnectionStore.off(LOGIN_SUCCESSFUL, ::this.login);
+		ConnectionStore.off(LOGIN, ::this.showDashboard);
+		ConnectionStore.off(LOGOUT, ::this.showLogin);
 	}
 	/**
 	* Renders a component with a simple login menu

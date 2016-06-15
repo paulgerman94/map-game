@@ -1,19 +1,19 @@
 import dispatcher from "../Dispatcher";
 import { EventEmitter } from "crystal-event-emitter";
 import {
-	LOGIN_SUCCESSFUL,
+	LOGIN,
 	LOGIN_FAILED,
-	LOGOUT_SUCCESSFUL,
+	LOGOUT,
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED
-} from "../actions/LoginActions";
+} from "../actions/ConnectionActions";
 export {
-	LOGIN_SUCCESSFUL,
+	LOGIN,
 	LOGIN_FAILED,
-	LOGOUT_SUCCESSFUL,
+	LOGOUT,
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED
-} from "../actions/LoginActions";
+} from "../actions/ConnectionActions";
 /**
 * This class is a flux store that keeps a global view of the user identification state.
 * It encompasses information about when the user registers, logs in, etc.
@@ -30,24 +30,6 @@ class ConnectionStore extends EventEmitter {
 	*/
 	isConnected;
 	/**
-	* Adds a user to the store
-	* @param {string} user
-	* 	The user's user
-	*/
-	login(user) {
-		this.user = user;
-		this.emit(LOGIN_SUCCESSFUL, user);
-	}
-	/**
-	* Removes a user from the store
-	* @param {string} user
-	* 	The user's user
-	*/
-	logout() {
-		this.user = null;
-		this.emit(LOGOUT_SUCCESSFUL);
-	}
-	/**
 	* Whether or not the user is currently logged in
 	* @return {boolean}
 	* 	Whether or not the user is currently logged in
@@ -62,16 +44,6 @@ class ConnectionStore extends EventEmitter {
 	*/
 	handleActions(action) {
 		switch (action.type) {
-			case LOGIN_SUCCESSFUL:
-				this.login(action.username);
-				break;
-			case LOGIN_FAILED:
-				this.user = null;
-				this.emit(action.type);
-				break;
-			case LOGOUT_SUCCESSFUL:
-				this.logout();
-				break;
 			case CONNECTION_DISRUPTED:
 				if (this.isConnected !== false) {
 					this.isConnected = false;
@@ -83,6 +55,18 @@ class ConnectionStore extends EventEmitter {
 					this.isConnected = true;
 					this.emit(action.type);
 				}
+				break;
+			case LOGIN:
+				this.user = action.username;
+				this.emit(action.type, this.user);
+				break;
+			case LOGIN_FAILED:
+				this.user = null;
+				this.emit(action.type);
+				break;
+			case LOGOUT:
+				this.user = null;
+				this.emit(action.type);
 				break;
 			default:
 				break;

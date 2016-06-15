@@ -14,15 +14,21 @@ import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import {
 	default as LayoutStore,
-	MENU_TOGGLED,
-	LOGIN_SUCCESSFUL,
-	LOGOUT_SUCCESSFUL,
-	REQUEST_LOCATION,
-	REQUEST_LOCATION_SETUP
+	MENU_TOGGLED
 } from "../stores/LayoutStore";
+import {
+	default as LocationStore,
+	LOCATION_REQUESTED,
+	LOCATION_SETUP_REQUESTED
+} from "../stores/LocationStore";
+import {
+	default as ConnectionStore,
+	LOGIN,
+	LOGOUT
+} from "../stores/ConnectionStore";
 import * as actions from "../actions/LayoutActions";
-import { grantLocation } from "../actions/GPSActions";
-import { signalConnectionDisruption, signalConnectionEstablished } from "../actions/LoginActions";
+import { signalLocationGranted } from "../actions/LocationActions";
+import { signalConnectionDisruption, signalConnectionEstablished } from "../actions/ConnectionActions";
 import * as API from "client/api/index";
 import { s } from "server/units";
 injectTapEventPlugin();
@@ -51,7 +57,6 @@ export default class Layout extends Component {
 		* 	Whether or not the menu is visible right now
 		*/
 		this.state = {
-			users: LayoutStore.users,
 			isMenuVisible: LayoutStore.isMenuVisible,
 			isLoggedIn: false,
 			isLocationRequested: false,
@@ -66,7 +71,7 @@ export default class Layout extends Component {
 			this.setState({
 				isLocationRequested: false
 			});
-			grantLocation();
+			signalLocationGranted();
 		}, () => {
 			this.setState({
 				isLocationRequested: false
@@ -89,14 +94,14 @@ export default class Layout extends Component {
 	* Whenever the store changes, this component will update its state.
 	*/
 	componentWillMount() {
-		LayoutStore.on(LOGIN_SUCCESSFUL, () => {
+		ConnectionStore.on(LOGIN, () => {
 			this.setState({
-				isLoggedIn: LayoutStore.isLoggedIn
+				isLoggedIn: ConnectionStore.isLoggedIn
 			});
 		});
-		LayoutStore.on(LOGOUT_SUCCESSFUL, () => {
+		ConnectionStore.on(LOGOUT, () => {
 			this.setState({
-				isLoggedIn: LayoutStore.isLoggedIn
+				isLoggedIn: ConnectionStore.isLoggedIn
 			});
 		});
 		LayoutStore.on(MENU_TOGGLED, () => {
@@ -104,12 +109,12 @@ export default class Layout extends Component {
 				isMenuVisible: LayoutStore.isMenuVisible
 			});
 		});
-		LayoutStore.on(REQUEST_LOCATION, () => {
+		LocationStore.on(LOCATION_REQUESTED, () => {
 			this.setState({
 				isLocationRequested: true
 			});
 		});
-		LayoutStore.on(REQUEST_LOCATION_SETUP, () => {
+		LocationStore.on(LOCATION_SETUP_REQUESTED, () => {
 			this.setState({
 				isLocationSetupRequested: true
 			});
@@ -129,7 +134,7 @@ export default class Layout extends Component {
 	* If the menu is visible, this function will make it invisible.
 	*/
 	toggleMenu() {
-		actions.toggleMenu();
+		actions.signalMenuToggled();
 	}
 	/**
 	* Renders a {@link Layout} component with a menu, the navigation bar and all components that this component contains.
@@ -181,13 +186,13 @@ export default class Layout extends Component {
 					</div>
 				}
 				/>
-				<Drawer docked={false} width={300} open={this.state.isMenuVisible} onRequestChange={actions.toggleMenu}>
-					<MenuItem onClick={actions.toggleMenu} leftIcon={<FeedIcon/>} primaryText="Feed"/>
-					<MenuItem onClick={actions.toggleMenu} leftIcon={<ChatIcon/>} primaryText="Chat"/>
-					<MenuItem onClick={actions.toggleMenu} leftIcon={<MessagesIcon/>} primaryText="Messages"/>
-					<MenuItem onClick={actions.toggleMenu} leftIcon={<FriendsIcon/>} primaryText="Friends"/>
-					<MenuItem onClick={actions.toggleMenu} leftIcon={<ShopIcon/>} primaryText="Shop"/>
-					<MenuItem onClick={actions.toggleMenu} leftIcon={<HelpCenterIcon/>} primaryText="Help center"/>
+				<Drawer docked={false} width={300} open={this.state.isMenuVisible} onRequestChange={::this.toggleMenu}>
+					<MenuItem onClick={::this.toggleMenu} leftIcon={<FeedIcon/>} primaryText="Feed"/>
+					<MenuItem onClick={::this.toggleMenu} leftIcon={<ChatIcon/>} primaryText="Chat"/>
+					<MenuItem onClick={::this.toggleMenu} leftIcon={<MessagesIcon/>} primaryText="Messages"/>
+					<MenuItem onClick={::this.toggleMenu} leftIcon={<FriendsIcon/>} primaryText="Friends"/>
+					<MenuItem onClick={::this.toggleMenu} leftIcon={<ShopIcon/>} primaryText="Shop"/>
+					<MenuItem onClick={::this.toggleMenu} leftIcon={<HelpCenterIcon/>} primaryText="Help center"/>
 				</Drawer>
 				<main>
 					{this.props.children}

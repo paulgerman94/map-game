@@ -1,9 +1,9 @@
 import client from "../client";
-import * as loginActions from "client/ui/actions/LoginActions";
+import * as connectionActions from "client/ui/actions/ConnectionActions";
 import {
-	default as store,
+	default as cache,
 	TOKEN
-} from "../store";
+} from "../cache";
 /**
 * Tries to login the client and caches the resulting session token if successful
 * @param {object} data
@@ -22,7 +22,7 @@ async function getToken(data) {
 		const value = await client.login(data);
 		const [token] = value;
 		if (token) {
-			store.save(TOKEN, token);
+			cache.save(TOKEN, token);
 			return true;
 		}
 		else {
@@ -55,19 +55,19 @@ export async function login(data = {}) {
 		email,
 		password
 	} = data;
-	const token = store.load(TOKEN);
+	const token = cache.load(TOKEN);
 	if (token) {
 		/* Try to login with the token */
 		try {
 			await client.login({
 				token
 			});
-			store.save(TOKEN, token);
+			cache.save(TOKEN, token);
 			return true;
 		}
 		catch (e) {
 			/* Network error, token expiration, etc. */
-			store.remove(TOKEN);
+			cache.remove(TOKEN);
 			throw new Error("There was a token error.");
 		}
 	}
@@ -77,7 +77,7 @@ export async function login(data = {}) {
 			return true;
 		}
 		else {
-			loginActions.signalLoginFailed();
+			connectionActions.signalLoginFailed();
 			throw new Error("There was a login data error.");
 		}
 	}
@@ -92,7 +92,7 @@ export async function login(data = {}) {
 * 	Whether or not the user is logged in judging by a (non-validated!) token
 */
 export function isLoggedIn() {
-	return store.has(TOKEN);
+	return cache.has(TOKEN);
 }
 /**
 * Determines if the WebSocket connection to the server is open
@@ -103,14 +103,14 @@ export function isConnectionOpen() {
 	return client.ws && client.ws.readyState === WebSocket.OPEN;
 }
 /**
-* Logs a user out by removing the JWT token from the store.
+* Logs a user out by removing the JWT token from cache.
 * Note that JWT tokens are not designed to be invalidated; the token might still work for a third party that tries to session-hijack the user session.
 * The general approach to this issue is to choose relatively short token expiration times.
 */
 export function logout() {
-	store.remove(TOKEN);
+	cache.remove(TOKEN);
 	setTimeout(() => {
-		loginActions.logout();
+		connectionActions.signalLogout();
 	}, 0);
 }
 export default from "./getPOIs";
