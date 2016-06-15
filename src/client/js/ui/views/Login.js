@@ -67,16 +67,25 @@ export default class Login extends React.Component {
 			}
 		}
 	}
+	/**
+	* Updates the state to display an error text to notify the user that the server is down
+	*/
 	assumeServerDown() {
 		this.setState({
 			errorText: "The server is currently down."
 		});
 	}
+	/**
+	* Updates the state to remove the login error text
+	*/
 	assumeServerUp() {
 		this.setState({
 			errorText: null
 		});
 	}
+	/**
+	* Updates the state to display an error text to notify the user that the credentials are wrong
+	*/
 	assumeBadCredentials() {
 		this.setState({
 			errorText: "Login failed. Please check your credentials."
@@ -120,11 +129,17 @@ export default class Login extends React.Component {
 	get isLoginValid() {
 		return this.state.isAccountNameValid && this.state.isPasswordValid && !this.state.isLoggingIn;
 	}
+	/**
+	* Registers all event listeners
+	*/
 	componentWillMount() {
 		ConnectionStore.on(CONNECTION_DISRUPTED, ::this.assumeServerDown);
 		ConnectionStore.on(CONNECTION_ESTABLISHED, ::this.assumeServerUp);
 		ConnectionStore.on(LOGIN_FAILED, ::this.assumeBadCredentials);
 	}
+	/**
+	* Unregisters all event listeners
+	*/
 	componentWillUnmount() {
 		ConnectionStore.off(CONNECTION_DISRUPTED, ::this.assumeServerDown);
 		ConnectionStore.off(CONNECTION_ESTABLISHED, ::this.assumeServerUp);

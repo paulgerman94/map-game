@@ -122,6 +122,11 @@ export default class Layout extends Component {
 		});
 		setInterval(::this.checkConnection, s);
 	}
+	/**
+	* Checks if the connection to the server is still up.
+	* If not, a {@link CONNECTION_DISRUPTED} event is fired.
+	* If it is, a {@link CONNECTION_ESTABLISHED} event is fired.
+	*/
 	checkConnection() {
 		if (!API.isConnectionOpen()) {
 			publish(CONNECTION_DISRUPTED);
