@@ -17,6 +17,7 @@ import { publish } from "../Dispatcher";
 */
 export default class Dashboard extends React.Component {
 	map = null;
+	isMapPositioned = false;
 	/**
 	* Watches the user coordinates in an interval and sends them to the server. Once the server replies with the corresponding flags, the flags are added to the map.
 	*/
@@ -31,6 +32,10 @@ export default class Dashboard extends React.Component {
 				latitude,
 				longitude
 			});
+			if (!this.isMapPositioned) {
+				this.map.setView([latitude, longitude], 13);
+				this.isMapPositioned = true;
+			}
 			const flags = pois.elements.map(poi => {
 				if (poi.type === "node" && poi.tags.amenity === "restaurant") {
 					return new Restaurant(poi);
@@ -62,9 +67,7 @@ export default class Dashboard extends React.Component {
 	*/
 	async componentDidMount() {
 		const mapContainer = ReactDOM.findDOMNode(this).querySelector("map-container");
-		const position = [51.505, -0.09];
-		const map = L.map(mapContainer)
-			.setView(position, 13);
+		const map = L.map(mapContainer);
 		this.map = map;
 		this.markers = new L.FeatureGroup();
 		this.map.addLayer(this.markers);
