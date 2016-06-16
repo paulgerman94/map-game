@@ -14,5 +14,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "Leaflet.awesome-markers": "^2.0.2",
+    "font-awesome": "^4.6.3"
+  }
 }
