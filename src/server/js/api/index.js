@@ -48,7 +48,14 @@ export async function getPOIs({
 			latitude,
 			longitude
 		});
-		const results = await point.closest(["restaurant"], km);
+		const results = await point.closest([
+			"driving_school",
+			"language_school",
+			"music_school",
+			"restaurant",
+			"school",
+			"university"
+		], 1.5 * km);
 		message.reply(results);
 	}
 	catch (e) {
