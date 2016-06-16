@@ -10,6 +10,7 @@ import {
 } from "../stores/LocationStore";
 import { Flag } from "../flags/Flag";
 import { Restaurant } from "../flags/Restaurant";
+import { School } from "../flags/School";
 import { publish } from "../Dispatcher";
 /**
 * This component contains the dashboard view that the user should see when entering the app as a logged in user.
@@ -39,6 +40,14 @@ export default class Dashboard extends React.Component {
 			const flags = pois.elements.map(poi => {
 				if (poi.type === "node" && poi.tags.amenity === "restaurant") {
 					return new Restaurant(poi);
+				}
+				if (poi.type === "node" && (
+					poi.tags.amenity === "music_school" ||
+					poi.tags.amenity === "driving_school" ||
+					poi.tags.amenity === "language_school" ||
+					poi.tags.amenity === "school" ||
+					poi.tags.amenity === "university")) {
+					return new School(poi);
 				}
 				else {
 					return new Flag(poi);
