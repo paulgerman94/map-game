@@ -39,9 +39,9 @@ export default class Dashboard extends React.Component {
 					return new Flag(poi);
 				}
 			});
+			this.markers.clearLayers();
 			for (const flag of flags) {
-				flag.marker.addTo(this.map)
-					.bindPopup("flag.popup");
+				this.markers.addLayer(flag.marker.bindPopup(flag.name));
 			}
 		});
 	}
@@ -66,6 +66,8 @@ export default class Dashboard extends React.Component {
 		const map = L.map(mapContainer)
 			.setView(position, 13);
 		this.map = map;
+		this.markers = new L.FeatureGroup();
+		this.map.addLayer(this.markers);
 		L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 		const result = await navigator.permissions.query({
 			name: "geolocation"

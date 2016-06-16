@@ -7,7 +7,7 @@ export class Restaurant extends Flag {
 	* @property {string} icon
 	* 	The flag icon
 	*/
-	icon = "coffee";
+	icon = "cutlery";
 	/**
 	* @property {string} color
 	* 	The flag color

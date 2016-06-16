@@ -20,6 +20,11 @@ export class Flag {
 		* 	The flag's longitude
 		*/
 		this.longitude = element.lon;
+		/**
+		* @property {String} name
+		* 	The flag's name
+		*/
+		this.name = element.tags.name;
 	}
 	/**
 	* Retrieves a marker to draw on the dashboard
