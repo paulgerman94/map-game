@@ -680,7 +680,7 @@ SystemJS.config({
       "map": {
         "pg": "npm:pg@4.5.6",
         "pg-minify": "npm:pg-minify@0.1.5",
-        "spex": "npm:spex@0.4.5"
+        "spex": "npm:spex@0.4.6"
       }
     },
     "npm:pgpass@0.0.3": {
