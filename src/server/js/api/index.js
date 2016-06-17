@@ -4,9 +4,9 @@ import {
 	login as loginUser,
 	isFree as isDataFree
 } from "../db";
-import { km } from "../units";
 import { log, err } from "../util";
 import { createToken } from "../crypto";
+import { POI_RADIUS } from "../constants";
 /**
 * Adds an array of numbers and sends the sum back to the client.
 * @param {object} options
@@ -55,7 +55,11 @@ export async function getPOIs({
 			"restaurant",
 			"school",
 			"university"
-		], 1.5 * km);
+		], POI_RADIUS);
+		if (results.elements) {
+			/* All POIs need a name tag at least */
+			results.elements = results.elements.filter(poi => poi.tags.name);
+		}
 		message.reply(results);
 	}
 	catch (e) {

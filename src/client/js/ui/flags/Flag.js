@@ -38,7 +38,7 @@ export class Flag {
 				markerColor: this.color,
 				prefix: "fa"
 			})
-		});
+		}).bindPopup(this.name);
 	}
 }
 export default Flag;

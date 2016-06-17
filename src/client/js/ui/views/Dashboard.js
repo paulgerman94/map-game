@@ -10,15 +10,18 @@ import {
 } from "../stores/LocationStore";
 import { Flag } from "../flags/Flag";
 import { Restaurant } from "../flags/Restaurant";
+import { Player } from "../flags/Player";
 import { School } from "../flags/School";
 import { publish } from "../Dispatcher";
+import { POI_RADIUS } from "server/constants";
 /**
 * This component contains the dashboard view that the user should see when entering the app as a logged in user.
 * It should a simple map as well as the main game components.
 */
 export default class Dashboard extends React.Component {
-	map = null;
-	isMapPositioned = false;
+	map;
+	markers;
+	player;
 	/**
 	* Watches the user coordinates in an interval and sends them to the server. Once the server replies with the corresponding flags, the flags are added to the map.
 	*/
@@ -26,38 +29,106 @@ export default class Dashboard extends React.Component {
 		navigator.geolocation.watchPosition(async position => {
 			const { coords } = position;
 			const {
+				accuracy,
 				latitude,
 				longitude
 			} = coords;
-			const [pois] = await client.getPOIs({
-				latitude,
-				longitude
-			});
-			if (!this.isMapPositioned) {
-				this.map.setView([latitude, longitude], 13);
-				this.isMapPositioned = true;
+			this.initializeView(latitude, longitude);
+			this.drawPlayer(latitude, longitude, accuracy);
+			const flags = await this.createFlags(latitude, longitude);
+			this.drawFlags(flags);
+		});
+	}
+	/**
+	* Sets the initial map position to render.
+	* If the map already has a set position, this is a no-op.
+	* @param {number} latitude
+	* 	The latitude to initialize the view to
+	* @param {number} longitude
+	* 	The longitude to initialize the view to
+	*/
+	initializeView(latitude, longitude) {
+		/* Initialize view */
+		try {
+			/* If the map has a center, the view must have been initialized already */
+			this.map.getCenter();
+		}
+		catch (e) {
+			/* Otherwise, its position is undefined */
+			this.map.setView([latitude, longitude], 13);
+		}
+	}
+	/**
+	* Contacts the server to retrieve POIs that this function will map to their corresponding {@link Flag} instances
+	* @param {number} latitude
+	* 	The latitude of the coordinate where flags should be created
+	* @param {number} longitude
+	* 	The longitude of the coordinate where flags should be created
+	* @return {Array.<Flag>}
+	* 	An array of {@link Flag} instances that can be drawn on the map
+	*/
+	async createFlags(latitude, longitude) {
+		const [pois] = await client.getPOIs({
+			latitude,
+			longitude
+		});
+		return pois.elements.map(poi => {
+			if (poi.type === "node" && poi.tags.amenity === "restaurant") {
+				return new Restaurant(poi);
 			}
-			const flags = pois.elements.map(poi => {
-				if (poi.type === "node" && poi.tags.amenity === "restaurant") {
-					return new Restaurant(poi);
+			if (poi.type === "node" && (
+				poi.tags.amenity === "music_school" ||
+				poi.tags.amenity === "driving_school" ||
+				poi.tags.amenity === "language_school" ||
+				poi.tags.amenity === "school" ||
+				poi.tags.amenity === "university")) {
+				if (!poi.tags.name) {
+					console.log(poi)
 				}
-				if (poi.type === "node" && (
-					poi.tags.amenity === "music_school" ||
-					poi.tags.amenity === "driving_school" ||
-					poi.tags.amenity === "language_school" ||
-					poi.tags.amenity === "school" ||
-					poi.tags.amenity === "university")) {
-					return new School(poi);
-				}
-				else {
-					return new Flag(poi);
-				}
-			});
-			this.markers.clearLayers();
-			for (const flag of flags) {
-				this.markers.addLayer(flag.marker.bindPopup(flag.name));
+				return new School(poi);
+			}
+			else {
+				return new Flag(poi);
 			}
 		});
+	}
+	/**
+	* Updates the map's flag layer with flags
+	* @param {Array.<Flag>} flags
+	* 	An array of {@link Flag} instances to draw on the map
+	*/
+	drawFlags(flags) {
+		this.markers.clearLayers();
+		for (const flag of flags) {
+			this.markers.addLayer(flag.marker);
+		}
+	}
+	/**
+	* Updates the map's player layer with the player position and the POI radius
+	* @param {number} latitude
+	* 	The latitude of the coordinate where the player should be drawn
+	* @param {number} longitude
+	* 	The longitude of the coordinate where the player should be drawn
+	* @param {number} accuracy
+	* 	The accuracy of the player's position in meters
+	*/
+	drawPlayer(latitude, longitude, accuracy) {
+		this.player.clearLayers();
+		const reach = L.circle([latitude, longitude], POI_RADIUS);
+		const player = new Player({
+			lon: longitude,
+			lat: latitude,
+			tags: {
+				name: "You",
+				type: "node"
+			}
+		}).marker;
+		const playerAccuracy = L.circle([latitude, longitude], accuracy, {
+			color: "red"
+		});
+		for (const element of [reach, playerAccuracy, player]) {
+			this.player.addLayer(element);
+		}
 	}
 	/**
 	* Sets up all event listeners
@@ -79,6 +150,8 @@ export default class Dashboard extends React.Component {
 		const map = L.map(mapContainer);
 		this.map = map;
 		this.markers = new L.FeatureGroup();
+		this.player = new L.FeatureGroup();
+		this.map.addLayer(this.player);
 		this.map.addLayer(this.markers);
 		L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 		const result = await navigator.permissions.query({
