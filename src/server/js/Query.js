@@ -1,8 +1,10 @@
 import "babel-polyfill";
 import fetch from "node-fetch";
+import { err } from "./util";
 const servers = [
 	"http://overpass-api.de/api",
-	"http://overpass.osm.rambler.ru/cgi"
+	"http://overpass.osm.rambler.ru/cgi",
+	"http://api.openstreetmap.fr/oapi/interpreter/"
 ];
 /**
 * Executes a query on a random Overpass server.
@@ -17,5 +19,12 @@ export async function execute(query) {
 	const server = servers[Math.floor(servers.length * Math.random())];
 	const url = `${server}/interpreter?data=[out:json];${source}out center;`;
 	const response = await fetch(url);
-	return await response.json();
+	const text = await response.text();
+	try {
+		return JSON.parse(text);
+	}
+	catch (e) {
+		err("Overpass API sent an invalid reply", text);
+		throw new Error("Overpass API error (rate limit exceeded?)");
+	}
 }

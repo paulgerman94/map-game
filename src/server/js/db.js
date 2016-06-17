@@ -31,6 +31,29 @@ export function createDB() {
 	});
 }
 /**
+* Extends a database with extensions needed for storing GeoLocations (specifically, this will add PostGIS support)
+* @param {object} db
+* 	The `pg-promise` database instance
+* @returns {Promise}
+* 	A Promise that resolves to whether or not the extension succeeded
+*/
+export async function extendDB(db) {
+	try {
+		log(`Extending database with "PostGIS" extensions…`);
+		await db.query(`
+			CREATE EXTENSION postgis;
+			CREATE EXTENSION postgis_topology;
+			CREATE EXTENSION fuzzystrmatch;
+			CREATE EXTENSION postgis_tiger_geocoder;
+		`);
+		return true;
+	}
+	catch (e) {
+		err(e);
+		return false;
+	}
+}
+/**
 * Inserts a new table in a database from an SQL file
 * @param {object} db
 * 	The `pg-promise` database instance to insert the table in
@@ -67,6 +90,8 @@ export async function connect(retry = 0) {
 		log("Database connection established.");
 		connection.done();
 		if (retry > 0) {
+			/* Register PostGIS extensions */
+			await extendDB(db);
 			/* On our first try, there was no database */
 			await createTable(db, "users");
 		}
