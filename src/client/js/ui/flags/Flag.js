@@ -14,17 +14,34 @@ export class Flag {
 		* @property {number} latitude
 		* 	The flag's latitude
 		*/
-		this.latitude = element.lat;
+		this.latitude = NaN;
 		/**
 		* @property {number} longitude
 		* 	The flag's longitude
 		*/
-		this.longitude = element.lon;
+		this.longitude = NaN;
 		/**
 		* @property {String} name
 		* 	The flag's name
 		*/
 		this.name = element.tags.name;
+		switch (element.type) {
+			case "node": {
+				this.latitude = element.lat;
+				this.longitude = element.lon;
+				break;
+			}
+			case "way": {
+				this.latitude = element.center.lat;
+				this.longitude = element.center.lon;
+				break;
+			}
+			case "area": {
+				break;
+			}
+			default:
+				break;
+		}
 	}
 	/**
 	* Retrieves a marker to draw on the dashboard

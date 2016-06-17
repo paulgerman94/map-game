@@ -41,8 +41,28 @@ export default class Point {
 	*/
 	async closest(amenities = [], radius = km) {
 		const disjunction = amenities.map(x => `(${x})`).join("|");
-		return await execute(`
+		const nodePromise = execute(`
 			node(around:${radius}, ${this.latitude}, ${this.longitude})["amenity"~"${disjunction}"];
 		`);
+		const wayPromise = execute(`
+			way(around:${radius}, ${this.latitude}, ${this.longitude})["amenity"~"${disjunction}"];
+		`);
+		const areaPromise = execute(`
+			area(around:${radius}, ${this.latitude}, ${this.longitude})["amenity"~"${disjunction}"];
+		`);
+		return new Promise(resolve => {
+			Promise.all([nodePromise, wayPromise, areaPromise]).then(collection => {
+				/* We're only interested in the actual content */
+				const [nodes, ways, areas] = collection
+					.map(reply => reply.elements
+						.filter(element => element.tags.name));
+				/* Enfore some rules for each element */
+				resolve({
+					nodes,
+					ways,
+					areas
+				});
+			});
+		});
 	}
 }

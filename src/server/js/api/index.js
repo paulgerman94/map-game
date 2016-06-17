@@ -56,10 +56,6 @@ export async function getPOIs({
 			"school",
 			"university"
 		], POI_RADIUS);
-		if (results.elements) {
-			/* All POIs need a name tag at least */
-			results.elements = results.elements.filter(poi => poi.tags.name);
-		}
 		message.reply(results);
 	}
 	catch (e) {

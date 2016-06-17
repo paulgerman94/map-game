@@ -15,7 +15,7 @@ const servers = [
 export async function execute(query) {
 	const source = query.trim().replace(/\s+/g, "");
 	const server = servers[Math.floor(servers.length * Math.random())];
-	const url = `${server}/interpreter?data=[out:json];${source}out body;`;
+	const url = `${server}/interpreter?data=[out:json];${source}out center;`;
 	const response = await fetch(url);
 	return await response.json();
 }
