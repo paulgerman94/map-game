@@ -4,6 +4,7 @@ import pgp from "pg-promise";
 import { log, err } from "./util";
 import { getSQL } from "./fs";
 import { checkPassword, hash } from "./crypto";
+import { km } from "./units";
 export const UNIQUENESS_VIOLATION = "23505";
 const pgpDB = pgp();
 const NO_DATABASE = "3D000";
@@ -93,7 +94,9 @@ export async function connect(retry = 0) {
 			/* Register PostGIS extensions */
 			await extendDB(db);
 			/* On our first try, there was no database */
-			await createTable(db, "users");
+			for (const table of ["users", "flag-associations", "pois"]) {
+				await createTable(db, table);
+			}
 		}
 		return db;
 	}
@@ -172,6 +175,168 @@ export async function register({
 	catch (e) {
 		err(e);
 		return false;
+	}
+}
+/**
+* This function adds a point to the `flags` table in the database.
+* The table maps coordinates to OSM element IDs.
+* @param {object} row
+* 	The row to be added
+* @param {object} row.db
+* 	A `pg-promise` database instance
+* @param {number} row.latitude
+* 	The latitude of the point that the flag IDs belong to
+* @param {number} row.longitude
+* 	The longitude of the point that the flag IDs belong to
+* @param {number} row.radius
+* 	The radius around the point where the flags were found
+* @param {Array.<number>} row.flags
+* 	An array of OSM element IDs
+* @return {Promise}
+* 	A {@link Promise} that resolves to whether or not the registration was successful
+*/
+export async function addPoint({
+	db,
+	latitude,
+	longitude,
+	radius,
+	pois
+} = {}) {
+	try {
+		await db.query(`
+		INSERT INTO "flag-associations" (
+			location,
+			radius,
+			flags
+		)
+		VALUES (
+			ST_MakePoint($[longitude], $[latitude]),
+			$[radius],
+			$[flags]
+		)`, {
+			longitude,
+			latitude,
+			radius,
+			flags: pois.map(element => element.id)
+		});
+		const insertQuery = `${pgpDB.helpers.insert(pois.map(poi => ({
+			id: poi.id,
+			metadata: poi
+		})), ["id", "metadata"], "pois")} ON CONFLICT DO NOTHING`;
+		await db.query(insertQuery);
+		return true;
+	}
+	catch (e) {
+		err(e);
+		return false;
+	}
+}
+/**
+* This function checks if a point has already cached and retrieves its IDs if so.
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {number} options.latitude
+* 	The latitude of the point to check
+* @param {number} options.longitude
+* 	The longitude of the point to check
+* @param {number} options.radius
+* 	The POI radius that the game currently uses
+* @return {Promise}
+* 	A {@link Promise} that resolves to a list of POIs if successful or `null` if the Promise is rejected
+*/
+export async function checkPoint({
+	db,
+	latitude,
+	longitude,
+	radius
+} = {}) {
+	try {
+		const result = await db.query(`
+		SELECT *
+		FROM "flag-associations"
+		WHERE "location" = ST_MakePoint($[longitude], $[latitude]) AND "radius" <= $[radius]
+		`, {
+			longitude,
+			latitude,
+			radius
+		});
+		if (!result.length) {
+			return null;
+		}
+		else {
+			return result[0].flags.map(id => Number(id));
+		}
+	}
+	catch (e) {
+		err(e);
+		return null;
+	}
+}
+/**
+* Determines the latitude, longitude, radius and associated flags of cached positions in a 2 km radius of the provided point.
+* This is helpful for determining if a new point should be stored in the database, since it gives information about the database coverage of a certain geographical area.
+* The value `2 km` was chosen as radial Overpass queries take a very long time with growing radii. In fact, the value `2 km` took so much time in testing that it seemed very unrealistic to make it the default POI radius, as it has devastating implications on user experience. Thus, this lets us safely assume that `2 km` is an extreme upper bound for radial searches.
+* @param {object} options
+* 	An option object
+* @param {object} row.db
+* 	A `pg-promise` database instance
+* @param {number} row.latitude
+* 	The latitude of the point around which to search for other flag associations
+* @param {number} row.longitude
+* 	The longitude of the point around which to search for other flag associations
+* @param {Array.<number>} row.flags
+* 	An array of OSM element IDs
+* @return {Promise}
+* 	A {@link Promise} that resolves to an array of associated flags if successful, `null` if Promise is rejected
+*/
+export async function searchAround({
+	db,
+	latitude,
+	longitude
+} = {}) {
+	try {
+		return await db.query(`
+		SELECT ST_X(location) AS longitude, ST_Y(location) AS latitude, radius, flags
+		FROM "flag-associations"
+		WHERE ST_Distance_Sphere(location, ST_MakePoint($[longitude], $[latitude])) <= ${2 * km}
+		`, {
+			longitude,
+			latitude
+		});
+	}
+	catch (e) {
+		err(e);
+		return null;
+	}
+}
+/**
+* This function retrieves OSM elements from the database given a list of their IDs.
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {Array.<number>} options.ids
+* 	The ids of the OSM elements to retrieve
+* @return {Promise}
+* 	A {@link Promise} that resolves to a list of POIs if successful or `null` if the Promise is rejected
+*/
+export async function retrievePOIs({
+	db,
+	ids
+} = {}) {
+	try {
+		const result = await db.query(`
+		SELECT metadata
+		FROM "pois"
+		WHERE "id" in (${ids.join(",")})
+		`);
+		return result.map(poi => poi.metadata);
+	}
+	catch (e) {
+		err(e);
+		return null;
 	}
 }
 /**

@@ -36,6 +36,7 @@ export function add({
 */
 export async function getPOIs({
 	args,
+	db,
 	message
 }) {
 	try {
@@ -45,6 +46,7 @@ export async function getPOIs({
 			longitude
 		} = coordinates;
 		const point = new Point({
+			db,
 			latitude,
 			longitude
 		});
