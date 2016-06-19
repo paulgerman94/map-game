@@ -4,6 +4,16 @@ import L from "../LeafletWrapper";
 */
 export class Flag {
 	/**
+	* @property {string} icon
+	* 	The flag icon
+	*/
+	icon = "question";
+	/**
+	* @property {string} color
+	* 	The flag color
+	*/
+	color = "blue";
+	/**
 	* Creates a new {@link Flag} instance
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
