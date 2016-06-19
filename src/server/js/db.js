@@ -190,7 +190,7 @@ export async function register({
 * 	The longitude of the point that the flag IDs belong to
 * @param {number} row.radius
 * 	The radius around the point where the flags were found
-* @param {Array.<number>} row.flags
+* @param {Array.<number>} row.pois
 * 	An array of OSM element IDs
 * @return {Promise}
 * 	A {@link Promise} that resolves to whether or not the registration was successful
@@ -212,18 +212,21 @@ export async function addPoint({
 		VALUES (
 			ST_MakePoint($[longitude], $[latitude]),
 			$[radius],
-			$[flags]
-		)`, {
+			$[flags]::BIGINT[]
+		) ON CONFLICT DO NOTHING`, {
 			longitude,
 			latitude,
 			radius,
 			flags: pois.map(element => element.id)
 		});
-		const insertQuery = `${pgpDB.helpers.insert(pois.map(poi => ({
-			id: poi.id,
-			metadata: poi
-		})), ["id", "metadata"], "pois")} ON CONFLICT DO NOTHING`;
-		await db.query(insertQuery);
+		/* If there were any POIs, we'll also have to add them to the `pois` table */
+		if (pois.length) {
+			const insertQuery = `${pgpDB.helpers.insert(pois.map(poi => ({
+				id: poi.id,
+				metadata: poi
+			})), ["id", "metadata"], "pois")} ON CONFLICT DO NOTHING`;
+			await db.query(insertQuery);
+		}
 		return true;
 	}
 	catch (e) {
@@ -327,12 +330,17 @@ export async function retrievePOIs({
 	ids
 } = {}) {
 	try {
-		const result = await db.query(`
-		SELECT metadata
-		FROM "pois"
-		WHERE "id" in (${ids.join(",")})
-		`);
-		return result.map(poi => poi.metadata);
+		if (ids.length) {
+			const result = await db.query(`
+			SELECT metadata
+			FROM "pois"
+			WHERE "id" in (${ids.join(",")})
+			`);
+			return result.map(poi => poi.metadata);
+		}
+		else {
+			return [];
+		}
 	}
 	catch (e) {
 		err(e);
