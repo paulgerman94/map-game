@@ -57,7 +57,7 @@ export default class Dashboard extends React.Component {
 		}
 		catch (e) {
 			/* Otherwise, its position is undefined */
-			this.map.setView([latitude, longitude], 13);
+			this.map.setView([latitude, longitude], 15);
 		}
 	}
 	/**
@@ -134,16 +134,40 @@ export default class Dashboard extends React.Component {
 		}
 	}
 	/**
+	* Updates the map's area layer with known circles that were cached on the server
+	* @param {Message} message
+	* 	A message object that can be used to send a reply
+	* @param {...*} args
+	* 	The arguments that are passed by the caller
+	*/
+	drawArea(message, ...args) {
+		const [circles] = args;
+		this.area.clearLayers();
+		for (const { latitude, longitude, radius } of circles) {
+			const areaCircle = L.circle([latitude, longitude], radius, {
+				weight: 1,
+				color: "hsl(220, 100%, 60%)",
+				fillOpacity: 0.0035,
+				opacity: 0.25
+			});
+			this.area.addLayer(areaCircle);
+		}
+		/* TODO: Fix replies in protocol to send token? */
+		message.reply();
+	}
+	/**
 	* Sets up all event listeners
 	*/
 	componentWillMount() {
 		LocationStore.on(LOCATION_GRANTED, ::this.receiveUserCoordinates);
+		client.on("drawArea", ::this.drawArea);
 	}
 	/**
 	* Removes all event listeners
 	*/
 	componentWillUnmount() {
 		LocationStore.off(LOCATION_GRANTED, ::this.receiveUserCoordinates);
+		client.off("drawArea", ::this.drawArea);
 	}
 	/**
 	* Fires once this React component mounts and starts rendering a Leaflet map
@@ -152,8 +176,10 @@ export default class Dashboard extends React.Component {
 		const mapContainer = ReactDOM.findDOMNode(this).querySelector("map-container");
 		const map = L.map(mapContainer);
 		this.map = map;
+		this.area = new L.FeatureGroup();
 		this.markers = new L.FeatureGroup();
 		this.player = new L.FeatureGroup();
+		this.map.addLayer(this.area);
 		this.map.addLayer(this.player);
 		this.map.addLayer(this.markers);
 		L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);

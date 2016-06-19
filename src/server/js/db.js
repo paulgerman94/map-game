@@ -278,6 +278,28 @@ export async function checkPoint({
 	}
 }
 /**
+* Determines the entire area that has been analyzed (cached) so far. This is especially useful for debugging purposes, as these areas may be visualized on a map.
+* @param {object} options
+* 	An option object
+* @param {object} row.db
+* 	A `pg-promise` database instance
+* @return {Promise}
+* 	A {@link Promise} that resolves to an array of cached center center points with their radii
+*/
+export async function getArea({
+	db
+} = {}) {
+	try {
+		return await db.query(`
+		SELECT ST_X(location) AS longitude, ST_Y(location) AS latitude, radius FROM "flag-associations"
+		`, {});
+	}
+	catch (e) {
+		err(e);
+		return null;
+	}
+}
+/**
 * Determines the latitude, longitude, radius and associated flags of cached positions in a 2 km radius of the provided point.
 * This is helpful for determining if a new point should be stored in the database, since it gives information about the database coverage of a certain geographical area.
 * The value `2 km` was chosen as radial Overpass queries take a very long time with growing radii. In fact, the value `2 km` took so much time in testing that it seemed very unrealistic to make it the default POI radius, as it has devastating implications on user experience. Thus, this lets us safely assume that `2 km` is an extreme upper bound for radial searches.

@@ -8,16 +8,7 @@ import {
 * The client defines event handlers for RPC methods that the server sends and methods to query the server.
 */
 class Client extends ClientCore {
-	/**
-	* @param {Message} message
-	* 	A message object that can be used to send a reply
-	* @param {...*} args
-	* 	The arguments that are passed by the caller
-	*/
-	onMultiply(message, ...args) {
-		const product = args.reduce((a, b) => a * b, 1);
-		message.reply(product);
-	}
+	/* Add on[instruction] events here */
 }
 export default new Proxy(new Client(), {
 	get: (target, property) => {

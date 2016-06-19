@@ -91,6 +91,7 @@ export default class ServerCore extends WS {
 		this.emit("connected", client);
 		socket.on("close", () => {
 			log("A client has disconnected.");
+			this.emit("disconnected", client);
 		});
 		socket.on("message", async msg => {
 			const message = socket.readMessage(msg.data);
