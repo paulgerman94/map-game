@@ -75,7 +75,7 @@ export async function execute(query) {
 		return JSON.parse(text);
 	}
 	catch (e) {
-		err("Overpass API sent an invalid reply", text);
+		err("Overpass API sent an invalid reply", text, api);
 		throw new Error("Overpass API error (rate limit exceeded?)");
 	}
 }

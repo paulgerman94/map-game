@@ -216,10 +216,39 @@ export default class Point {
 					db: this.db,
 					ids
 				});
+				/* Only the inner POIs will be contained in the player's POI radius */
+				const contained = pois.filter(poi => {
+					let point = null;
+					switch (poi.type) {
+						default:
+						case "node": {
+							point = new Point({
+								latitude: poi.lat,
+								longitude: poi.lon
+							});
+							break;
+						}
+						case "way": {
+							point = new Point({
+								latitude: poi.center.lat,
+								longitude: poi.center.lon
+							});
+							break;
+						}
+						case "area": {
+							/* TODO: How should areas behave? */
+							point = new Point({
+								latitude: poi.center.lat,
+								longitude: poi.center.lon
+							});
+						}
+					}
+					return point.measureDistance(this) <= radius;
+				});
 				return {
-					nodes: pois.filter(poi => poi.type === "node"),
-					ways: pois.filter(poi => poi.type === "way"),
-					areas: pois.filter(poi => poi.type === "area")
+					nodes: contained.filter(poi => poi.type === "node"),
+					ways: contained.filter(poi => poi.type === "way"),
+					areas: contained.filter(poi => poi.type === "area")
 				};
 			}
 			else {
