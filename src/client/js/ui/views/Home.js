@@ -17,6 +17,11 @@ export default class Home extends React.Component {
 		isLoginDataAvailable: false,
 		isLoggedIn: false
 	};
+	constructor() {
+		super();
+		this.showDashboard = ::this.showDashboard;
+		this.showLogin = ::this.showLogin;
+	}
 	/**
 	* Updates the state of this component such that only the state is displayed that users should see when they're logged out
 	*/
@@ -43,9 +48,9 @@ export default class Home extends React.Component {
 	*/
 	async componentWillMount() {
 		/* If the user logs in via the sub-view <Login>, change the state to transfer him to his <Dashboard> */
-		ConnectionStore.on(LOGIN, ::this.showDashboard);
+		ConnectionStore.on(LOGIN, this.showDashboard);
 		/* If the user logs out, change the state to transfer him to his <Login> view again */
-		ConnectionStore.on(LOGOUT, ::this.showLogin);
+		ConnectionStore.on(LOGOUT, this.showLogin);
 		try {
 			/* If we can log in by just using the session token, we can show the dashboard */
 			await API.login();
@@ -61,8 +66,8 @@ export default class Home extends React.Component {
 	*/
 	async componentWillUnmount() {
 		/* Unregister event listeners */
-		ConnectionStore.off(LOGIN, ::this.showDashboard);
-		ConnectionStore.off(LOGOUT, ::this.showLogin);
+		ConnectionStore.off(LOGIN, this.showDashboard);
+		ConnectionStore.off(LOGOUT, this.showLogin);
 	}
 	/**
 	* Renders a component with a simple login menu

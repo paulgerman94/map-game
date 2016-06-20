@@ -21,6 +21,12 @@ export default class Login extends React.Component {
 		isPasswordValid: false,
 		isLoggingIn: false
 	};
+	constructor() {
+		super();
+		this.assumeServerDown = ::this.assumeServerDown;
+		this.assumeServerUp = ::this.assumeServerUp;
+		this.assumeBadCredentials = ::this.assumeBadCredentials;
+	}
 	/**
 	* Logs a user in and sets the state such that potential login errors as well as a spinner are displayed.
 	* If the login suceeds, the state is set such that the Dashboard is displayed.
@@ -133,17 +139,17 @@ export default class Login extends React.Component {
 	* Registers all event listeners
 	*/
 	componentWillMount() {
-		ConnectionStore.on(CONNECTION_DISRUPTED, ::this.assumeServerDown);
-		ConnectionStore.on(CONNECTION_ESTABLISHED, ::this.assumeServerUp);
-		ConnectionStore.on(LOGIN_FAILED, ::this.assumeBadCredentials);
+		ConnectionStore.on(CONNECTION_DISRUPTED, this.assumeServerDown);
+		ConnectionStore.on(CONNECTION_ESTABLISHED, this.assumeServerUp);
+		ConnectionStore.on(LOGIN_FAILED, this.assumeBadCredentials);
 	}
 	/**
 	* Unregisters all event listeners
 	*/
 	componentWillUnmount() {
-		ConnectionStore.off(CONNECTION_DISRUPTED, ::this.assumeServerDown);
-		ConnectionStore.off(CONNECTION_ESTABLISHED, ::this.assumeServerUp);
-		ConnectionStore.off(LOGIN_FAILED, ::this.assumeBadCredentials);
+		ConnectionStore.off(CONNECTION_DISRUPTED, this.assumeServerDown);
+		ConnectionStore.off(CONNECTION_ESTABLISHED, this.assumeServerUp);
+		ConnectionStore.off(LOGIN_FAILED, this.assumeBadCredentials);
 	}
 	/**
 	* Renders a component with a simple login menu
