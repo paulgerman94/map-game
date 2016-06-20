@@ -7,10 +7,10 @@ const APIs = [{
 	url: "http://overpass-api.de/api",
 	rateLimit: 3
 }, {
-	url: "http://overpass.osm.rambler.ru/cgi",
+	url: "http://api.openstreetmap.fr/oapi/interpreter",
 	rateLimit: 20
 }, {
-	url: "http://api.openstreetmap.fr/oapi/interpreter",
+	url: "http://overpass.osm.rambler.ru/cgi",
 	rateLimit: 20
 }];
 const connections = new Map();

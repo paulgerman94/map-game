@@ -5,9 +5,10 @@ import { log, err } from "./util";
 import { getSQL } from "./fs";
 import { checkPassword, hash } from "./crypto";
 import { km } from "./units";
+import POI from "./types/POI";
 export const UNIQUENESS_VIOLATION = "23505";
-const pgpDB = pgp();
 const NO_DATABASE = "3D000";
+const pgpDB = pgp();
 /**
 * Creates a new database honoring the settings in `config.json`
 * @return {Promise}
@@ -32,43 +33,20 @@ export function createDB() {
 	});
 }
 /**
-* Extends a database with extensions needed for storing GeoLocations (specifically, this will add PostGIS support)
-* @param {object} db
-* 	The `pg-promise` database instance
-* @returns {Promise}
-* 	A Promise that resolves to whether or not the extension succeeded
-*/
-export async function extendDB(db) {
-	try {
-		log(`Extending database with "PostGIS" extensions…`);
-		await db.query(`
-			CREATE EXTENSION postgis;
-			CREATE EXTENSION postgis_topology;
-			CREATE EXTENSION fuzzystrmatch;
-			CREATE EXTENSION postgis_tiger_geocoder;
-		`);
-		return true;
-	}
-	catch (e) {
-		err(e);
-		return false;
-	}
-}
-/**
 * Inserts a new table in a database from an SQL file
 * @param {object} db
 * 	The `pg-promise` database instance to insert the table in
-* @param {string} table
+* @param {string} file
 * 	The basename of the SQL file to be run
 * @return {Promise}
 * 	A Promise that resolves if the table is successfully created and rejects if its creation fails
 */
-export async function createTable(db, table) {
-	log(`Creating table "${table}"…`);
+export async function runSQL(db, file) {
+	log(`Running "${file}.sql"…`);
 	try {
-		const sql = await getSQL(table);
+		const sql = await getSQL(file);
 		await db.query(sql);
-		log(`Table "${table}" has been created.`);
+		log(`"${file}.sql" has been successfully executed.`);
 		return true;
 	}
 	catch (e) {
@@ -91,11 +69,15 @@ export async function connect(retry = 0) {
 		log("Database connection established.");
 		connection.done();
 		if (retry > 0) {
-			/* Register PostGIS extensions */
-			await extendDB(db);
 			/* On our first try, there was no database */
-			for (const table of ["users", "flag-associations", "pois"]) {
-				await createTable(db, table);
+			for (const file of [
+				"postgis-extensions",
+				"types",
+				"users",
+				"flag-associations",
+				"pois"
+			]) {
+				await runSQL(db, file);
 			}
 		}
 		return db;
@@ -190,10 +172,10 @@ export async function register({
 * 	The longitude of the point that the flag IDs belong to
 * @param {number} row.radius
 * 	The radius around the point where the flags were found
-* @param {Array.<number>} row.pois
-* 	An array of OSM element IDs
+* @param {Array.<POI>} row.pois
+* 	An array of POIs
 * @return {Promise}
-* 	A {@link Promise} that resolves to whether or not the registration was successful
+* 	A {@link Promise} that resolves to whether or not the insertion was successful
 */
 export async function addPoint({
 	db,
@@ -207,30 +189,31 @@ export async function addPoint({
 		INSERT INTO "flag-associations" (
 			location,
 			radius,
-			flags
+			pois
 		)
 		VALUES (
 			ST_MakePoint($[longitude], $[latitude]),
 			$[radius],
-			$[flags]::BIGINT[]
+			ARRAY[$[pois]]::poi[]
 		) ON CONFLICT DO NOTHING`, {
 			longitude,
 			latitude,
 			radius,
-			flags: pois.map(element => element.id)
+			pois
 		});
 		/* If there were any POIs, we'll also have to add them to the `pois` table */
 		if (pois.length) {
 			const insertQuery = `${pgpDB.helpers.insert(pois.map(poi => ({
-				id: poi.id,
-				metadata: poi
-			})), ["id", "metadata"], "pois")} ON CONFLICT DO NOTHING`;
+				poi,
+				metadata: poi.element
+			})), ["poi", "metadata"], "pois")} ON CONFLICT DO NOTHING`;
 			await db.query(insertQuery);
 		}
 		return true;
 	}
 	catch (e) {
 		err(e);
+		console.log(e, e.detail);
 		return false;
 	}
 }
@@ -269,7 +252,7 @@ export async function checkPoint({
 			return null;
 		}
 		else {
-			return result[0].flags.map(id => Number(id));
+			return POI.parseArray(result[0].pois);
 		}
 	}
 	catch (e) {
@@ -323,7 +306,7 @@ export async function searchAround({
 } = {}) {
 	try {
 		return await db.query(`
-		SELECT ST_X(location) AS longitude, ST_Y(location) AS latitude, radius, flags
+		SELECT ST_X(location) AS longitude, ST_Y(location) AS latitude, radius, pois
 		FROM "flag-associations"
 		WHERE ST_Distance_Sphere(location, ST_MakePoint($[longitude], $[latitude])) <= ${2 * km}
 		`, {
@@ -342,22 +325,24 @@ export async function searchAround({
 * 	An option object
 * @param {object} options.db
 * 	A `pg-promise` database instance
-* @param {Array.<number>} options.ids
-* 	The ids of the OSM elements to retrieve
+* @param {Array.<POI>} options.pois
+* 	The list of POI objects for which to look up the element data
 * @return {Promise}
 * 	A {@link Promise} that resolves to a list of POIs if successful or `null` if the Promise is rejected
 */
 export async function retrievePOIs({
 	db,
-	ids
+	pois
 } = {}) {
 	try {
-		if (ids.length) {
+		if (pois.length) {
 			const result = await db.query(`
 			SELECT metadata
 			FROM "pois"
-			WHERE "id" in (${ids.join(",")})
-			`);
+			WHERE "poi" = ANY($[pois]::poi[])
+			`, {
+				pois
+			});
 			return result.map(poi => poi.metadata);
 		}
 		else {

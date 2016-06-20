@@ -2,6 +2,7 @@ import { execute } from "./Query";
 import { EARTH_RADIUS } from "./constants";
 import { addPoint, searchAround, retrievePOIs, checkPoint } from "./db";
 import { log } from "./util";
+import POI from "./types/POI";
 /**
 * This class models a point somewhere on the globe.
 * A point is described by its latitude and its longitude.
@@ -111,14 +112,15 @@ export default class Point {
 	* 	A promise that resolves to a list of OSM element IDs if the location is known and null if the location is unknown
 	*/
 	async checkLocation(radius) {
-		const ids = await checkPoint({
+		const pois = await checkPoint({
 			db: this.db,
 			latitude: this.latitude,
 			longitude: this.longitude,
 			radius
 		});
-		if (ids) {
-			return ids;
+		if (pois) {
+			/* Exact point already in database */
+			return pois;
 		}
 		/* Retrieve stored data around this point */
 		const centers = await searchAround({
@@ -154,7 +156,12 @@ export default class Point {
 			}
 		}
 		/* All points are contained in some circle's POI radius */
-		return [...new Set(centers.map(center => center.flags.map(id => Number(id))).reduce((a, b) => a.concat(b)))];
+		const uniquePOIs = new Map();
+		const centerPOIs = centers.map(center => POI.parseArray(center.pois)).reduce((a, b) => a.concat(b));
+		for (const poi of centerPOIs) {
+			uniquePOIs.set(poi.id, poi);
+		}
+		return Array.from(uniquePOIs.values());
 	}
 	/**
 	* Queries an Overpass server for nearby POI seeds. On a successful query, the results will be stored in our database.
@@ -188,7 +195,7 @@ export default class Point {
 					latitude: this.latitude,
 					longitude: this.longitude,
 					radius,
-					pois: [...nodes, ...ways, ...areas]
+					pois: [...nodes, ...ways, ...areas].map(element => new POI(element.id, element.type, element))
 				});
 				resolve({
 					nodes,
@@ -209,12 +216,12 @@ export default class Point {
 	*/
 	async closest(amenities = [], radius) {
 		try {
-			const ids = await this.checkLocation(radius);
-			if (ids) {
-				log("Found known location.");
+			const locationPOIs = await this.checkLocation(radius);
+			if (locationPOIs) {
+				// log("Found known location.");
 				const pois = await retrievePOIs({
 					db: this.db,
-					ids
+					pois: locationPOIs
 				});
 				/* Only the inner POIs will be contained in the player's POI radius */
 				const contained = pois.filter(poi => {

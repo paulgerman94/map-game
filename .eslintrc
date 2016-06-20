@@ -280,7 +280,8 @@
 			"warn"
 		],
 		"no-underscore-dangle": [
-			"warn"
+			"warn",
+			allow: ["_rawDBType"]
 		],
 		"no-unneeded-ternary": [
 			"warn"
