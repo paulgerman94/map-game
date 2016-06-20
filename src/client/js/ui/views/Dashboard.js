@@ -38,7 +38,7 @@ export default class Dashboard extends React.Component {
 			const flags = await this.createFlags(latitude, longitude);
 			this.drawFlags(flags);
 		}, null, {
-			enableHighAccuracy: false
+			enableHighAccuracy: true
 		});
 	}
 	/**
