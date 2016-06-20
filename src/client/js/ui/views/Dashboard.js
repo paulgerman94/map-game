@@ -8,6 +8,9 @@ import {
 	LOCATION_SETUP_REQUESTED,
 	LOCATION_GRANTED
 } from "../stores/LocationStore";
+import {
+	default as SettingsStore
+} from "../stores/SettingsStore";
 import { Flag } from "../flags/Flag";
 import { Restaurant } from "../flags/Restaurant";
 import { Player } from "../flags/Player";
@@ -35,6 +38,9 @@ export default class Dashboard extends React.Component {
 			this.initializeView(latitude, longitude);
 			const flags = await this.createFlags(latitude, longitude);
 			this.drawPlayer(latitude, longitude, accuracy);
+			if (SettingsStore.isCameraFollowing) {
+				this.map.panTo([latitude, longitude]);
+			}
 			this.drawFlags(flags);
 		}, null, {
 			enableHighAccuracy: true

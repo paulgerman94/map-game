@@ -178,7 +178,9 @@ export default class Layout extends Component {
 					browserHistory.push("/");
 				}} iconElementRight={
 					<div>
-						<IconButton tooltip="Settings">
+						<IconButton tooltip="Settings" onClick={() => {
+							browserHistory.push("/settings");
+						}}>
 							<SettingsIcon/>
 						</IconButton>
 						{logoutButton}

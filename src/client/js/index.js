@@ -4,6 +4,7 @@ import { Router, Route, browserHistory } from "react-router";
 import Layout from "./ui/layout/Layout";
 import Home from "./ui/views/Home";
 import Register from "./ui/views/Register";
+import Settings from "./ui/views/Settings";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMUITheme from "material-ui/styles/getMuiTheme";
 import client from "./client";
@@ -17,7 +18,7 @@ const muiTheme = getMUITheme({
 	palette: {
 		primary1Color: blue300,
 		primary2Color: pinkA200,
-		primary3Color: pinkA200,
+		primary3Color: grey500,
 		accent1Color: pinkA200,
 		accent2Color: grey100,
 		accent3Color: grey500,
@@ -49,6 +50,7 @@ const muiTheme = getMUITheme({
 							<Route component={Layout}>
 								<Route path="/" component={Home}/>
 								<Route path="/register" component={Register}/>
+								<Route path="/settings" component={Settings}/>
 							</Route>
 						</Router>
 					</main>
