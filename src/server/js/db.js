@@ -213,7 +213,6 @@ export async function addPoint({
 	}
 	catch (e) {
 		err(e);
-		console.log(e, e.detail);
 		return false;
 	}
 }

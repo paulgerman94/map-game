@@ -63,7 +63,6 @@ async function waitForFreeAPI() {
 * 	An object created from the JSON query result
 */
 export async function execute(query) {
-	console.log(query);
 	const source = query.trim();
 	const api = await waitForFreeAPI();
 	const server = api.url;

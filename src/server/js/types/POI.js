@@ -49,6 +49,9 @@ export class POI {
 	* 	An array of {@link POI} instances that are described by their corresponding serializations
 	*/
 	static parseArray(string) {
+		if (string === "{}") {
+			return [];
+		}
 		return string
 			.replace(/"|({{)|(}})/g, "")
 			.split(`),(`)
