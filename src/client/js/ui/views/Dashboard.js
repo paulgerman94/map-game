@@ -69,30 +69,27 @@ export default class Dashboard extends React.Component {
 	* 	An array of {@link Flag} instances that can be drawn on the map
 	*/
 	async createFlags(latitude, longitude) {
-		const [{ nodes, ways, areas }] = await client.getPOIs({
+		const [pois] = await client.getPOIs({
 			latitude,
 			longitude
 		});
-		const elementCollections = [nodes, ways, areas];
-		return elementCollections.map(elementCollection => {
-			return elementCollection.map(poi => {
-				if (poi.tags.amenity === "restaurant") {
-					return new Restaurant(poi);
-				}
-				if (poi.tags.amenity === "music_school" ||
-					poi.tags.amenity === "dancing_school" ||
-					poi.tags.amenity === "driving_school" ||
-					poi.tags.amenity === "language_school" ||
-					poi.tags.amenity === "school" ||
-					poi.tags.amenity === "university"
-				) {
-					return new School(poi);
-				}
-				else {
-					return new Flag(poi);
-				}
-			});
-		}).reduce((a, b) => a.concat(b));
+		return pois.map(poi => {
+			if (poi.tags.amenity === "restaurant") {
+				return new Restaurant(poi);
+			}
+			if (poi.tags.amenity === "music_school" ||
+				poi.tags.amenity === "dancing_school" ||
+				poi.tags.amenity === "driving_school" ||
+				poi.tags.amenity === "language_school" ||
+				poi.tags.amenity === "school" ||
+				poi.tags.amenity === "university"
+			) {
+				return new School(poi);
+			}
+			else {
+				return new Flag(poi);
+			}
+		});
 	}
 	/**
 	* Updates the map's flag layer with flags

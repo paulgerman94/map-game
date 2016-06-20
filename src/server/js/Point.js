@@ -174,36 +174,24 @@ export default class Point {
 	*/
 	async generatePOIs(amenities, radius) {
 		const disjunction = amenities.map(x => `(${x})`).join("|");
-		const nodePromise = execute(`
+		const collection = await execute(`
 			node(around:${radius}, ${this.latitude}, ${this.longitude})["amenity"~"${disjunction}"];
-		`);
-		const wayPromise = execute(`
+			out center;
 			way(around:${radius}, ${this.latitude}, ${this.longitude})["amenity"~"${disjunction}"];
-		`);
-		const areaPromise = execute(`
+			out center;
 			area(around:${radius}, ${this.latitude}, ${this.longitude})["amenity"~"${disjunction}"];
+			out center;
 		`);
-		return new Promise(resolve => {
-			Promise.all([nodePromise, wayPromise, areaPromise]).then(async collection => {
-				/* We're only interested in the actual content */
-				const [nodes, ways, areas] = collection
-					.map(reply => reply.elements
-						.filter(element => element.tags.name));
-				/* Cache the results in the database */
-				await addPoint({
-					db: this.db,
-					latitude: this.latitude,
-					longitude: this.longitude,
-					radius,
-					pois: [...nodes, ...ways, ...areas].map(element => new POI(element.id, element.type, element))
-				});
-				resolve({
-					nodes,
-					ways,
-					areas
-				});
-			});
+		const cleanCollection = collection.elements.filter(element => element.tags.name);
+		/* Cache the results in the database */
+		await addPoint({
+			db: this.db,
+			latitude: this.latitude,
+			longitude: this.longitude,
+			radius,
+			pois: cleanCollection.map(element => new POI(element.id, element.type, element))
 		});
+		return cleanCollection;
 	}
 	/**
 	* Queries an Overpass server for nearby POI seeds
@@ -252,11 +240,7 @@ export default class Point {
 					}
 					return point.measureDistance(this) <= radius;
 				});
-				return {
-					nodes: contained.filter(poi => poi.type === "node"),
-					ways: contained.filter(poi => poi.type === "way"),
-					areas: contained.filter(poi => poi.type === "area")
-				};
+				return contained;
 			}
 			else {
 				log("Found new location.");

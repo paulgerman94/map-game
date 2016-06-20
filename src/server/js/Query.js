@@ -4,11 +4,11 @@ import { err } from "./util";
 import { ms } from "./units";
 /* Note that the German server seems to be the only one introducing a rate limit as can be seen on http://overpass-api.de/api/status. In order to spatially parallelize the requests, we choose a rate limit of 20 for the others; this is not a fixed upper bound. */
 const APIs = [{
-	url: "http://overpass-api.de/api",
-	rateLimit: 3
-}, {
 	url: "http://api.openstreetmap.fr/oapi/interpreter",
 	rateLimit: 20
+}, {
+	url: "http://overpass-api.de/api",
+	rateLimit: 3
 }, {
 	url: "http://overpass.osm.rambler.ru/cgi",
 	rateLimit: 20
@@ -63,7 +63,8 @@ async function waitForFreeAPI() {
 * 	An object created from the JSON query result
 */
 export async function execute(query) {
-	const source = query.trim().replace(/\s+/g, "");
+	console.log(query);
+	const source = query.trim();
 	const api = await waitForFreeAPI();
 	const server = api.url;
 	const url = `${server}/interpreter?data=[out:json];${source}out center;`;
