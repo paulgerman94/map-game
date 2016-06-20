@@ -20,8 +20,7 @@ import { POI_RADIUS } from "server/constants";
 */
 export default class Dashboard extends React.Component {
 	map;
-	markers;
-	player;
+	layers = {};
 	/**
 	* Watches the user coordinates in an interval and sends them to the server. Once the server replies with the corresponding flags, the flags are added to the map.
 	*/
@@ -101,9 +100,9 @@ export default class Dashboard extends React.Component {
 	* 	An array of {@link Flag} instances to draw on the map
 	*/
 	drawFlags(flags) {
-		this.markers.clearLayers();
+		this.layers.markers.clearLayers();
 		for (const flag of flags) {
-			this.markers.addLayer(flag.marker);
+			this.layers.markers.addLayer(flag.marker);
 		}
 	}
 	/**
@@ -116,21 +115,41 @@ export default class Dashboard extends React.Component {
 	* 	The accuracy of the player's position in meters
 	*/
 	drawPlayer(latitude, longitude, accuracy) {
-		this.player.clearLayers();
-		const reach = L.circle([latitude, longitude], POI_RADIUS);
-		const player = new Player({
-			lon: longitude,
-			lat: latitude,
-			tags: {
-				name: "You"
-			},
-			type: "node"
-		}).marker;
-		const playerAccuracy = L.circle([latitude, longitude], accuracy, {
-			color: "red"
-		});
-		for (const element of [reach, playerAccuracy, player]) {
-			this.player.addLayer(element);
+		/* Create or update the player reach */
+		if (!this.layers.player.reach) {
+			const reach = L.circle([latitude, longitude], POI_RADIUS);
+			this.layers.player.reach = reach;
+			this.layers.player.addLayer(reach);
+		}
+		else {
+			this.layers.player.reach.setLatLng([latitude, longitude]);
+		}
+		/* Create or update the player marker */
+		if (!this.layers.player.marker) {
+			const playerMarker = this.layers.player.marker = new Player({
+				lon: longitude,
+				lat: latitude,
+				tags: {
+					name: "You"
+				},
+				type: "node"
+			}).marker;
+			this.layers.player.marker = playerMarker;
+			this.layers.player.addLayer(playerMarker);
+		}
+		else {
+			this.layers.player.marker.setLatLng([latitude, longitude]);
+		}
+		/* Create or update the player accuracy */
+		if (!this.layers.player.accuracy) {
+			const accuracyCircle = L.circle([latitude, longitude], accuracy, {
+				color: "red"
+			});
+			this.layers.player.accuracy = accuracyCircle;
+			this.layers.player.addLayer(accuracyCircle);
+		}
+		else {
+			this.layers.player.accuracy.setLatLng([latitude, longitude]);
 		}
 	}
 	/**
@@ -142,7 +161,7 @@ export default class Dashboard extends React.Component {
 	*/
 	drawArea(message, ...args) {
 		const [circles] = args;
-		this.area.clearLayers();
+		this.layers.area.clearLayers();
 		for (const { latitude, longitude, radius } of circles) {
 			const areaCircle = L.circle([latitude, longitude], radius, {
 				weight: 1,
@@ -168,6 +187,31 @@ export default class Dashboard extends React.Component {
 	componentWillUnmount() {
 		LocationStore.off(LOCATION_GRANTED, ::this.receiveUserCoordinates);
 		client.off("drawArea", ::this.drawArea);
+		this.map.off("zoomstart", ::this.appendZoomFix);
+		this.map.off("zoomend", ::this.removeZoomFix);
+	}
+	/**
+	* Adds the "zoom patch" styling element to the head of the HTML
+	*/
+	appendZoomFix() {
+		const css = document.createElement("style");
+		css.setAttribute("id", "disable-jag");
+		css.type = "text/css";
+		css.innerHTML = `
+			/* This prevents a jagged path transition on zooms */
+			path {
+				transition: none;
+			}
+		`;
+		document.head.appendChild(css);
+	}
+	/**
+	* Removes the "zoom patch" styling element by the next slot in the execution queue
+	*/
+	removeZoomFix() {
+		setTimeout(() => {
+			document.querySelector("#disable-jag").remove();
+		}, 0);
 	}
 	/**
 	* Fires once this React component mounts and starts rendering a Leaflet map
@@ -176,13 +220,18 @@ export default class Dashboard extends React.Component {
 		const mapContainer = ReactDOM.findDOMNode(this).querySelector("map-container");
 		const map = L.map(mapContainer);
 		this.map = map;
-		this.area = new L.FeatureGroup();
-		this.markers = new L.FeatureGroup();
-		this.player = new L.FeatureGroup();
-		this.map.addLayer(this.area);
-		this.map.addLayer(this.player);
-		this.map.addLayer(this.markers);
+		/* Set up listeners for patching rendering issues */
+		map.on("zoomstart", ::this.appendZoomFix);
+		map.on("zoomend", ::this.removeZoomFix);
+		/* Create layers */
+		this.layers.area = new L.FeatureGroup();
+		this.layers.markers = new L.FeatureGroup();
+		this.layers.player = new L.FeatureGroup();
+		this.map.addLayer(this.layers.area);
+		this.map.addLayer(this.layers.markers);
+		this.map.addLayer(this.layers.player);
 		L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+		/* Handle GeoLocation permissions */
 		const result = await navigator.permissions.query({
 			name: "geolocation"
 		});
