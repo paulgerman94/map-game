@@ -43,7 +43,7 @@ export default class Dashboard extends React.Component {
 	* Watches the user coordinates in an interval and sends them to the server. Once the server replies with the corresponding flags, the flags are added to the map.
 	*/
 	async receiveUserCoordinates() {
-		navigator.geolocation.watchPosition(async position => {
+		this.geoLocationWatchID = navigator.geolocation.watchPosition(async position => {
 			const { coords } = position;
 			const {
 				accuracy,
@@ -216,6 +216,7 @@ export default class Dashboard extends React.Component {
 	*/
 	componentWillUnmount() {
 		LocationStore.off(LOCATION_GRANTED, this.receiveUserCoordinates);
+		navigator.geolocation.clearWatch(this.geoLocationWatchID);
 		client.off("drawArea", this.drawArea);
 		this.map.off("zoomstart", this.appendZoomFix);
 		this.map.off("zoomend", this.removeZoomFix);
