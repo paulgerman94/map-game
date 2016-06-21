@@ -1,7 +1,11 @@
 SystemJS.config({
   paths: {
-    "server/": "dist/server/js/",
-    "map-game/": "dist/client/js/"
+    "server/": "dist/server/js/"
+  },
+  nodeConfig: {
+    "paths": {
+      "map-game/": "dist/client/js/"
+    }
   },
   devConfig: {
     "map": {
@@ -163,6 +167,7 @@ SystemJS.config({
     "github:*/*.json"
   ],
   map: {
+    "history": "npm:history@2.1.2",
     "leaflet": "npm:leaflet@0.7.7",
     "react-leaflet": "npm:react-leaflet@0.11.7",
     "email-regex": "npm:email-regex@1.0.0",
@@ -246,7 +251,7 @@ SystemJS.config({
         "babel-code-frame": "npm:babel-code-frame@6.8.0",
         "babel-messages": "npm:babel-messages@6.8.0",
         "babel-runtime": "npm:babel-runtime@6.9.2",
-        "babel-types": "npm:babel-types@6.10.0",
+        "babel-types": "npm:babel-types@6.10.2",
         "babylon": "npm:babylon@6.8.1",
         "debug": "npm:debug@2.2.0",
         "globals": "npm:globals@8.18.0",
@@ -308,7 +313,7 @@ SystemJS.config({
     },
     "npm:recompose@0.17.0": {
       "map": {
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.1.0",
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0",
         "lodash": "npm:lodash@4.13.1"
       }
     },
@@ -535,11 +540,6 @@ SystemJS.config({
         "readable-stream": "npm:readable-stream@1.1.14"
       }
     },
-    "npm:ecdsa-sig-formatter@1.0.5": {
-      "map": {
-        "base64-url": "npm:base64-url@1.2.2"
-      }
-    },
     "npm:encoding@0.1.12": {
       "map": {
         "iconv-lite": "npm:iconv-lite@0.4.13"
@@ -627,7 +627,7 @@ SystemJS.config({
       "map": {
         "base64url": "npm:base64url@1.0.6",
         "buffer-equal-constant-time": "npm:buffer-equal-constant-time@1.0.1",
-        "ecdsa-sig-formatter": "npm:ecdsa-sig-formatter@1.0.5"
+        "ecdsa-sig-formatter": "npm:ecdsa-sig-formatter@1.0.7"
       }
     },
     "npm:jws@3.1.3": {
@@ -872,7 +872,7 @@ SystemJS.config({
         "history": "npm:history@2.1.2",
         "invariant": "npm:invariant@2.2.1",
         "warning": "npm:warning@2.1.0",
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.1.0"
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0"
       }
     },
     "npm:history@2.1.2": {
@@ -1033,15 +1033,6 @@ SystemJS.config({
         "lodash": "npm:lodash@4.13.1"
       }
     },
-    "npm:babel-types@6.10.0": {
-      "map": {
-        "babel-traverse": "npm:babel-traverse@6.9.0",
-        "lodash": "npm:lodash@4.13.1",
-        "to-fast-properties": "npm:to-fast-properties@1.0.2",
-        "esutils": "npm:esutils@2.0.2",
-        "babel-runtime": "npm:babel-runtime@6.9.2"
-      }
-    },
     "npm:babylon@6.8.1": {
       "map": {
         "babel-runtime": "npm:babel-runtime@6.9.2"
@@ -1053,6 +1044,20 @@ SystemJS.config({
         "inherits": "npm:inherits@2.0.1",
         "brorand": "npm:brorand@1.0.5",
         "hash.js": "npm:hash.js@1.0.3"
+      }
+    },
+    "npm:babel-types@6.10.2": {
+      "map": {
+        "babel-traverse": "npm:babel-traverse@6.9.0",
+        "lodash": "npm:lodash@4.13.1",
+        "to-fast-properties": "npm:to-fast-properties@1.0.2",
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "esutils": "npm:esutils@2.0.2"
+      }
+    },
+    "npm:ecdsa-sig-formatter@1.0.7": {
+      "map": {
+        "base64-url": "npm:base64-url@1.2.2"
       }
     }
   }
