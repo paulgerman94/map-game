@@ -89,4 +89,9 @@ L.AwesomeMarkers.Icon = L.Icon.extend({
 L.AwesomeMarkers.icon = options => {
 	return new L.AwesomeMarkers.Icon(options);
 };
+L.Circle.include({
+	contains(latLng) {
+		return this.getLatLng().distanceTo(latLng) <= this.getRadius();
+	}
+});
 export default L;

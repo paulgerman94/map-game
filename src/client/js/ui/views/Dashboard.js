@@ -4,16 +4,14 @@ import L from "client/ui/LeafletWrapper";
 import client from "client/client";
 import {
 	default as LocationStore,
+	FLAG_CACHE_UPDATED,
 	LOCATION_REQUESTED,
 	LOCATION_SETUP_REQUESTED,
 	LOCATION_GRANTED
 } from "../stores/LocationStore";
 import SettingsStore from "../stores/SettingsStore";
 import StateStore from "../stores/StateStore";
-import { Flag } from "../flags/Flag";
-import { Restaurant } from "../flags/Restaurant";
-import { Player } from "../flags/Player";
-import { School } from "../flags/School";
+import { Flag, Player } from "../Flag";
 import { publish } from "../Dispatcher";
 import { POI_RADIUS } from "server/constants";
 /**
@@ -75,6 +73,8 @@ export default class Dashboard extends React.Component {
 			this.initializeView(...view);
 			/* Immediately move the player to his new position */
 			this.drawPlayer(...view, accuracy, this.styles.layers.player.reach.loading);
+			/* Immediately clear all flags and draw only flags from client cache */
+			this.drawFlags();
 			if (SettingsStore.isCameraFollowing) {
 				/* The camera should also follow immediately */
 				this.map.panTo(view);
@@ -151,37 +151,39 @@ export default class Dashboard extends React.Component {
 			latitude,
 			longitude
 		});
-		const flags = pois.map(poi => {
-			if (poi.tags.amenity === "restaurant") {
-				return new Restaurant(poi);
-			}
-			if (poi.tags.amenity === "music_school" ||
-				poi.tags.amenity === "dancing_school" ||
-				poi.tags.amenity === "driving_school" ||
-				poi.tags.amenity === "language_school" ||
-				poi.tags.amenity === "school" ||
-				poi.tags.amenity === "university"
-			) {
-				return new School(poi);
-			}
-			else {
-				return new Flag(poi);
-			}
-		});
+		const flags = pois.map(poi => new Flag(poi).specialized);
 		this.setState({
 			shownFlags: flags
+		});
+		publish(FLAG_CACHE_UPDATED, {
+			flags
 		});
 		return flags;
 	}
 	/**
 	* Updates the map's flag layer with flags
-	* @param {Array.<Flag>} flags
-	* 	An array of {@link Flag} instances to draw on the map
+	* @param {Array.<Flag>} [flags]
+	* 	An array of {@link Flag} instances to draw on the map — if the array is ommitted, the function will instead try to draw flags from the client cache that would be contained in the player's reach
 	*/
 	drawFlags(flags) {
+		const [latitude, longitude] = this.state.view;
 		this.layers.markers.clearLayers();
-		for (const flag of flags) {
-			this.layers.markers.addLayer(flag.marker);
+		if (!flags) {
+			/* Display cached flags */
+			const circle = L.circle(this.state.view, POI_RADIUS);
+			for (const flag of LocationStore.flags) {
+				if (this.isCurrentPosition(latitude, longitude)) {
+					if (circle.contains([flag.latitude, flag.longitude])) {
+						/* If the cached flag is in the reach, draw it */
+						this.layers.markers.addLayer(flag.marker);
+					}
+				}
+			}
+		}
+		else {
+			for (const flag of flags) {
+				this.layers.markers.addLayer(flag.marker);
+			}
 		}
 	}
 	/**
