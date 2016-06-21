@@ -179,7 +179,7 @@ export default class Layout extends Component {
 				}} iconElementRight={
 					<div>
 						<IconButton tooltip="Settings" onClick={() => {
-							browserHistory.push("/settings");
+							browserHistory.push("settings");
 						}}>
 							<SettingsIcon/>
 						</IconButton>

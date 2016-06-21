@@ -29,6 +29,23 @@ export default class Dashboard extends React.Component {
 		zoom: 15,
 		accuracy: 0
 	};
+	styles = {
+		layers: {
+			player: {
+				reach: {
+					failed: {
+						color: "hsl(8, 100%, 80%)"
+					},
+					loading: {
+						color: "hsl(128, 100%, 80%)"
+					},
+					ready: {
+						color: "hsl(228, 100%, 50%)"
+					}
+				}
+			}
+		}
+	};
 	/**
 	* Instantiates a new {@link Dashboard} component
 	*/
@@ -56,15 +73,50 @@ export default class Dashboard extends React.Component {
 				accuracy
 			});
 			this.initializeView(...view);
-			const flags = await this.createFlags(...view);
-			this.drawPlayer(...view, accuracy);
+			/* Immediately move the player to his new position */
+			this.drawPlayer(...view, accuracy, this.styles.layers.player.reach.loading);
 			if (SettingsStore.isCameraFollowing) {
+				/* The camera should also follow immediately */
 				this.map.panTo(view);
 			}
-			this.drawFlags(flags);
+			let reachStyle;
+			try {
+				const flags = await this.createFlags(...view);
+				/* Is the player still where he was back when he requested the flags? */
+				if (this.isCurrentPosition(...view)) {
+					/* Update the player to signal completion, update the flags */
+					reachStyle = this.styles.layers.player.reach.ready;
+					this.drawFlags(flags);
+				}
+			}
+			catch (e) {
+				/* Update the player to signal failure */
+				reachStyle = this.styles.layers.player.reach.failed;
+			}
+			finally {
+				/* Is the player still where he was back when he requested the flags? */
+				if (this.isCurrentPosition(...view)) {
+					/* Update the player if the operation was issued for the current position */
+					this.drawPlayer(...view, accuracy, reachStyle);
+				}
+			}
 		}, null, {
 			enableHighAccuracy: true
 		});
+	}
+	/**
+	* This function determines if the latitude and longitude provided are what the map is currently set to.
+	* Note that this function is needed because Leaflet maps don't save their position exactly.
+	* @param {number} latitude
+	* 	The latitude of the point
+	* @param {number} longitude
+	* 	The longitude of the point
+	* @return {boolean}
+	* 	Whether or not this is the position that the map currently displays
+	*/
+	isCurrentPosition(latitude, longitude) {
+		const [viewLatitude, viewLongitude] = this.state.view;
+		return viewLatitude === latitude && viewLongitude === longitude;
 	}
 	/**
 	* Sets the initial map position to render.
@@ -140,8 +192,10 @@ export default class Dashboard extends React.Component {
 	* 	The longitude of the coordinate where the player should be drawn
 	* @param {number} accuracy
 	* 	The accuracy of the player's position in meters
+	* @param {object} [reachStyle={}]
+	* 	An optional style object that determines how the player reach will be rendered
 	*/
-	drawPlayer(latitude, longitude, accuracy) {
+	drawPlayer(latitude, longitude, accuracy, reachStyle = {}) {
 		/* Create or update the player reach */
 		if (!this.layers.player.reach) {
 			const reach = L.circle([latitude, longitude], POI_RADIUS);
@@ -149,6 +203,7 @@ export default class Dashboard extends React.Component {
 			this.layers.player.addLayer(reach);
 		}
 		else {
+			this.layers.player.reach.setStyle(reachStyle);
 			this.layers.player.reach.setLatLng([latitude, longitude]);
 		}
 		/* Create or update the player marker */

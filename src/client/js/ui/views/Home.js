@@ -7,6 +7,7 @@ import {
 	LOGIN,
 	LOGOUT
 } from "../stores/ConnectionStore";
+import { CircularProgress } from "material-ui";
 /**
 * This component contains the home view that the user should see when entering the app.
 * It should a simple login/registration menu if the user isn't logged in.
@@ -80,7 +81,7 @@ export default class Home extends React.Component {
 	render() {
 		if (!this.state.isLoginDataAvailable) {
 			/* Return a spinner? */
-			return <p></p>;
+			return <CircularProgress/>;
 		}
 		else {
 			return this.state.isLoggedIn ? <Dashboard/> : <Login/>;

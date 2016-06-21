@@ -1,7 +1,8 @@
 import React from "react";
 import { render } from "react-dom";
-import { Router, Route, IndexRoute, useRouterHistory, browserHistory as M } from "react-router";
-import { createHistory } from "history";
+import { Router, Route, IndexRoute, browserHistory } from "react-router";
+// import { useRouterHistory } from "react-router";
+// import { createHistory } from "history";
 import Layout from "./ui/layout/Layout";
 import Home from "./ui/views/Home";
 import Register from "./ui/views/Register";
@@ -34,9 +35,9 @@ const muiTheme = getMUITheme({
 // if (navigator.serviceWorker) {
 // 	navigator.serviceWorker.register("sw.js");
 // }
-const browserHistory = useRouterHistory(createHistory)({
-	basename: "/<%LINUX_USERNAME%>/"
-});
+// const browserHistory = useRouterHistory(createHistory)({
+// 	basename: "/<%LINUX_USERNAME%>/"
+// });
 (async () => {
 	try {
 		/* The first rendering of the page should also try to establish a WebSocket connection */

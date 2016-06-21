@@ -2,10 +2,10 @@
 	display: none;
 }
 .leaflet-marker-pane > * {
-	transition: transform 0.3s linear;
+	transition: transform 0.3s ease;
 }
 path {
-	transition: d 0.3s linear;
+	transition: d 0.3s ease, stroke 0.3s ease, fill 0.3s ease;
 }
 map-container {
 	display: block;
