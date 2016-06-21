@@ -207,8 +207,8 @@ export default class Dashboard extends React.Component {
 	componentWillMount() {
 		LocationStore.on(LOCATION_GRANTED, this.receiveUserCoordinates);
 		client.on("drawArea", this.drawArea);
-		if (StateStore.state) {
-			this.state = LocationStore.dashboard;
+		if (StateStore.dashboard) {
+			this.state = StateStore.dashboard;
 		}
 	}
 	/**
