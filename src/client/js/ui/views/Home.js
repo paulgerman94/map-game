@@ -17,6 +17,9 @@ export default class Home extends React.Component {
 		isLoginDataAvailable: false,
 		isLoggedIn: false
 	};
+	/**
+	* Instantiates a new {@link Home} component
+	*/
 	constructor() {
 		super();
 		this.showDashboard = ::this.showDashboard;

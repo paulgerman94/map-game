@@ -21,6 +21,9 @@ export default class Login extends React.Component {
 		isPasswordValid: false,
 		isLoggingIn: false
 	};
+	/**
+	* Instantiates a new {@link Login} component
+	*/
 	constructor() {
 		super();
 		this.assumeServerDown = ::this.assumeServerDown;

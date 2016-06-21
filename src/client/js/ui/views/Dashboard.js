@@ -8,9 +8,8 @@ import {
 	LOCATION_SETUP_REQUESTED,
 	LOCATION_GRANTED
 } from "../stores/LocationStore";
-import {
-	default as SettingsStore
-} from "../stores/SettingsStore";
+import SettingsStore from "../stores/SettingsStore";
+import StateStore from "../stores/StateStore";
 import { Flag } from "../flags/Flag";
 import { Restaurant } from "../flags/Restaurant";
 import { Player } from "../flags/Player";
@@ -24,6 +23,22 @@ import { POI_RADIUS } from "server/constants";
 export default class Dashboard extends React.Component {
 	map;
 	layers = {};
+	state = {
+		view: null,
+		shownFlags: [],
+		zoom: 15,
+		accuracy: 0
+	};
+	/**
+	* Instantiates a new {@link Dashboard} component
+	*/
+	constructor() {
+		super();
+		this.receiveUserCoordinates = ::this.receiveUserCoordinates;
+		this.drawArea = ::this.drawArea;
+		this.appendZoomFix = ::this.appendZoomFix;
+		this.removeZoomFix = ::this.removeZoomFix;
+	}
 	/**
 	* Watches the user coordinates in an interval and sends them to the server. Once the server replies with the corresponding flags, the flags are added to the map.
 	*/
@@ -35,11 +50,16 @@ export default class Dashboard extends React.Component {
 				latitude,
 				longitude
 			} = coords;
-			this.initializeView(latitude, longitude);
-			const flags = await this.createFlags(latitude, longitude);
-			this.drawPlayer(latitude, longitude, accuracy);
+			const view = [latitude, longitude];
+			this.setState({
+				view,
+				accuracy
+			});
+			this.initializeView(...view);
+			const flags = await this.createFlags(...view);
+			this.drawPlayer(...view, accuracy);
 			if (SettingsStore.isCameraFollowing) {
-				this.map.panTo([latitude, longitude]);
+				this.map.panTo(view);
 			}
 			this.drawFlags(flags);
 		}, null, {
@@ -62,7 +82,7 @@ export default class Dashboard extends React.Component {
 		}
 		catch (e) {
 			/* Otherwise, its position is undefined */
-			this.map.setView([latitude, longitude], 15);
+			this.map.setView([latitude, longitude], this.state.zoom);
 		}
 	}
 	/**
@@ -79,7 +99,7 @@ export default class Dashboard extends React.Component {
 			latitude,
 			longitude
 		});
-		return pois.map(poi => {
+		const flags = pois.map(poi => {
 			if (poi.tags.amenity === "restaurant") {
 				return new Restaurant(poi);
 			}
@@ -96,6 +116,10 @@ export default class Dashboard extends React.Component {
 				return new Flag(poi);
 			}
 		});
+		this.setState({
+			shownFlags: flags
+		});
+		return flags;
 	}
 	/**
 	* Updates the map's flag layer with flags
@@ -181,17 +205,21 @@ export default class Dashboard extends React.Component {
 	* Sets up all event listeners
 	*/
 	componentWillMount() {
-		LocationStore.on(LOCATION_GRANTED, ::this.receiveUserCoordinates);
-		client.on("drawArea", ::this.drawArea);
+		LocationStore.on(LOCATION_GRANTED, this.receiveUserCoordinates);
+		client.on("drawArea", this.drawArea);
+		if (StateStore.state) {
+			this.state = LocationStore.dashboard;
+		}
 	}
 	/**
 	* Removes all event listeners
 	*/
 	componentWillUnmount() {
-		LocationStore.off(LOCATION_GRANTED, ::this.receiveUserCoordinates);
-		client.off("drawArea", ::this.drawArea);
-		this.map.off("zoomstart", ::this.appendZoomFix);
-		this.map.off("zoomend", ::this.removeZoomFix);
+		LocationStore.off(LOCATION_GRANTED, this.receiveUserCoordinates);
+		client.off("drawArea", this.drawArea);
+		this.map.off("zoomstart", this.appendZoomFix);
+		this.map.off("zoomend", this.removeZoomFix);
+		StateStore.dashboard = this.state;
 	}
 	/**
 	* Adds the "zoom patch" styling element to the head of the HTML
@@ -212,6 +240,9 @@ export default class Dashboard extends React.Component {
 	* Removes the "zoom patch" styling element by the next slot in the execution queue
 	*/
 	removeZoomFix() {
+		this.setState({
+			zoom: this.map.getZoom()
+		});
 		setTimeout(() => {
 			document.querySelector("#disable-jag").remove();
 		}, 0);
@@ -224,8 +255,8 @@ export default class Dashboard extends React.Component {
 		const map = L.map(mapContainer);
 		this.map = map;
 		/* Set up listeners for patching rendering issues */
-		map.on("zoomstart", ::this.appendZoomFix);
-		map.on("zoomend", ::this.removeZoomFix);
+		map.on("zoomstart", this.appendZoomFix);
+		map.on("zoomend", this.removeZoomFix);
 		/* Create layers */
 		this.layers.area = new L.FeatureGroup();
 		this.layers.markers = new L.FeatureGroup();
@@ -234,6 +265,12 @@ export default class Dashboard extends React.Component {
 		this.map.addLayer(this.layers.markers);
 		this.map.addLayer(this.layers.player);
 		L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+		if (this.state.view) {
+			/* Restore view, player and flags */
+			map.setView(this.state.view, this.state.zoom);
+			this.drawPlayer(...this.state.view, this.state.accuracy);
+			this.drawFlags(this.state.shownFlags);
+		}
 		/* Handle GeoLocation permissions */
 		const result = await navigator.permissions.query({
 			name: "geolocation"
