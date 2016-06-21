@@ -253,7 +253,7 @@ export default class Dashboard extends React.Component {
 				fillOpacity: 0.0035,
 				opacity: 0.25
 			});
-			this.area.addLayer(areaCircle);
+			this.layers.area.addLayer(areaCircle);
 		}
 		/* TODO: Fix replies in protocol to send token? */
 		message.reply();

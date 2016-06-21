@@ -8,24 +8,6 @@ import { log, err } from "../util";
 import { createToken } from "../crypto";
 import { POI_RADIUS } from "../constants";
 /**
-* Adds an array of numbers and sends the sum back to the client.
-* @param {object} options
-* 	An object
-* @param {Array.<number>} options.args
-* 	The arguments provided by the caller. Here, the array is to be expected to be an array of numbers.
-* @param {Message} options.message
-* 	An RPC message object that can be used to send a reply
-* @param {RPCClient} options.client
-* 	The RPC client that has called the function
-*/
-export function add({
-	args,
-	message
-} = {}) {
-	const sum = args.reduce((a, b) => a + b, 0);
-	message.reply(sum);
-}
-/**
 * @param {object} options An object
 * @param {Array.<number>} options.args
 * 	The arguments provided by the caller. Here, the arguments are expected to contain at least one object that matches the properties of a {@link Position} (GeoLocation API) object.
