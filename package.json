@@ -99,8 +99,6 @@
       "pg-promise": "npm:pg-promise@^2.0.6",
       "pgtools": "npm:pgtools@^0.0.2",
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.9",
-      "react-flexr": "npm:react-flexr@^2.1.0-beta",
-      "react-leaflet": "npm:react-leaflet@^0.11.6",
       "react-router": "npm:react-router@^2.0.1",
       "ws-promise-client": "npm:ws-promise-client@^3.0.0"
     },
@@ -120,7 +118,7 @@
       "fs": "github:jspm/nodelibs-fs@^0.2.0-alpha",
       "http": "github:jspm/nodelibs-http@^0.2.0-alpha",
       "https": "github:jspm/nodelibs-https@^0.2.0-alpha",
-      "leaflet": "npm:leaflet@^0.7.7",
+      "leaflet": "npm:leaflet@1.0.0-rc.1",
       "module": "github:jspm/nodelibs-module@^0.2.0-alpha",
       "net": "github:jspm/nodelibs-net@^0.2.0-alpha",
       "os": "github:jspm/nodelibs-os@^0.2.0-alpha",
@@ -191,9 +189,6 @@
         "ignore": [
           "test.js"
         ]
-      },
-      "npm:leaflet@0.7.7": {
-        "jspmNodeConversion": false
       },
       "npm:ms@0.7.1": {
         "jspmNodeConversion": false,

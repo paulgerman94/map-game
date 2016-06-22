@@ -116,6 +116,7 @@ const paths = {
 };
 const globs = {
 	client: {
+		css: `${paths.client.css.src}/**/*.scss`,
 		js: [`${paths.client.js.src}/**/*.js`, `!${paths.client.js.src}/sw/**/*.js`],
 		json: `${paths.client.json.src}/**/*.json`,
 		sw: `${paths.client.sw.src}/**/*.js`
@@ -242,7 +243,15 @@ gulp.task("watch", async done => {
 	const watcherOptions = {
 		usePolling: true
 	};
-	/* Retranspile and client JS files and lint them */
+	/* Retranspile HTML files */
+	gulp.watch("src/client/html/index.html", watcherOptions, gulp.parallel(
+		"html"
+	));
+	/* Retranspile CSS files */
+	gulp.watch(globs.client.css, watcherOptions, gulp.parallel(
+		"css"
+	));
+	/* Retranspile client JS files and lint them */
 	const clientJSWatcher = gulp.watch(globs.client.js, watcherOptions, gulp.parallel(
 		"lint"
 	));
@@ -273,8 +282,6 @@ gulp.task("watch", async done => {
 	configWatcher.on("change", () => {
 		return splitConfig();
 	});
-// 	gulp.watch("src/scss/main.scss", ["css"]);
-// 	gulp.watch("src/index.html", ["html"]);
 	done();
 });
 /**

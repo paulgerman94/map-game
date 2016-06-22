@@ -148,6 +148,166 @@ SystemJS.config({
         "bowser": "npm:bowser@1.0.0",
         "inline-style-prefix-all": "npm:inline-style-prefix-all@1.0.5"
       }
+    },
+    "npm:readable-stream@1.0.34": {
+      "map": {
+        "core-util-is": "npm:core-util-is@1.0.2",
+        "inherits": "npm:inherits@2.0.1",
+        "isarray": "npm:isarray@0.0.1",
+        "string_decoder": "npm:string_decoder@0.10.31",
+        "stream-browserify": "npm:stream-browserify@1.0.0"
+      }
+    },
+    "npm:react-flexr@2.1.0-beta": {
+      "map": {
+        "react": "npm:react@15.1.0",
+        "stilr": "npm:stilr@1.2.4"
+      }
+    },
+    "npm:brfs@1.4.3": {
+      "map": {
+        "quote-stream": "npm:quote-stream@1.0.2",
+        "resolve": "npm:resolve@1.1.7",
+        "static-module": "npm:static-module@1.3.1",
+        "through2": "npm:through2@2.0.1"
+      }
+    },
+    "npm:browserify-versionify@1.0.6": {
+      "map": {
+        "find-root": "npm:find-root@0.1.2",
+        "through2": "npm:through2@0.6.3"
+      }
+    },
+    "npm:duplexer2@0.0.2": {
+      "map": {
+        "readable-stream": "npm:readable-stream@1.1.14"
+      }
+    },
+    "npm:escodegen@0.0.28": {
+      "map": {
+        "esprima": "npm:esprima@1.0.4",
+        "estraverse": "npm:estraverse@1.3.2"
+      }
+    },
+    "npm:escodegen@1.3.3": {
+      "map": {
+        "esprima": "npm:esprima@1.1.1",
+        "estraverse": "npm:estraverse@1.5.1",
+        "esutils": "npm:esutils@1.0.0"
+      }
+    },
+    "npm:falafel@1.2.0": {
+      "map": {
+        "acorn": "npm:acorn@1.2.2",
+        "foreach": "npm:foreach@2.0.5",
+        "isarray": "npm:isarray@0.0.1",
+        "object-keys": "npm:object-keys@1.0.9"
+      }
+    },
+    "npm:has@1.0.1": {
+      "map": {
+        "function-bind": "npm:function-bind@1.1.0"
+      }
+    },
+    "npm:pixi.js@3.0.11": {
+      "map": {
+        "async": "npm:async@1.5.2",
+        "brfs": "npm:brfs@1.4.3",
+        "browserify-versionify": "npm:browserify-versionify@1.0.6",
+        "earcut": "npm:earcut@2.1.1",
+        "eventemitter3": "npm:eventemitter3@1.2.0",
+        "object-assign": "npm:object-assign@4.1.0",
+        "resource-loader": "npm:resource-loader@1.6.5"
+      }
+    },
+    "npm:quote-stream@0.0.0": {
+      "map": {
+        "minimist": "npm:minimist@0.0.8",
+        "through2": "npm:through2@0.4.2"
+      }
+    },
+    "npm:quote-stream@1.0.2": {
+      "map": {
+        "buffer-equal": "npm:buffer-equal@0.0.1",
+        "minimist": "npm:minimist@1.2.0",
+        "through2": "npm:through2@2.0.1"
+      }
+    },
+    "npm:readable-stream@2.0.6": {
+      "map": {
+        "core-util-is": "npm:core-util-is@1.0.2",
+        "inherits": "npm:inherits@2.0.1",
+        "isarray": "npm:isarray@1.0.0",
+        "process-nextick-args": "npm:process-nextick-args@1.0.7",
+        "string_decoder": "npm:string_decoder@0.10.31",
+        "util-deprecate": "npm:util-deprecate@1.0.2"
+      }
+    },
+    "npm:static-eval@0.2.4": {
+      "map": {
+        "escodegen": "npm:escodegen@0.0.28"
+      }
+    },
+    "npm:static-module@1.3.1": {
+      "map": {
+        "concat-stream": "npm:concat-stream@1.4.10",
+        "duplexer2": "npm:duplexer2@0.0.2",
+        "escodegen": "npm:escodegen@1.3.3",
+        "falafel": "npm:falafel@1.2.0",
+        "has": "npm:has@1.0.1",
+        "object-inspect": "npm:object-inspect@0.4.0",
+        "quote-stream": "npm:quote-stream@0.0.0",
+        "readable-stream": "npm:readable-stream@1.0.34",
+        "shallow-copy": "npm:shallow-copy@0.0.1",
+        "static-eval": "npm:static-eval@0.2.4",
+        "through2": "npm:through2@0.4.2"
+      }
+    },
+    "npm:stilr@1.2.4": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "react": "npm:react@15.1.0"
+      }
+    },
+    "npm:through2@0.4.2": {
+      "map": {
+        "readable-stream": "npm:readable-stream@1.0.34",
+        "xtend": "npm:xtend@2.1.2"
+      }
+    },
+    "npm:through2@0.6.3": {
+      "map": {
+        "readable-stream": "npm:readable-stream@1.0.34",
+        "xtend": "npm:xtend@4.0.1"
+      }
+    },
+    "npm:through2@2.0.1": {
+      "map": {
+        "readable-stream": "npm:readable-stream@2.0.6",
+        "xtend": "npm:xtend@4.0.1"
+      }
+    },
+    "npm:xtend@2.1.2": {
+      "map": {
+        "object-keys": "npm:object-keys@0.4.0"
+      }
+    },
+    "npm:resource-loader@1.6.5": {
+      "map": {
+        "async": "npm:async@0.9.2",
+        "eventemitter3": "npm:eventemitter3@1.2.0"
+      }
+    },
+    "npm:warning@3.0.0": {
+      "map": {
+        "loose-envify": "npm:loose-envify@1.2.0"
+      }
+    },
+    "npm:react-leaflet@0.11.7": {
+      "map": {
+        "warning": "npm:warning@3.0.0",
+        "lodash": "npm:lodash@4.13.1"
+      }
     }
   },
   map: {
@@ -156,7 +316,11 @@ SystemJS.config({
     "classnames": "npm:classnames@2.2.4",
     "flexboxgrid": "npm:flexboxgrid@6.3.0",
     "react-flexbox-grid": "npm:react-flexbox-grid@0.9.6",
-    "react-grid-layout": "npm:react-grid-layout@0.12.1"
+    "react-grid-layout": "npm:react-grid-layout@0.12.1",
+    "react-leaflet": "npm:react-leaflet@0.11.7",
+    "react-flexr": "npm:react-flexr@2.1.0-beta",
+    "Polymer/polymer": "github:Polymer/polymer@1.5.0",
+    "pixi.js": "npm:pixi.js@3.0.11"
   }
 });
 
@@ -168,14 +332,11 @@ SystemJS.config({
   ],
   map: {
     "history": "npm:history@2.1.2",
-    "leaflet": "npm:leaflet@0.7.7",
-    "react-leaflet": "npm:react-leaflet@0.11.7",
+    "leaflet": "npm:leaflet@1.0.0-rc.1",
     "email-regex": "npm:email-regex@1.0.0",
     "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
     "babel-types": "npm:babel-types@6.7.7",
-    "react-flexr": "npm:react-flexr@2.1.0-beta",
     "flux": "npm:flux@2.1.1",
-    "Polymer/polymer": "github:Polymer/polymer@1.5.0",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
     "babel-polyfill": "npm:babel-polyfill@6.9.1",
     "bcrypt": "npm:bcrypt@0.8.7",
@@ -205,7 +366,6 @@ SystemJS.config({
     "pg-native": "npm:pg-native@1.10.0",
     "pg-promise": "npm:pg-promise@2.9.5",
     "pgtools": "npm:pgtools@0.0.2",
-    "pixi.js": "npm:pixi.js@3.0.11",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.9",
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
     "react": "npm:react@15.1.0",
@@ -282,15 +442,6 @@ SystemJS.config({
         "isarray": "npm:isarray@1.0.0"
       }
     },
-    "npm:readable-stream@1.0.34": {
-      "map": {
-        "core-util-is": "npm:core-util-is@1.0.2",
-        "inherits": "npm:inherits@2.0.1",
-        "isarray": "npm:isarray@0.0.1",
-        "string_decoder": "npm:string_decoder@0.10.31",
-        "stream-browserify": "npm:stream-browserify@1.0.0"
-      }
-    },
     "npm:readable-stream@1.1.14": {
       "map": {
         "core-util-is": "npm:core-util-is@1.0.2",
@@ -298,12 +449,6 @@ SystemJS.config({
         "isarray": "npm:isarray@0.0.1",
         "stream-browserify": "npm:stream-browserify@1.0.0",
         "string_decoder": "npm:string_decoder@0.10.31"
-      }
-    },
-    "npm:react-flexr@2.1.0-beta": {
-      "map": {
-        "react": "npm:react@15.1.0",
-        "stilr": "npm:stilr@1.2.4"
       }
     },
     "npm:react-tap-event-plugin@1.0.0": {
@@ -396,14 +541,6 @@ SystemJS.config({
         "meow": "npm:meow@2.0.0"
       }
     },
-    "npm:brfs@1.4.3": {
-      "map": {
-        "quote-stream": "npm:quote-stream@1.0.2",
-        "resolve": "npm:resolve@1.1.7",
-        "static-module": "npm:static-module@1.3.1",
-        "through2": "npm:through2@2.0.1"
-      }
-    },
     "npm:browserify-aes@1.0.6": {
       "map": {
         "buffer-xor": "npm:buffer-xor@1.0.3",
@@ -442,12 +579,6 @@ SystemJS.config({
         "elliptic": "npm:elliptic@6.3.1",
         "inherits": "npm:inherits@2.0.1",
         "parse-asn1": "npm:parse-asn1@5.0.0"
-      }
-    },
-    "npm:browserify-versionify@1.0.6": {
-      "map": {
-        "find-root": "npm:find-root@0.1.2",
-        "through2": "npm:through2@0.6.3"
       }
     },
     "npm:browserify-zlib@0.1.4": {
@@ -535,40 +666,14 @@ SystemJS.config({
         "randombytes": "npm:randombytes@2.0.3"
       }
     },
-    "npm:duplexer2@0.0.2": {
-      "map": {
-        "readable-stream": "npm:readable-stream@1.1.14"
-      }
-    },
     "npm:encoding@0.1.12": {
       "map": {
         "iconv-lite": "npm:iconv-lite@0.4.13"
       }
     },
-    "npm:escodegen@0.0.28": {
-      "map": {
-        "esprima": "npm:esprima@1.0.4",
-        "estraverse": "npm:estraverse@1.3.2"
-      }
-    },
-    "npm:escodegen@1.3.3": {
-      "map": {
-        "esprima": "npm:esprima@1.1.1",
-        "estraverse": "npm:estraverse@1.5.1",
-        "esutils": "npm:esutils@1.0.0"
-      }
-    },
     "npm:evp_bytestokey@1.0.0": {
       "map": {
         "create-hash": "npm:create-hash@1.1.2"
-      }
-    },
-    "npm:falafel@1.2.0": {
-      "map": {
-        "acorn": "npm:acorn@1.2.2",
-        "foreach": "npm:foreach@2.0.5",
-        "isarray": "npm:isarray@0.0.1",
-        "object-keys": "npm:object-keys@1.0.9"
       }
     },
     "npm:fbjs@0.2.1": {
@@ -581,11 +686,6 @@ SystemJS.config({
     "npm:has-ansi@2.0.0": {
       "map": {
         "ansi-regex": "npm:ansi-regex@2.0.0"
-      }
-    },
-    "npm:has@1.0.1": {
-      "map": {
-        "function-bind": "npm:function-bind@1.1.0"
       }
     },
     "npm:hash.js@1.0.3": {
@@ -694,17 +794,6 @@ SystemJS.config({
         "pg": "npm:pg@4.5.6"
       }
     },
-    "npm:pixi.js@3.0.11": {
-      "map": {
-        "async": "npm:async@1.5.2",
-        "brfs": "npm:brfs@1.4.3",
-        "browserify-versionify": "npm:browserify-versionify@1.0.6",
-        "earcut": "npm:earcut@2.1.1",
-        "eventemitter3": "npm:eventemitter3@1.2.0",
-        "object-assign": "npm:object-assign@4.1.0",
-        "resource-loader": "npm:resource-loader@1.6.5"
-      }
-    },
     "npm:promise@7.1.1": {
       "map": {
         "asap": "npm:asap@2.0.4"
@@ -724,35 +813,12 @@ SystemJS.config({
         "strict-uri-encode": "npm:strict-uri-encode@1.1.0"
       }
     },
-    "npm:quote-stream@0.0.0": {
-      "map": {
-        "minimist": "npm:minimist@0.0.8",
-        "through2": "npm:through2@0.4.2"
-      }
-    },
-    "npm:quote-stream@1.0.2": {
-      "map": {
-        "buffer-equal": "npm:buffer-equal@0.0.1",
-        "minimist": "npm:minimist@1.2.0",
-        "through2": "npm:through2@2.0.1"
-      }
-    },
     "npm:readable-stream@1.0.31": {
       "map": {
         "core-util-is": "npm:core-util-is@1.0.2",
         "inherits": "npm:inherits@2.0.1",
         "isarray": "npm:isarray@0.0.1",
         "string_decoder": "npm:string_decoder@0.10.31"
-      }
-    },
-    "npm:readable-stream@2.0.6": {
-      "map": {
-        "core-util-is": "npm:core-util-is@1.0.2",
-        "inherits": "npm:inherits@2.0.1",
-        "isarray": "npm:isarray@1.0.0",
-        "process-nextick-args": "npm:process-nextick-args@1.0.7",
-        "string_decoder": "npm:string_decoder@0.10.31",
-        "util-deprecate": "npm:util-deprecate@1.0.2"
       }
     },
     "npm:repeating@1.1.3": {
@@ -773,32 +839,6 @@ SystemJS.config({
     "npm:split@0.3.3": {
       "map": {
         "through": "npm:through@2.3.8"
-      }
-    },
-    "npm:static-eval@0.2.4": {
-      "map": {
-        "escodegen": "npm:escodegen@0.0.28"
-      }
-    },
-    "npm:static-module@1.3.1": {
-      "map": {
-        "concat-stream": "npm:concat-stream@1.4.10",
-        "duplexer2": "npm:duplexer2@0.0.2",
-        "escodegen": "npm:escodegen@1.3.3",
-        "falafel": "npm:falafel@1.2.0",
-        "has": "npm:has@1.0.1",
-        "object-inspect": "npm:object-inspect@0.4.0",
-        "quote-stream": "npm:quote-stream@0.0.0",
-        "readable-stream": "npm:readable-stream@1.0.34",
-        "shallow-copy": "npm:shallow-copy@0.0.1",
-        "static-eval": "npm:static-eval@0.2.4",
-        "through2": "npm:through2@0.4.2"
-      }
-    },
-    "npm:stilr@1.2.4": {
-      "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.2",
-        "react": "npm:react@15.1.0"
       }
     },
     "npm:stream-browserify@1.0.0": {
@@ -827,24 +867,6 @@ SystemJS.config({
         "ansi-regex": "npm:ansi-regex@2.0.0"
       }
     },
-    "npm:through2@0.4.2": {
-      "map": {
-        "readable-stream": "npm:readable-stream@1.0.34",
-        "xtend": "npm:xtend@2.1.2"
-      }
-    },
-    "npm:through2@0.6.3": {
-      "map": {
-        "readable-stream": "npm:readable-stream@1.0.34",
-        "xtend": "npm:xtend@4.0.1"
-      }
-    },
-    "npm:through2@2.0.1": {
-      "map": {
-        "readable-stream": "npm:readable-stream@2.0.6",
-        "xtend": "npm:xtend@4.0.1"
-      }
-    },
     "npm:url@0.11.0": {
       "map": {
         "punycode": "npm:punycode@1.3.2",
@@ -854,17 +876,6 @@ SystemJS.config({
     "npm:warning@2.1.0": {
       "map": {
         "loose-envify": "npm:loose-envify@1.2.0"
-      }
-    },
-    "npm:xtend@2.1.2": {
-      "map": {
-        "object-keys": "npm:object-keys@0.4.0"
-      }
-    },
-    "npm:resource-loader@1.6.5": {
-      "map": {
-        "async": "npm:async@0.9.2",
-        "eventemitter3": "npm:eventemitter3@1.2.0"
       }
     },
     "npm:react-router@2.4.1": {
@@ -1016,21 +1027,10 @@ SystemJS.config({
         "generic-pool": "npm:generic-pool@2.4.2"
       }
     },
-    "npm:warning@3.0.0": {
-      "map": {
-        "loose-envify": "npm:loose-envify@1.2.0"
-      }
-    },
     "npm:bcrypt@0.8.7": {
       "map": {
         "bindings": "npm:bindings@1.2.1",
         "nan": "npm:nan@2.3.5"
-      }
-    },
-    "npm:react-leaflet@0.11.7": {
-      "map": {
-        "warning": "npm:warning@3.0.0",
-        "lodash": "npm:lodash@4.13.1"
       }
     },
     "npm:babylon@6.8.1": {
