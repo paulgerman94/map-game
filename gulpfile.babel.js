@@ -1,8 +1,9 @@
 import "babel-polyfill";
 import ava from "gulp-ava";
+import autoPrefixer from "autoprefixer";
 import babel from "gulp-babel";
-import cleanCSS from "gulp-clean-css";
 import concat from "gulp-concat";
+import cssNano from "cssnano";
 import del from "del";
 import esDoc from "gulp-esdoc";
 import esLint from "gulp-eslint";
@@ -16,6 +17,7 @@ import htmlMin from "gulp-htmlmin";
 import liveReload from "gulp-livereload";
 import merge from "merge2";
 import minifyJSON from "gulp-jsonminify";
+import nested from "postcss-nested";
 import nodemon from "gulp-nodemon";
 import replace from "gulp-replace";
 import shell from "gulp-shell";
@@ -23,7 +25,9 @@ import sourceMaps from "gulp-sourcemaps";
 import tap from "gulp-tap";
 import uglify from "gulp-uglify";
 import path from "path";
-import sass from "gulp-sass";
+import postCSS from "gulp-postcss";
+import postCSSImport from "postcss-import";
+import scss from "postcss-scss";
 let unixUsername = null;
 /**
 * Replaces custom literals by values in the build process. This is needed so that every developer can work on his own build without interfering with the others.
@@ -158,16 +162,21 @@ gulp.task("json", () => {
 		.pipe(gulp.dest(paths.client.json.dest));
 });
 gulp.task("css", () => {
-	const scssFiles = gulp.src(`${paths.client.css.src}/main.scss`)
+	const processors = [
+		postCSSImport,
+		nested,
+		autoPrefixer({
+			browsers: ["> 5%"]
+		}),
+		cssNano
+	];
+	return gulp.src([`${paths.client.css.src}/main.scss`, `${paths.client.css.dest}/fonts.css`])
 		.pipe(sourceMaps.init())
-		.pipe(sass());
-	const fontConfiguration = gulp.src(`${paths.client.css.dest}/fonts.css`);
-	return merge(scssFiles, fontConfiguration)
-		.pipe(concat("style.css"))
-		.pipe(cleanCSS({
-			keepSpecialComments: false
+		.pipe(postCSS(processors, {
+			syntax: scss
 		}))
-// 		.pipe(sourceMaps.write("."))
+		.pipe(concat("style.css"))
+		.pipe(sourceMaps.write("."))
 		.pipe(gulp.dest(paths.client.css.dest));
 });
 gulp.task("fonts", () => {

@@ -25,7 +25,7 @@ for (const api of APIs) {
 * 	An API which can still be used for a new connection
 */
 function chooseFreeAPI() {
-	/* First, select an API based on Round Robin scheduling */
+	/* First, select an API based on round robin scheduling */
 	for (let i = 0; i < APIs.length; ++i) {
 		/* Read in the next API */
 		const api = APIs[apiIndex];

@@ -1,6 +1,8 @@
-@import "material";
-@import "leaflet";
-$foucTime: 0.4s;
+@import "material.scss";
+@import "leaflet.scss";
+:root {
+	--fouc-time: 0.4s;
+}
 * {
 	padding: 0;
 	margin: 0;
@@ -19,9 +21,9 @@ input-row {
 	margin: 1em auto;
 }
 body {
-	transition: opacity $foucTime;
+	transition: opacity var(--fouc-time);
 }
 body[invisible] {
 	opacity: 0;
-	transition: opacity $foucTime;
+	transition: opacity var(--fouc-time);
 }
