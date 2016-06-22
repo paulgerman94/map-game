@@ -35,7 +35,7 @@ export default class Dashboard extends React.Component {
 						color: "hsl(8, 100%, 80%)"
 					},
 					loading: {
-						color: "hsl(128, 100%, 80%)"
+						color: "hsl(228, 100%, 80%)"
 					},
 					ready: {
 						color: "hsl(228, 100%, 50%)"
