@@ -169,9 +169,9 @@ gulp.task("css", () => {
 		autoPrefixer({
 			browsers: ["> 5%"]
 		}),
-		cssNano
+		cssNano()
 	];
-	return gulp.src([`${paths.client.css.src}/main.scss`, `${paths.client.css.dest}/fonts.css`])
+	return gulp.src(`${paths.client.css.src}/main.scss`)
 		.pipe(sourceMaps.init())
 		.pipe(postCSS(processors, {
 			syntax: scss
