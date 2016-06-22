@@ -2,17 +2,19 @@ import "babel-polyfill";
 import fetch from "node-fetch";
 import { err } from "./util";
 import { ms } from "./units";
-/* Note that the German server seems to be the only one introducing a rate limit as can be seen on http://overpass-api.de/api/status. In order to spatially parallelize the requests, we choose a rate limit of 20 for the others; this is not a fixed upper bound. */
+/* Note that the German server has a very strict maximum connection limit, as can be seen on http://overpass-api.de/api/status. In order to spatially parallelize the requests, we choose a maximum connection limit of 20 for the others; this is not a fixed upper bound. */
 const APIs = [{
 	url: "http://api.openstreetmap.fr/oapi/interpreter",
-	rateLimit: 20
-}, {
-	url: "http://overpass-api.de/api",
-	rateLimit: 3
+	maxConnections: 20
 }, {
 	url: "http://overpass.osm.rambler.ru/cgi",
-	rateLimit: 20
+	maxConnections: 20
+}, {
+	url: "http://overpass-api.de/api",
+	maxConnections: 3
 }];
+/* This map maps APIs to their number of currently open connections */
+let apiIndex = 0;
 const connections = new Map();
 for (const api of APIs) {
 	connections.set(api, 0);
@@ -23,13 +25,22 @@ for (const api of APIs) {
 * 	An API which can still be used for a new connection
 */
 function chooseFreeAPI() {
-	for (const [api, openConnections] of connections) {
-		if (openConnections < api.rateLimit) {
+	/* First, select an API based on Round Robin scheduling */
+	for (let i = 0; i < APIs.length; ++i) {
+		/* Read in the next API */
+		const api = APIs[apiIndex];
+		/* Move the pointer with modular arithmetic */
+		const newIndex = (apiIndex + 1) % APIs.length;
+		apiIndex = newIndex;
+		/* Perform check if free */
+		const currentConnections = connections.get(api);
+		if (currentConnections < api.maxConnections) {
 			/* Immediately reserve the API */
-			connections.set(api, openConnections + 1);
+			connections.set(api, currentConnections + 1);
 			return api;
 		}
 	}
+	/* All APIs are busy */
 	return null;
 }
 /**
