@@ -5,6 +5,7 @@ import {
 	CAMERA_FOLLOW_CONFIGURED
 } from "../stores/SettingsStore";
 import { publish } from "../Dispatcher";
+export const ROUTE = "settings";
 /**
 * This component contains the home view that the user should see when entering the app.
 * It should a simple login/registration menu if the user isn't logged in.

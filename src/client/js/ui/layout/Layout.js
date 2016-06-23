@@ -12,6 +12,8 @@ import SettingsIcon from "material-ui/svg-icons/action/settings";
 import { browserHistory } from "react-router";
 import { PROJECT_NAME } from "../constants";
 import injectTapEventPlugin from "react-tap-event-plugin";
+import { ROUTE as HOME_ROUTE } from "../views/Home";
+import { ROUTE as SETTINGS_ROUTE } from "../views/Settings";
 import {
 	default as LayoutStore,
 	MENU_TOGGLED
@@ -153,7 +155,7 @@ export default class Layout extends Component {
 			logoutButton =
 			<IconButton onClick={() => {
 				API.logout();
-				browserHistory.push("/");
+				browserHistory.push(HOME_ROUTE);
 			}} tooltip="Logout">
 				<ExitIcon/>
 			</IconButton>;
@@ -178,11 +180,11 @@ export default class Layout extends Component {
 				<AppBar title={<span style={{
 					cursor: "pointer"
 				}}>{PROJECT_NAME}</span>} onTitleTouchTap={() => {
-					browserHistory.push("/");
+					browserHistory.push(HOME_ROUTE);
 				}} iconElementRight={
 					<div>
 						<IconButton tooltip="Settings" onClick={() => {
-							browserHistory.push("settings");
+							browserHistory.push(SETTINGS_ROUTE);
 						}}>
 							<SettingsIcon/>
 						</IconButton>

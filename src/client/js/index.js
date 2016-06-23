@@ -4,9 +4,18 @@ import { Router, Route, IndexRoute, browserHistory } from "react-router";
 // import { useRouterHistory } from "react-router";
 // import { createHistory } from "history";
 import Layout from "./ui/layout/Layout";
-import Home from "./ui/views/Home";
-import Register from "./ui/views/Register";
-import Settings from "./ui/views/Settings";
+import {
+	default as Home,
+	ROUTE as HOME_ROUTE
+} from "./ui/views/Home";
+import {
+	default as Register,
+	ROUTE as REGISTER_ROUTE
+} from "./ui/views/Register";
+import {
+	default as Settings,
+	ROUTE as SETTINGS_ROUTE
+} from "./ui/views/Settings";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMUITheme from "material-ui/styles/getMuiTheme";
 import client from "./client";
@@ -32,9 +41,9 @@ const muiTheme = getMUITheme({
 		height: 50
 	}
 });
-// if (navigator.serviceWorker) {
-// 	navigator.serviceWorker.register("sw.js");
-// }
+if (navigator.serviceWorker) {
+	navigator.serviceWorker.register("sw.js");
+}
 // const browserHistory = useRouterHistory(createHistory)({
 // 	basename: "/<%LINUX_USERNAME%>/"
 // });
@@ -52,10 +61,10 @@ const muiTheme = getMUITheme({
 				<div>
 					<main>
 						<Router history={browserHistory}>
-							<Route path="/" component={Layout}>
+							<Route path={HOME_ROUTE} component={Layout}>
 								<IndexRoute component={Home}/>
-								<Route path="register" component={Register}/>
-								<Route path="settings" component={Settings}/>
+								<Route path={REGISTER_ROUTE} component={Register}/>
+								<Route path={SETTINGS_ROUTE} component={Settings}/>
 							</Route>
 						</Router>
 					</main>

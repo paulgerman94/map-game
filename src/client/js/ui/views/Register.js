@@ -6,9 +6,11 @@ import { TextField, RaisedButton, CircularProgress } from "material-ui";
 import { browserHistory } from "react-router";
 import { publish } from "../Dispatcher";
 import { LOGIN } from "../stores/ConnectionStore";
+import { ROUTE as REGISTER_ROUTE } from "../views/Register";
 const emailChecker = emailRegEx({
 	exact: true
 });
+export const ROUTE = "register";
 /**
 * This class is a React component that displays a {@link Register} component and automatically fetches its content asynchronously.
 */
@@ -253,7 +255,7 @@ export default class Register extends Component {
 					isRegistering: false
 				});
 				if (isRegistrationSuccessful) {
-					browserHistory.push("/");
+					browserHistory.push(REGISTER_ROUTE);
 				}
 			}
 		}

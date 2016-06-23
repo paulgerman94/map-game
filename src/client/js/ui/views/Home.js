@@ -8,6 +8,7 @@ import {
 	LOGOUT
 } from "../stores/ConnectionStore";
 import { CircularProgress } from "material-ui";
+export const ROUTE = "/";
 /**
 * This component contains the home view that the user should see when entering the app.
 * It should a simple login/registration menu if the user isn't logged in.

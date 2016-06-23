@@ -159,6 +159,7 @@ gulp.task("sw", () => {
 });
 gulp.task("json", () => {
 	return gulp.src(globs.client.json)
+		.pipe(replace(/<%[^%]+%>/g, replacer))
 		.pipe(minifyJSON())
 		.pipe(gulp.dest(paths.client.json.dest));
 });
@@ -246,6 +247,10 @@ gulp.task("watch", async done => {
 	/* Retranspile HTML files */
 	gulp.watch("src/client/html/index.html", watcherOptions, gulp.parallel(
 		"html"
+	));
+	/* Retranspile manifest */
+	gulp.watch("src/client/json/**/*.json", watcherOptions, gulp.parallel(
+		"json"
 	));
 	/* Retranspile CSS files */
 	gulp.watch(globs.client.css, watcherOptions, gulp.parallel(

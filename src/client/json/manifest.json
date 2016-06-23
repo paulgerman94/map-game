@@ -1,7 +1,7 @@
 {
-	"name": "P06 — PCGame",
-	"short_name": "Map game",
-	"start_url": "/game/",
+	"name": "Map Game",
+	"short_name": "Map Game",
+	"start_url": "/<%LINUX_USERNAME%>/",
 	"icons": [{
 		"src": "../../../img/kdex-192.png",
 		"sizes": "192x192",
@@ -20,5 +20,5 @@
 		"type": "image/png"
 	}],
 	"display": "fullscreen",
-	"orientation": "landscape"
+	"orientation": "portrait"
 }
