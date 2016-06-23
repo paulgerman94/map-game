@@ -151,7 +151,10 @@ export default class Layout extends Component {
 		let logoutButton;
 		if (this.state.isLoggedIn || API.isLoggedIn()) {
 			logoutButton =
-			<IconButton onClick={API.logout} tooltip="Logout">
+			<IconButton onClick={() => {
+				API.logout();
+				browserHistory.push("/");
+			}} tooltip="Logout">
 				<ExitIcon/>
 			</IconButton>;
 		}

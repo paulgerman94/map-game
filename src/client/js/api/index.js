@@ -114,8 +114,6 @@ export function isConnectionOpen() {
 */
 export function logout() {
 	cache.remove(TOKEN);
-	setTimeout(() => {
-		publish(LOGOUT);
-	}, 0);
+	publish(LOGOUT);
 }
 export default from "./getPOIs";
