@@ -3,11 +3,10 @@
 ```bash
 # gyp requires python2
 $ pacman -S python2
-# cordova is a platform for hybrid apps
 # gulp is a task runner
 # jspm is a module transformer
 # bower is a package manager for web assets
-$ npm install -g cordova gulp jspm bower
+$ npm install -g gulp jspm bower
 ```
 ## Installation
 ```bash
