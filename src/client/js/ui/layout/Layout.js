@@ -31,6 +31,12 @@ import {
 	LOGIN,
 	LOGOUT
 } from "../stores/ConnectionStore";
+import {
+	default as SettingsStore,
+	NOTIFICATION_GRANTED,
+	NOTIFICATION_REQUESTED,
+	NOTIFICATION_CONFIGURED
+} from "../stores/SettingsStore";
 import * as API from "client/api/index";
 import { s } from "server/units";
 import { publish } from "../Dispatcher";
@@ -63,7 +69,8 @@ export default class Layout extends Component {
 			isMenuVisible: LayoutStore.isMenuVisible,
 			isLoggedIn: false,
 			isLocationRequested: false,
-			isLocationSetupRequested: false
+			isLocationSetupRequested: false,
+			isNotificationRequested: false
 		};
 	}
 	/**
@@ -93,11 +100,62 @@ export default class Layout extends Component {
 		API.logout();
 	}
 	/**
+	* Accepts a notification dialog by configuring the settings to whatever the user chooses
+	*/
+	async acceptNotification() {
+		this.setState({
+			isNotificationRequested: false
+		});
+		const permission = await Notification.requestPermission();
+		switch (permission) {
+			case "granted": {
+				publish(NOTIFICATION_CONFIGURED, {
+					isNotificationAllowed: true
+				});
+				/* Send the new notification ID to the server */
+				const registration = ConnectionStore.serviceWorkerRegistration;
+				const subscription = await registration.pushManager.subscribe({
+					userVisibleOnly: true
+				});
+				API.updateNotificationID(subscription);
+				break;
+			}
+			case "default": {
+				/* Make the user decide again */
+				this.setState({
+					isNotificationRequested: true
+				});
+				break;
+			}
+			case "denied": {
+				publish(NOTIFICATION_CONFIGURED, {
+					isNotificationAllowed: false
+				});
+				/* Show a warning? */
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+	}
+	/**
+	* Denies notifications by caching this decision and disabling the dialog
+	*/
+	denyNotificiation() {
+		publish(NOTIFICATION_CONFIGURED, {
+			isNotificationAllowed: false
+		});
+		this.setState({
+			isNotificationRequested: false
+		});
+	}
+	/**
 	* Fires before a React component mounts and sets up event listeners for the store.
 	* Whenever the store changes, this component will update its state.
 	*/
 	componentWillMount() {
-		ConnectionStore.on(LOGIN, () => {
+		ConnectionStore.on(LOGIN, async () => {
 			this.setState({
 				isLoggedIn: ConnectionStore.isLoggedIn
 			});
@@ -121,6 +179,24 @@ export default class Layout extends Component {
 			this.setState({
 				isLocationSetupRequested: true
 			});
+		});
+		SettingsStore.on(NOTIFICATION_REQUESTED, () => {
+			this.setState({
+				isNotificationRequested: true
+			});
+		});
+		SettingsStore.on(NOTIFICATION_GRANTED, () => {
+			::this.acceptNotification();
+		});
+		SettingsStore.on(NOTIFICATION_CONFIGURED, async isNotificationAllowed => {
+			if (isNotificationAllowed) {
+				/* Send the new notification ID to the server */
+				const registration = ConnectionStore.serviceWorkerRegistration;
+				const subscription = await registration.pushManager.subscribe({
+					userVisibleOnly: true
+				});
+				API.updateNotificationID(subscription);
+			}
 		});
 		setInterval(::this.checkConnection, s);
 	}
@@ -176,6 +252,14 @@ export default class Layout extends Component {
 					</div>
 				}>
 					Sorry, but it seems as if you can't play {PROJECT_NAME}. Please unblock your GeoLocation permission for {PROJECT_NAME} if you want to play.
+				</Dialog>
+				<Dialog title="Display notifications" modal={true} open={this.state.isNotificationRequested} actions={
+					<div>
+						<RaisedButton label="No" onClick={::this.denyNotificiation}/>
+						<RaisedButton label="Yes" primary onClick={::this.acceptNotification}/>
+					</div>
+				}>
+					Would you like to receive notifications from {PROJECT_NAME}?
 				</Dialog>
 				<AppBar title={<span style={{
 					cursor: "pointer"

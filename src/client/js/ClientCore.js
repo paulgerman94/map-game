@@ -21,13 +21,6 @@ export class ClientCore extends WS {
 		});
 	}
 	/**
-	* This method fires whenever the connection is (re-)established.
-	* Currently, it's only used for debugging purposes.
-	*/
-	onOpen() {
-		console.log("Connection established.");
-	}
-	/**
 	* This message fires whenever a new message arrives over the protocol.
 	* The function will then read the message and fire a specialized event, depending on the payload instruction.
 	* The event will be fired using the arguments that the other party has provided in the function invocation.

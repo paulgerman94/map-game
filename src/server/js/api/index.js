@@ -181,3 +181,26 @@ export async function isFree({
 		message.reply(isFree);
 	})();
 }
+/**
+* Updates the notification ID of a client
+* @param {object} options
+* 	An object
+* @param {object} options.args
+* 	An object containing the notification ID
+* @param {string} options.client
+* 	The socket that sent the request
+* @param {Message} options.message
+* 	A message object to reply to
+*/
+export async function updateNotificationID({
+	args,
+	client,
+	message
+}) {
+	const [, data] = args;
+	const {
+		notificationID
+	} = data;
+	client.properties.notificationID = notificationID;
+	message.reply({});
+}

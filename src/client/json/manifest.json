@@ -1,5 +1,6 @@
 {
 	"name": "Map Game",
+	"gcm_sender_id": "<%GCM_SENDER_ID%>",
 	"short_name": "Map Game",
 	"start_url": "/<%LINUX_USERNAME%>/",
 	"icons": [{

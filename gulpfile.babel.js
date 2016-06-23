@@ -41,6 +41,8 @@ function replacer(match) {
 	switch (literal) {
 		case "LINUX_USERNAME":
 			return unixUsername;
+		case "GCM_SENDER_ID":
+			return process.env.GCM_ID;
 		default:
 			return literal;
 	}

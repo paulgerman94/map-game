@@ -66,6 +66,7 @@ export default class ServerCore extends WS {
 	*/
 	onConnection(socket) {
 		log("A client has connected.");
+		socket.properties = {};
 		const client = new Proxy(socket, {
 			get: (target, property) => {
 				const lookUp = target[property];
@@ -86,6 +87,9 @@ export default class ServerCore extends WS {
 						return lookUp;
 					}
 				}
+			},
+			set: (target, property, value) => {
+				target[property] = value;
 			}
 		});
 		this.emit("connected", client);

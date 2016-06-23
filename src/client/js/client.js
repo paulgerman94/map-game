@@ -1,4 +1,7 @@
 import ClientCore from "./ClientCore";
+import ConnectionStore from "./ui/stores/ConnectionStore";
+import SettingsStore from "./ui/stores/SettingsStore";
+import * as API from "./api/index";
 import {
 	default as cache,
 	TOKEN
@@ -8,7 +11,24 @@ import {
 * The client defines event handlers for RPC methods that the server sends and methods to query the server.
 */
 class Client extends ClientCore {
-	/* Add on[instruction] events here */
+	/**
+	* This method fires whenever the connection is (re-)established.
+	* It will perform tasks that are necessary after a successful connection establishment (i. e. updating the notification ID).
+	*/
+	onOpen() {
+		console.log("Connection established.");
+		this.sendNotificationID();
+	}
+	/**
+	* Asynchronously updates the notification ID for the client on the server
+	*/
+	async sendNotificationID() {
+		if (SettingsStore.isNotificationAllowed === true) {
+			const registration = ConnectionStore.serviceWorkerRegistration;
+			const subscription = await registration.pushManager.getSubscription();
+			API.updateNotificationID(subscription);
+		}
+	}
 }
 export default new Proxy(new Client(), {
 	get: (target, property) => {

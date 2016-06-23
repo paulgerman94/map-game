@@ -17,9 +17,13 @@ export const LOGOUT = Symbol("Logout");
 */
 export const CONNECTION_DISRUPTED = Symbol("Connection disrupted");
 /**
-* A symbol that denotes an established
+* A symbol that denotes an established connection
 */
 export const CONNECTION_ESTABLISHED = Symbol("Connection established");
+/**
+* A symbol that denotes that a service worker has been registered
+*/
+export const SERVICE_WORKER_REGISTERED = Symbol("Service worker registered");
 /**
 * This class is a flux store that keeps a global view of the connection state.
 * It encompasses information about when the user registers, logs in, etc.
@@ -36,6 +40,11 @@ class ConnectionStore extends EventEmitter {
 	*/
 	isConnected;
 	/**
+	* The service worker registration that is created upon starting the app
+	* @property {ServiceWorkerRegistration} serviceWorkerRegistration
+	*/
+	serviceWorkerRegistration;
+	/**
 	* Whether or not the user is currently logged in
 	* @return {boolean}
 	* 	Whether or not the user is currently logged in
@@ -50,32 +59,42 @@ class ConnectionStore extends EventEmitter {
 	*/
 	handleActions(action) {
 		switch (action.type) {
-			case CONNECTION_DISRUPTED:
+			case CONNECTION_DISRUPTED: {
 				if (this.isConnected !== false) {
 					this.isConnected = false;
 					this.emit(action.type);
 				}
 				break;
-			case CONNECTION_ESTABLISHED:
+			}
+			case CONNECTION_ESTABLISHED: {
 				if (this.isConnected !== true) {
 					this.isConnected = true;
 					this.emit(action.type);
 				}
 				break;
-			case LOGIN:
+			}
+			case LOGIN: {
 				this.user = action.username;
 				this.emit(action.type, this.user);
 				break;
-			case LOGIN_FAILED:
+			}
+			case LOGIN_FAILED: {
 				this.user = null;
 				this.emit(action.type);
 				break;
-			case LOGOUT:
+			}
+			case LOGOUT: {
 				this.user = null;
 				this.emit(action.type);
 				break;
-			default:
+			}
+			case SERVICE_WORKER_REGISTERED: {
+				this.serviceWorkerRegistration = action.registration;
 				break;
+			}
+			default: {
+				break;
+			}
 		}
 	}
 }

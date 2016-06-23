@@ -9,7 +9,11 @@ import {
 	LOCATION_SETUP_REQUESTED,
 	LOCATION_GRANTED
 } from "../stores/LocationStore";
-import SettingsStore from "../stores/SettingsStore";
+import {
+	default as SettingsStore,
+	NOTIFICATION_GRANTED,
+	NOTIFICATION_REQUESTED
+} from "../stores/SettingsStore";
 import StateStore from "../stores/StateStore";
 import { Flag, Player } from "../Flag";
 import { publish } from "../Dispatcher";
@@ -255,7 +259,7 @@ export default class Dashboard extends React.Component {
 			});
 			this.layers.area.addLayer(areaCircle);
 		}
-		/* TODO: Fix replies in protocol to send token? */
+		/* Handle replies in protocol to send token? */
 		message.reply();
 	}
 	/**
@@ -330,17 +334,44 @@ export default class Dashboard extends React.Component {
 			this.drawFlags(this.state.shownFlags);
 		}
 		/* Handle GeoLocation permissions */
-		const result = await navigator.permissions.query({
+		const geoLocationPermission = await navigator.permissions.query({
 			name: "geolocation"
 		});
-		if (result.state === "granted") {
-			::this.receiveUserCoordinates();
+		switch (geoLocationPermission.state) {
+			case "granted":
+				::this.receiveUserCoordinates();
+				break;
+			case "prompt": {
+				publish(LOCATION_REQUESTED);
+				break;
+			}
+			case "denied": {
+				publish(LOCATION_SETUP_REQUESTED);
+				break;
+			}
+			default: {
+				break;
+			}
 		}
-		else if (result.state === "prompt") {
-			publish(LOCATION_REQUESTED);
-		}
-		else if (result.state === "denied") {
-			publish(LOCATION_SETUP_REQUESTED);
+		/* Handle Notification permissions */
+		if (SettingsStore.isNotificationAllowed === null) {
+			const notificationPermission = await navigator.permissions.query({
+				name: "notifications"
+			});
+			switch (notificationPermission.state) {
+				case "granted": {
+					publish(NOTIFICATION_GRANTED);
+					break;
+				}
+				case "prompt": {
+					publish(NOTIFICATION_REQUESTED);
+					break;
+				}
+				default: {
+					/* Ignore denials, it's better not to annoy the user */
+					break;
+				}
+			}
 		}
 	}
 	/**

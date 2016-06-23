@@ -116,4 +116,16 @@ export function logout() {
 	cache.remove(TOKEN);
 	publish(LOGOUT);
 }
+/**
+* Performes an API call that updates the client's notification ID on the server, given a subscription
+* @param {PushSubscription} subscription
+* 	The PushSubscription that determines the client's notification ID
+*/
+export function updateNotificationID(subscription) {
+	const { endpoint } = subscription;
+	const notificationID = endpoint.substr(endpoint.lastIndexOf("/") + 1);
+	client.updateNotificationID({
+		notificationID
+	});
+}
 export default from "./getPOIs";

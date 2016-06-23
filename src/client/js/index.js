@@ -4,6 +4,8 @@ import { Router, Route, IndexRoute, browserHistory } from "react-router";
 // import { useRouterHistory } from "react-router";
 // import { createHistory } from "history";
 import Layout from "./ui/layout/Layout";
+import { SERVICE_WORKER_REGISTERED } from "./ui/stores/ConnectionStore";
+import { publish } from "./ui/Dispatcher";
 import {
 	default as Home,
 	ROUTE as HOME_ROUTE
@@ -41,13 +43,16 @@ const muiTheme = getMUITheme({
 		height: 50
 	}
 });
-if (navigator.serviceWorker) {
-	navigator.serviceWorker.register("sw.js");
-}
 // const browserHistory = useRouterHistory(createHistory)({
 // 	basename: "/<%LINUX_USERNAME%>/"
 // });
 (async () => {
+	if (navigator.serviceWorker) {
+		const registration = await navigator.serviceWorker.register("sw.js");
+		publish(SERVICE_WORKER_REGISTERED, {
+			registration
+		});
+	}
 	try {
 		/* The first rendering of the page should also try to establish a WebSocket connection */
 		await client.open();
