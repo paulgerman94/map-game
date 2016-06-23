@@ -172,9 +172,9 @@ export default class Layout extends Component {
 				}>
 					Sorry, but it seems as if you can't play {PROJECT_NAME}. Please unblock your GeoLocation permission for {PROJECT_NAME} if you want to play.
 				</Dialog>
-				<AppBar title={PROJECT_NAME} style={{
+				<AppBar title={<span style={{
 					cursor: "pointer"
-				}} onTitleTouchTap={() => {
+				}}>{PROJECT_NAME}</span>} onTitleTouchTap={() => {
 					browserHistory.push("/");
 				}} iconElementRight={
 					<div>

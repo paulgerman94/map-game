@@ -17,10 +17,19 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.9.1/polyfill.min.js"></script>
 	</head>
 	<body>
+		<splash-screen>
+			<span no-select normal-cursor>map-game</span>
+		</splash-screen>
 		<map-game></map-game>
 		<script src="packages.js"></script>
 		<script>
-			System.import("map-game/index");
+			System.import("map-game/index").then(() => {
+				const splashScreen = document.querySelector("splash-screen");
+				splashScreen.setAttribute("invisible", "");
+				setTimeout(() => {
+					splashScreen.remove();
+				}, 1000);
+			});
 		</script>
 	</body>
 </html>

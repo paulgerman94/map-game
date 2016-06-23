@@ -1,8 +1,15 @@
 @import "../../../dist/client/css/fonts.css";
 @import "material.scss";
 @import "leaflet.scss";
+@import "splash-screen.scss";
 :root {
 	--fouc-time: 0.4s;
+}
+[no-select] {
+	user-select: none;
+}
+[normal-cursor] {
+	cursor: default;
 }
 * {
 	padding: 0;
@@ -20,11 +27,4 @@ label {
 input-row {
 	display: block;
 	margin: 1em auto;
-}
-body {
-	transition: opacity var(--fouc-time);
-}
-body[invisible] {
-	opacity: 0;
-	transition: opacity var(--fouc-time);
 }

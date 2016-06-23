@@ -1,0 +1,22 @@
+splash-screen {
+	display: flex;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	/* Material blue300 */
+	background-color: rgb(100, 181, 246);
+	align-items: center;
+	justify-content: center;
+	transition: opacity var(--fouc-time);
+	transform: translateZ(0);
+}
+splash-screen * {
+	color: white;
+	font-size: 4rem;
+	font-family: Arial;
+	text-align: center;
+}
+splash-screen[invisible] {
+	opacity: 0;
+	transition: opacity var(--fouc-time);
+}
