@@ -1,7 +1,9 @@
 import React from "react";
-import cache from "client/cache";
 import { Toggle } from "material-ui";
-import { CAMERA_FOLLOW_CONFIGURED } from "../stores/SettingsStore";
+import {
+	default as SettingsStore,
+	CAMERA_FOLLOW_CONFIGURED
+} from "../stores/SettingsStore";
 import { publish } from "../Dispatcher";
 /**
 * This component contains the home view that the user should see when entering the app.
@@ -9,9 +11,6 @@ import { publish } from "../Dispatcher";
 * Otherwise, it should display the general game UI.
 */
 export default class Login extends React.Component {
-	state = {
-		isCameraFollowing: cache.load("isCameraFollowing")
-	};
 	/**
 	* Enables or disables the camera follow state
 	* @param {SyntheticEvent} e
@@ -50,7 +49,7 @@ export default class Login extends React.Component {
 				<div style={styles.heading} className="col-md-3 col-lg-3">
 					<h1>Game settings</h1>
 					<div style={styles.block}>
-						<Toggle label="Camera follows my location" defaultToggled={this.state.isCameraFollowing} style={styles.toggle} onToggle={::this.toggleCameraFollow}/>
+						<Toggle label="Camera follows my location" defaultToggled={SettingsStore.isCameraFollowing} style={styles.toggle} onToggle={::this.toggleCameraFollow}/>
 					</div>
 				</div>
 			</div>
