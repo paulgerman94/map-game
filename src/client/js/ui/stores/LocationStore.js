@@ -2,21 +2,6 @@ import dispatcher from "../Dispatcher";
 import { EventEmitter } from "crystal-event-emitter";
 import cache from "client/cache";
 import Flag from "../Flag";
-/**
-* A symbol that denotes that the browser registers that the location permission has been granted
-*/
-export const LOCATION_GRANTED = Symbol("Location granted");
-/**
-* A symbol that denotes that the browser tries to request the user's GeoLocation
-*/
-export const LOCATION_REQUESTED = Symbol("Location requested");
-/**
-* A symbol that denotes that the browser tries to ask the user to unblock GeoLocation
-*/
-export const LOCATION_SETUP_REQUESTED = Symbol("Location setup requested");
-/**
-* A symbol that denotes that the browser tries to ask the user to unblock GeoLocation
-*/
 export const FLAG_CACHE_UPDATED = Symbol("Flag cache updated");
 /**
 * This class is a flux store that keeps a global view of the user location and its associated permissions.
@@ -45,18 +30,6 @@ class LocationStore extends EventEmitter {
 				}
 				/* Cache the flags permanently */
 				cache.save("flags", this.flags.map(flag => flag.element));
-				this.emit(action.type);
-				break;
-			}
-			case LOCATION_GRANTED: {
-				this.emit(action.type);
-				break;
-			}
-			case LOCATION_REQUESTED: {
-				this.emit(action.type);
-				break;
-			}
-			case LOCATION_SETUP_REQUESTED: {
 				this.emit(action.type);
 				break;
 			}

@@ -172,10 +172,10 @@ export default class Login extends React.Component {
 					}}/>
 					<p>Please log in to continue.</p>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField onKeyDown={::this.login} onChange={::this.updateAccountName} floatingLabelText="Username"/>
+						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" autoFocus="on" onKeyDown={::this.login} onChange={::this.updateAccountName} floatingLabelText="Username"/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField onKeyDown={::this.login} errorText={this.state.errorText} onChange={::this.updatePassword} floatingLabelText="Password" type="password"/>
+						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" onKeyDown={::this.login} errorText={this.state.errorText} onChange={::this.updatePassword} floatingLabelText="Password" type="password"/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg" style={{
 						marginTop: "2rem",

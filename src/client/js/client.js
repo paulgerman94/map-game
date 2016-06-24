@@ -1,6 +1,12 @@
 import ClientCore from "./ClientCore";
 import ConnectionStore from "./ui/stores/ConnectionStore";
-import SettingsStore from "./ui/stores/SettingsStore";
+import SplashScreen from "./ui/SplashScreen";
+import {
+	default as PermissionStore,
+	NOTIFICATIONS,
+	GRANTED,
+	ENABLED
+} from "./ui/stores/PermissionStore";
 import * as API from "./api/index";
 import {
 	default as cache,
@@ -15,15 +21,27 @@ class Client extends ClientCore {
 	* This method fires whenever the connection is (re-)established.
 	* It will perform tasks that are necessary after a successful connection establishment (i. e. updating the notification ID).
 	*/
-	onOpen() {
+	async onOpen() {
 		console.log("Connection established.");
-		this.sendNotificationID();
+		try {
+			/* Try to log in via the session token */
+			await API.login();
+			this.sendNotificationID();
+		}
+		catch (e) {
+			/* We couldn't log in via the token mechanism */
+		}
+		finally {
+			/* Now that we know whether or not the login succeeded, remove the splash screen */
+			SplashScreen.hide();
+		}
 	}
 	/**
 	* Asynchronously updates the notification ID for the client on the server
 	*/
 	async sendNotificationID() {
-		if (SettingsStore.isNotificationAllowed === true) {
+		const notifications = PermissionStore.get(NOTIFICATIONS);
+		if (notifications.permission === GRANTED && notifications.preference === ENABLED) {
 			const registration = ConnectionStore.serviceWorkerRegistration;
 			const subscription = await registration.pushManager.getSubscription();
 			API.updateNotificationID(subscription);

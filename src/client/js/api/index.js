@@ -4,6 +4,7 @@ import {
 	TOKEN
 } from "../cache";
 import {
+	LOGIN,
 	LOGOUT,
 	LOGIN_FAILED
 } from "client/ui/stores/ConnectionStore";
@@ -50,8 +51,6 @@ async function getToken(data) {
 * 	The user email to log into
 * @param {string} data.password
 * 	The user's password
-* @return {boolean}
-* 	True if login was successful, throws otherwise
 */
 export async function login(data = {}) {
 	const {
@@ -67,7 +66,7 @@ export async function login(data = {}) {
 				token
 			});
 			cache.save(TOKEN, token);
-			return true;
+			publish(LOGIN);
 		}
 		catch (e) {
 			/* Network error, token expiration, etc. */
@@ -79,7 +78,7 @@ export async function login(data = {}) {
 	else if (accountName && email || accountName && password) {
 		const isTokenReceived = await getToken(data);
 		if (isTokenReceived) {
-			return true;
+			publish(LOGIN);
 		}
 		else {
 			publish(LOGIN_FAILED);
@@ -87,7 +86,7 @@ export async function login(data = {}) {
 		}
 	}
 	else {
-		/* `data` is empty, so don't contact the server */
+		/* `data` is empty, so don't even contact the server */
 		throw new Error("No login data has been provided.");
 	}
 }
@@ -117,7 +116,7 @@ export function logout() {
 	publish(LOGOUT);
 }
 /**
-* Performes an API call that updates the client's notification ID on the server, given a subscription
+* Performs an API call that updates the client's notification ID on the server, given a subscription
 * @param {PushSubscription} subscription
 * 	The PushSubscription that determines the client's notification ID
 */
@@ -126,6 +125,14 @@ export function updateNotificationID(subscription) {
 	const notificationID = endpoint.substr(endpoint.lastIndexOf("/") + 1);
 	client.updateNotificationID({
 		notificationID
+	});
+}
+/**
+* Performs an API call that removes the client's notification ID on the server
+*/
+export function removeNotificationID() {
+	client.updateNotificationID({
+		notificationID: null
 	});
 }
 export default from "./getPOIs";

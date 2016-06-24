@@ -9,6 +9,7 @@ splash-screen {
 	justify-content: center;
 	transition: opacity var(--fouc-time);
 	transform: translateZ(0);
+	z-index: 10000;
 }
 splash-screen * {
 	color: white;

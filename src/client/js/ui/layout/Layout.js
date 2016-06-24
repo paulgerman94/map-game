@@ -11,6 +11,7 @@ import HelpCenterIcon from "material-ui/svg-icons/action/help";
 import SettingsIcon from "material-ui/svg-icons/action/settings";
 import { browserHistory } from "react-router";
 import { PROJECT_NAME } from "../constants";
+import SplashScreen from "client/ui/SplashScreen";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import { ROUTE as HOME_ROUTE } from "../views/Home";
 import { ROUTE as SETTINGS_ROUTE } from "../views/Settings";
@@ -19,27 +20,31 @@ import {
 	MENU_TOGGLED
 } from "../stores/LayoutStore";
 import {
-	default as LocationStore,
-	LOCATION_GRANTED,
-	LOCATION_REQUESTED,
-	LOCATION_SETUP_REQUESTED
-} from "../stores/LocationStore";
-import {
 	default as ConnectionStore,
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED,
 	LOGIN,
 	LOGOUT
 } from "../stores/ConnectionStore";
-import {
-	default as SettingsStore,
-	NOTIFICATION_GRANTED,
-	NOTIFICATION_REQUESTED,
-	NOTIFICATION_CONFIGURED
-} from "../stores/SettingsStore";
+// import SettingsStore from "../stores/SettingsStore";
 import * as API from "client/api/index";
 import { s } from "server/units";
 import { publish } from "../Dispatcher";
+import {
+	default as PermissionStore,
+	NOTIFICATIONS,
+	LOCATION,
+	PERMISSION_CHANGED,
+	PREFERENCE_CHANGED,
+	PERMISSION_REQUESTED,
+	PERMISSION_SETUP_REQUESTED,
+	GRANTED,
+	DENIED,
+	PROMPT,
+	ENABLED,
+	DISABLED
+} from "../stores/PermissionStore";
+import client from "client/client";
 injectTapEventPlugin();
 /**
 * This React component is used to use a common Layout across the whole page.
@@ -76,18 +81,21 @@ export default class Layout extends Component {
 	/**
 	* Runs when the user presses the `Accept` button when asked whether he'd like to share his location and either logs the user out or fires a success, depending on what the user decides to do.
 	*/
-	acceptLocation() {
-		navigator.geolocation.getCurrentPosition(() => {
-			this.setState({
-				isLocationRequested: false
-			});
-			publish(LOCATION_GRANTED);
-		}, () => {
-			this.setState({
-				isLocationRequested: false
-			});
-			API.logout();
+	async acceptLocation() {
+		const permission = await PermissionStore.requestPermission(LOCATION);
+		this.setState({
+			isLocationRequested: false
 		});
+		switch (permission) {
+			case DENIED: {
+				PermissionStore.requestSetup(LOCATION);
+				API.logout();
+				break;
+			}
+			default: {
+				break;
+			}
+		}
 	}
 	/**
 	* Runs when the user presses the `Cancel` button when asked whether he'd like to share his location and logs the user out.
@@ -100,41 +108,52 @@ export default class Layout extends Component {
 		API.logout();
 	}
 	/**
+	* Enables push notifications for the user on the server, assuming that the permission was granted
+	*/
+	async enablePushNotifications() {
+		/* Send the new notification ID to the server */
+		const registration = ConnectionStore.serviceWorkerRegistration;
+		const subscription = await registration.pushManager.subscribe({
+			userVisibleOnly: true
+		});
+		API.updateNotificationID(subscription);
+	}
+	/**
+	* Disables push notifications for the user on the server
+	*/
+	async disablePushNotifications() {
+		API.removeNotificationID();
+	}
+	/**
 	* Accepts a notification dialog by configuring the settings to whatever the user chooses
 	*/
 	async acceptNotification() {
-		this.setState({
-			isNotificationRequested: false
-		});
-		const permission = await Notification.requestPermission();
-		switch (permission) {
-			case "granted": {
-				publish(NOTIFICATION_CONFIGURED, {
-					isNotificationAllowed: true
-				});
-				/* Send the new notification ID to the server */
-				const registration = ConnectionStore.serviceWorkerRegistration;
-				const subscription = await registration.pushManager.subscribe({
-					userVisibleOnly: true
-				});
-				API.updateNotificationID(subscription);
-				break;
-			}
-			case "default": {
-				/* Make the user decide again */
+		const notifications = PermissionStore.get(NOTIFICATIONS);
+		switch (notifications.permission) {
+			case GRANTED: {
+				this.enablePushNotifications();
 				this.setState({
-					isNotificationRequested: true
+					isNotificationRequested: false
 				});
 				break;
 			}
-			case "denied": {
-				publish(NOTIFICATION_CONFIGURED, {
-					isNotificationAllowed: false
+			case PROMPT: {
+				await PermissionStore.requestPermission(NOTIFICATIONS);
+				this.acceptNotification();
+				break;
+			}
+			case DENIED: {
+				this.setState({
+					isNotificationRequested: false
 				});
 				/* Show a warning? */
 				break;
 			}
 			default: {
+				/* Make the user decide again */
+				this.setState({
+					isNotificationRequested: true
+				});
 				break;
 			}
 		}
@@ -143,9 +162,6 @@ export default class Layout extends Component {
 	* Denies notifications by caching this decision and disabling the dialog
 	*/
 	denyNotificiation() {
-		publish(NOTIFICATION_CONFIGURED, {
-			isNotificationAllowed: false
-		});
 		this.setState({
 			isNotificationRequested: false
 		});
@@ -154,7 +170,16 @@ export default class Layout extends Component {
 	* Fires before a React component mounts and sets up event listeners for the store.
 	* Whenever the store changes, this component will update its state.
 	*/
-	componentWillMount() {
+	async componentWillMount() {
+		await PermissionStore.initialize();
+		try {
+			/* The first rendering of the page should also try to establish a WebSocket connection */
+			await client.open();
+		}
+		catch (e) {
+			/* At least show the user the screen now */
+			SplashScreen.hide();
+		}
 		ConnectionStore.on(LOGIN, async () => {
 			this.setState({
 				isLoggedIn: ConnectionStore.isLoggedIn
@@ -170,32 +195,78 @@ export default class Layout extends Component {
 				isMenuVisible: LayoutStore.isMenuVisible
 			});
 		});
-		LocationStore.on(LOCATION_REQUESTED, () => {
-			this.setState({
-				isLocationRequested: true
-			});
+		PermissionStore.on(PERMISSION_REQUESTED, request => {
+			switch (request.type) {
+				case NOTIFICATIONS: {
+					this.setState({
+						isNotificationRequested: true
+					});
+					break;
+				}
+				case LOCATION: {
+					this.setState({
+						isLocationRequested: true
+					});
+					break;
+				}
+				default: {
+					break;
+				}
+			}
 		});
-		LocationStore.on(LOCATION_SETUP_REQUESTED, () => {
-			this.setState({
-				isLocationSetupRequested: true
-			});
+		PermissionStore.on(PERMISSION_SETUP_REQUESTED, request => {
+			switch (request.type) {
+				case LOCATION: {
+					this.setState({
+						isLocationSetupRequested: true
+					});
+					break;
+				}
+				default: {
+					break;
+				}
+			}
 		});
-		SettingsStore.on(NOTIFICATION_REQUESTED, () => {
-			this.setState({
-				isNotificationRequested: true
-			});
+		PermissionStore.on(PERMISSION_CHANGED, change => {
+			switch (change.type) {
+				case NOTIFICATIONS: {
+					switch (change.permission) {
+						case GRANTED: {
+							::this.acceptNotification();
+							break;
+						}
+						default: {
+							break;
+						}
+					}
+					break;
+				}
+				default: {
+					break;
+				}
+			}
 		});
-		SettingsStore.on(NOTIFICATION_GRANTED, () => {
-			::this.acceptNotification();
-		});
-		SettingsStore.on(NOTIFICATION_CONFIGURED, async isNotificationAllowed => {
-			if (isNotificationAllowed) {
-				/* Send the new notification ID to the server */
-				const registration = ConnectionStore.serviceWorkerRegistration;
-				const subscription = await registration.pushManager.subscribe({
-					userVisibleOnly: true
-				});
-				API.updateNotificationID(subscription);
+		PermissionStore.on(PREFERENCE_CHANGED, change => {
+			switch (change.type) {
+				case NOTIFICATIONS: {
+					switch (change.permission) {
+						case ENABLED: {
+							this.enablePushNotifications();
+							break;
+						}
+						case DISABLED: {
+							this.disablePushNotifications();
+							break;
+						}
+						default: {
+							break;
+						}
+					}
+					break;
+				}
+				default: {
+					break;
+				}
 			}
 		});
 		setInterval(::this.checkConnection, s);
@@ -248,7 +319,7 @@ export default class Layout extends Component {
 				</Dialog>
 				<Dialog title="Location setup needed" modal={true} open={this.state.isLocationSetupRequested} actions={
 					<div>
-						<RaisedButton label="Exit" onClick={::this.cancelLocation}/>
+						<RaisedButton label="OK" onClick={::this.cancelLocation}/>
 					</div>
 				}>
 					Sorry, but it seems as if you can't play {PROJECT_NAME}. Please unblock your GeoLocation permission for {PROJECT_NAME} if you want to play.

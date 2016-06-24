@@ -4,16 +4,21 @@ import L from "client/ui/LeafletWrapper";
 import client from "client/client";
 import {
 	default as LocationStore,
-	FLAG_CACHE_UPDATED,
-	LOCATION_REQUESTED,
-	LOCATION_SETUP_REQUESTED,
-	LOCATION_GRANTED
+	FLAG_CACHE_UPDATED
 } from "../stores/LocationStore";
 import {
-	default as SettingsStore,
-	NOTIFICATION_GRANTED,
-	NOTIFICATION_REQUESTED
+	default as SettingsStore
 } from "../stores/SettingsStore";
+import {
+	default as PermissionStore,
+	NOTIFICATIONS,
+	LOCATION,
+	GRANTED,
+	PROMPT,
+	DENIED,
+	PERMISSION_CHANGED,
+	UNSET
+} from "../stores/PermissionStore";
 import StateStore from "../stores/StateStore";
 import { Flag, Player } from "../Flag";
 import { publish } from "../Dispatcher";
@@ -53,6 +58,7 @@ export default class Dashboard extends React.Component {
 	*/
 	constructor() {
 		super();
+		this.handlePermissionChanges = ::this.handlePermissionChanges;
 		this.receiveUserCoordinates = ::this.receiveUserCoordinates;
 		this.drawArea = ::this.drawArea;
 		this.appendZoomFix = ::this.appendZoomFix;
@@ -241,6 +247,31 @@ export default class Dashboard extends React.Component {
 		}
 	}
 	/**
+	* This function handles a {@link Permission} change during runtime.
+	* If the {@link Permission} type was `LOCATION` and the change was to `GRANTED`, the game will start receiving the user's coordinates and draw the map.
+	* @param {PermissionChangeEvent} change
+	* 	The event that describes how the permission has been changed
+	*/
+	handlePermissionChanges(change) {
+		switch (change.type) {
+			case LOCATION: {
+				switch (change.permission) {
+					case GRANTED: {
+						this.receiveUserCoordinates();
+						break;
+					}
+					default: {
+						break;
+					}
+				}
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+	}
+	/**
 	* Updates the map's area layer with known circles that were cached on the server
 	* @param {Message} message
 	* 	A message object that can be used to send a reply
@@ -259,14 +290,14 @@ export default class Dashboard extends React.Component {
 			});
 			this.layers.area.addLayer(areaCircle);
 		}
-		/* Handle replies in protocol to send token? */
+		/* TODO: Handle replies in protocol to send token? */
 		message.reply();
 	}
 	/**
 	* Sets up all event listeners
 	*/
 	componentWillMount() {
-		LocationStore.on(LOCATION_GRANTED, this.receiveUserCoordinates);
+		PermissionStore.on(PERMISSION_CHANGED, this.handlePermissionChanges);
 		client.on("drawArea", this.drawArea);
 		if (StateStore.dashboard) {
 			this.state = StateStore.dashboard;
@@ -276,7 +307,7 @@ export default class Dashboard extends React.Component {
 	* Removes all event listeners
 	*/
 	componentWillUnmount() {
-		LocationStore.off(LOCATION_GRANTED, this.receiveUserCoordinates);
+		PermissionStore.off(PERMISSION_CHANGED, this.handlePermissionChanges);
 		navigator.geolocation.clearWatch(this.geoLocationWatchID);
 		client.off("drawArea", this.drawArea);
 		this.map.off("zoomstart", this.appendZoomFix);
@@ -334,44 +365,26 @@ export default class Dashboard extends React.Component {
 			this.drawFlags(this.state.shownFlags);
 		}
 		/* Handle GeoLocation permissions */
-		const geoLocationPermission = await navigator.permissions.query({
-			name: "geolocation"
-		});
-		switch (geoLocationPermission.state) {
-			case "granted":
-				::this.receiveUserCoordinates();
-				break;
-			case "prompt": {
-				publish(LOCATION_REQUESTED);
+		const geoLocation = PermissionStore.get(LOCATION);
+		switch (geoLocation.permission) {
+			default:
+			case GRANTED: {
+				this.receiveUserCoordinates();
 				break;
 			}
-			case "denied": {
-				publish(LOCATION_SETUP_REQUESTED);
+			case PROMPT: {
+				PermissionStore.request(LOCATION);
 				break;
 			}
-			default: {
+			case DENIED: {
+				PermissionStore.requestSetup(LOCATION);
 				break;
 			}
 		}
 		/* Handle Notification permissions */
-		if (SettingsStore.isNotificationAllowed === null) {
-			const notificationPermission = await navigator.permissions.query({
-				name: "notifications"
-			});
-			switch (notificationPermission.state) {
-				case "granted": {
-					publish(NOTIFICATION_GRANTED);
-					break;
-				}
-				case "prompt": {
-					publish(NOTIFICATION_REQUESTED);
-					break;
-				}
-				default: {
-					/* Ignore denials, it's better not to annoy the user */
-					break;
-				}
-			}
+		const notifications = PermissionStore.get(NOTIFICATIONS);
+		if (notifications.permission === PROMPT && notifications.preference === UNSET) {
+			PermissionStore.request(NOTIFICATIONS);
 		}
 	}
 	/**

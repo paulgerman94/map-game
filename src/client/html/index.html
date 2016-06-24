@@ -22,14 +22,6 @@
 		</splash-screen>
 		<map-game></map-game>
 		<script src="packages.js"></script>
-		<script>
-			System.import("map-game/index").then(() => {
-				const splashScreen = document.querySelector("splash-screen");
-				splashScreen.setAttribute("invisible", "");
-				setTimeout(() => {
-					splashScreen.remove();
-				}, 1000);
-			});
-		</script>
+		<script>System.import("map-game/index")</script>
 	</body>
 </html>

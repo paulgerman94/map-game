@@ -172,7 +172,10 @@ gulp.task("css", () => {
 		autoPrefixer({
 			browsers: ["> 5%"]
 		}),
-		cssNano()
+		cssNano({
+			/* This is necessary for the splash screen */
+			zindex: false
+		})
 	];
 	return gulp.src(`${paths.client.css.src}/main.scss`)
 		.pipe(sourceMaps.init())

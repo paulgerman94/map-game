@@ -276,19 +276,19 @@ export default class Register extends Component {
 						visibility: this.state.isRegistering ? "visible" : "hidden"
 					}}/>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Account name" onChange={::this.updateAccountName} onKeyDown={::this.register} errorText={this.state.errors.accountName}/>
+						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" floatingLabelText="Account name" onChange={::this.updateAccountName} onKeyDown={::this.register} errorText={this.state.errors.accountName}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Display name" onChange={::this.updateDisplayName} onKeyDown={::this.register} errorText={this.state.errors.displayName}/>
+						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" floatingLabelText="Display name" onChange={::this.updateDisplayName} onKeyDown={::this.register} errorText={this.state.errors.displayName}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Email" onChange={::this.updateEmail} onKeyDown={::this.register} errorText={this.state.errors.email}/>
+						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" floatingLabelText="Email" onChange={::this.updateEmail} onKeyDown={::this.register} errorText={this.state.errors.email}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Password" type="password" onChange={::this.updatePassword} onKeyDown={::this.register} errorText={this.state.errors.password}/>
+						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" floatingLabelText="Password" type="password" onChange={::this.updatePassword} onKeyDown={::this.register} errorText={this.state.errors.password}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField floatingLabelText="Repeat password" type="password" onChange={::this.updateRepeatedPassword} onKeyDown={::this.register} errorText={this.state.errors.password}/>
+						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" floatingLabelText="Repeat password" type="password" onChange={::this.updateRepeatedPassword} onKeyDown={::this.register} errorText={this.state.errors.password}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
 						<RaisedButton disabled={!this.isRegistrationValid} primary onClick={::this.register} style={{

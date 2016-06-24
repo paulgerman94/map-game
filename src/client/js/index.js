@@ -20,7 +20,6 @@ import {
 } from "./ui/views/Settings";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMUITheme from "material-ui/styles/getMuiTheme";
-import client from "./client";
 import {
 	blue300,
 	grey100, grey500,
@@ -54,8 +53,7 @@ const muiTheme = getMUITheme({
 		});
 	}
 	try {
-		/* The first rendering of the page should also try to establish a WebSocket connection */
-		await client.open();
+		// nothing
 	}
 	catch (e) {
 		console.info("Server is currently offline.");

@@ -1,13 +1,11 @@
 import React from "react";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
-import * as API from "client/api/index";
 import {
 	default as ConnectionStore,
 	LOGIN,
 	LOGOUT
 } from "../stores/ConnectionStore";
-import { CircularProgress } from "material-ui";
 export const ROUTE = "/";
 /**
 * This component contains the home view that the user should see when entering the app.
@@ -15,35 +13,18 @@ export const ROUTE = "/";
 * Otherwise, it should display the general game UI.
 */
 export default class Home extends React.Component {
-	state = {
-		isLoginDataAvailable: false,
-		isLoggedIn: false
-	};
 	/**
 	* Instantiates a new {@link Home} component
 	*/
 	constructor() {
 		super();
-		this.showDashboard = ::this.showDashboard;
-		this.showLogin = ::this.showLogin;
+		this.update = ::this.update;
 	}
 	/**
-	* Updates the state of this component such that only the state is displayed that users should see when they're logged out
+	* Triggers the renderer to update
 	*/
-	showLogin() {
-		this.setState({
-			isLoggedIn: false,
-			isLoginDataAvailable: true
-		});
-	}
-	/**
-	* Updates the state of this component such that only the state is displayed that users should see when they're logged in
-	*/
-	showDashboard() {
-		this.setState({
-			isLoggedIn: true,
-			isLoginDataAvailable: true
-		});
+	update() {
+		this.setState({});
 	}
 	/**
 	* Fires before a React component mounts and asynchronously tries to login with the session token, if there is one.
@@ -53,26 +34,16 @@ export default class Home extends React.Component {
 	*/
 	async componentWillMount() {
 		/* If the user logs in via the sub-view <Login>, change the state to transfer him to his <Dashboard> */
-		ConnectionStore.on(LOGIN, this.showDashboard);
-		/* If the user logs out, change the state to transfer him to his <Login> view again */
-		ConnectionStore.on(LOGOUT, this.showLogin);
-		try {
-			/* If we can log in by just using the session token, we can show the dashboard */
-			await API.login();
-			this.showDashboard();
-		}
-		catch (e) {
-			/* If not, we'll have to render the login/register screen */
-			this.showLogin();
-		}
+		ConnectionStore.on(LOGIN, this.update);
+		ConnectionStore.on(LOGOUT, this.update);
 	}
 	/**
 	* Fires before a React component unmounts and unregisters all event listeners so that no memory is leaked
 	*/
 	async componentWillUnmount() {
 		/* Unregister event listeners */
-		ConnectionStore.off(LOGIN, this.showDashboard);
-		ConnectionStore.off(LOGOUT, this.showLogin);
+		ConnectionStore.off(LOGIN, this.update);
+		ConnectionStore.off(LOGOUT, this.update);
 	}
 	/**
 	* Renders a component with a simple login menu
@@ -80,12 +51,11 @@ export default class Home extends React.Component {
 	* 	The React component
 	*/
 	render() {
-		if (!this.state.isLoginDataAvailable) {
-			/* Return a spinner? */
-			return <CircularProgress/>;
+		if (ConnectionStore.isLoggedIn) {
+			return <Dashboard/>;
 		}
 		else {
-			return this.state.isLoggedIn ? <Dashboard/> : <Login/>;
+			return <Login/>;
 		}
 	}
 }

@@ -2,10 +2,17 @@ import React from "react";
 import { Toggle } from "material-ui";
 import {
 	default as SettingsStore,
-	CAMERA_FOLLOW_CONFIGURED,
-	NOTIFICATION_CONFIGURED,
-	NOTIFICATION_REQUESTED
+	CAMERA_FOLLOW_CONFIGURED
 } from "../stores/SettingsStore";
+import {
+	default as PermissionStore,
+	GRANTED,
+	NOTIFICATIONS,
+	PREFERENCE_CHANGED,
+	PERMISSION_CHANGED,
+	ENABLED,
+	DISABLED
+} from "../stores/PermissionStore";
 import { publish } from "../Dispatcher";
 export const ROUTE = "settings";
 /**
@@ -19,7 +26,7 @@ export default class Login extends React.Component {
 	*/
 	constructor() {
 		super();
-		this.copySettings = ::this.copySettings;
+		this.update = ::this.update;
 	}
 	/**
 	* Enables or disables the camera follow state
@@ -42,44 +49,41 @@ export default class Login extends React.Component {
 	*/
 	async toggleNotificationsAllowed(e, isNotificationAllowed) {
 		if (isNotificationAllowed) {
-			const notificationPermission = await navigator.permissions.query({
-				name: "notifications"
-			});
-			if (notificationPermission.state === "granted") {
-				/* Just toggle it */
-				publish(NOTIFICATION_CONFIGURED, {
-					isNotificationAllowed
-				});
+			/* The user wants to toggle notifictations to `on` */
+			const notifications = PermissionStore.get(NOTIFICATIONS);
+			if (notifications.permission === GRANTED) {
+				/* We can toggle it without asking him for permission */
+				PermissionStore.setPreference(NOTIFICATIONS, ENABLED);
 			}
 			else {
-				/* Make sure that we can toggle it, then do it */
-				publish(NOTIFICATION_REQUESTED);
+				/* Dispatch this task to a dedicated dialog */
+				PermissionStore.request(NOTIFICATIONS);
 			}
 		}
 		else {
-			/* Just toggle it */
-			publish(NOTIFICATION_CONFIGURED, {
-				isNotificationAllowed
-			});
+			/* Toggling off is always possible */
+			PermissionStore.setPreference(NOTIFICATIONS, DISABLED);
 		}
 	}
 	/**
-	* Applies all settings from the SettingsStore
+	* Applies all settings from the SettingsStore and re-renders the component
 	*/
-	copySettings() {
+	update() {
 		this.setState({});
 	}
 	/**
 	* Sets up all event listeners
 	*/
 	componentWillMount() {
-		SettingsStore.on(NOTIFICATION_CONFIGURED, this.copySettings);
+		PermissionStore.on(PREFERENCE_CHANGED, this.update);
+		PermissionStore.on(PERMISSION_CHANGED, this.update);
 	}
 	/**
 	* Removes all event listeners
 	*/
 	componentWillUnmount() {
-		SettingsStore.off(NOTIFICATION_CONFIGURED, this.copySettings);
+		PermissionStore.off(PREFERENCE_CHANGED, this.update);
+		PermissionStore.off(PERMISSION_CHANGED, this.update);
 	}
 	/**
 	* Renders a component with a simple login menu
@@ -110,7 +114,9 @@ export default class Login extends React.Component {
 						<Toggle label="Make camera follow me" defaultToggled={SettingsStore.isCameraFollowing} style={styles.toggle} onToggle={::this.toggleCameraFollow}/>
 					</div>
 					<div style={styles.block}>
-						<Toggle label="Show push notifications" toggled={SettingsStore.isNotificationAllowed} style={styles.toggle} onToggle={::this.toggleNotificationsAllowed}/>
+						<Toggle label="Show push notifications" toggled={
+							PermissionStore.get(NOTIFICATIONS).permission === GRANTED &&
+							PermissionStore.get(NOTIFICATIONS).preference === ENABLED} style={styles.toggle} onToggle={::this.toggleNotificationsAllowed}/>
 					</div>
 				</div>
 			</div>
