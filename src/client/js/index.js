@@ -52,27 +52,19 @@ const muiTheme = getMUITheme({
 			registration
 		});
 	}
-	try {
-		// nothing
-	}
-	catch (e) {
-		console.info("Server is currently offline.");
-	}
-	finally {
-		render((
-			<MuiThemeProvider muiTheme={muiTheme}>
-				<div>
-					<main>
-						<Router history={browserHistory}>
-							<Route path={HOME_ROUTE} component={Layout}>
-								<IndexRoute component={Home}/>
-								<Route path={REGISTER_ROUTE} component={Register}/>
-								<Route path={SETTINGS_ROUTE} component={Settings}/>
-							</Route>
-						</Router>
-					</main>
-				</div>
-			</MuiThemeProvider>
-		), document.querySelector("map-game"));
-	}
+	render((
+		<MuiThemeProvider muiTheme={muiTheme}>
+			<div>
+				<main>
+					<Router history={browserHistory}>
+						<Route path={HOME_ROUTE} component={Layout}>
+							<IndexRoute component={Home}/>
+							<Route path={REGISTER_ROUTE} component={Register}/>
+							<Route path={SETTINGS_ROUTE} component={Settings}/>
+						</Route>
+					</Router>
+				</main>
+			</div>
+		</MuiThemeProvider>
+	), document.querySelector("map-game"));
 })();
