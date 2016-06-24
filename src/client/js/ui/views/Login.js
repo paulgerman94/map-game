@@ -6,10 +6,8 @@ import {
 	default as ConnectionStore,
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED,
-	LOGIN,
 	LOGIN_FAILED
 } from "../stores/ConnectionStore";
-import { publish } from "../Dispatcher";
 /**
 * This component contains the home view that the user should see when entering the app.
 * It should a simple login/registration menu if the user isn't logged in.
@@ -29,6 +27,9 @@ export default class Login extends React.Component {
 		this.assumeServerDown = ::this.assumeServerDown;
 		this.assumeServerUp = ::this.assumeServerUp;
 		this.assumeBadCredentials = ::this.assumeBadCredentials;
+		this.login = ::this.login;
+		this.updateAccountName = ::this.updateAccountName;
+		this.updatePassword = ::this.updatePassword;
 	}
 	/**
 	* Logs a user in and sets the state such that potential login errors as well as a spinner are displayed.
@@ -43,8 +44,8 @@ export default class Login extends React.Component {
 		}
 		else {
 			/* If it is a keydown event for ↲ or a click event, try to login */
-			let isLoginSuccessful = false;
 			if (this.isLoginValid) {
+				/* Enable the spinner */
 				this.setState({
 					isLoggingIn: true
 				});
@@ -55,23 +56,9 @@ export default class Login extends React.Component {
 						password
 					});
 					/* We have successfully logged in! */
-					this.setState({
-						errorText: null
-					});
-					isLoginSuccessful = true;
 				}
 				catch (e) {
 					/* All errors are covered by ConnectionStore events */
-				}
-				finally {
-					this.setState({
-						isLoggingIn: false
-					});
-					if (isLoginSuccessful) {
-						publish(LOGIN, {
-							accountName
-						});
-					}
 				}
 			}
 		}
@@ -172,10 +159,10 @@ export default class Login extends React.Component {
 					}}/>
 					<p>Please log in to continue.</p>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" autoFocus="on" onKeyDown={::this.login} onChange={::this.updateAccountName} floatingLabelText="Username"/>
+						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" autoFocus="on" onKeyDown={this.login} onChange={this.updateAccountName} floatingLabelText="Username"/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" onKeyDown={::this.login} errorText={this.state.errorText} onChange={::this.updatePassword} floatingLabelText="Password" type="password"/>
+						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" onKeyDown={this.login} errorText={this.state.errorText} onChange={this.updatePassword} floatingLabelText="Password" type="password"/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg" style={{
 						marginTop: "2rem",
@@ -184,7 +171,7 @@ export default class Login extends React.Component {
 						<RaisedButton label="Register" containerElement={
 							<Link to="register"/>
 						}/>
-						<RaisedButton label="Login" primary onClick={::this.login} disabled={!this.isLoginValid} style={{
+						<RaisedButton label="Login" primary onClick={this.login} disabled={!this.isLoginValid} style={{
 							marginLeft: "0.5rem"
 						}}/>
 					</div>
