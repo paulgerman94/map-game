@@ -72,9 +72,12 @@ export default class ServerCore extends WS {
 				const lookUp = target[property];
 				if (!lookUp) {
 					return async (...args) => {
-						const returnValue = await target.send(property, undefined, ...args);
+						const returnValue = await target.send({
+							args,
+							instruction: property
+						});
 						if (returnValue && returnValue.error) {
-							throw new Error(`Error trying to proxy ${property} with arguments`, args);
+							throw new Error(`Error trying to proxy ${property} with arguments:`, args);
 						}
 						return returnValue.payload.args;
 					};

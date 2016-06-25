@@ -16,7 +16,7 @@ export class ClientCore extends WS {
 			reconnectionMinimum: 1000,
 			reconnectionFactor: 1.0,
 			rpcOptions: {
-				timeout: 20 * s
+				timeout: s
 			}
 		});
 	}

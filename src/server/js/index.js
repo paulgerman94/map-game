@@ -23,7 +23,7 @@ for (const event of ["unhandledRejection", "uncaughtException"]) {
 		new Server(db, {
 			port: 3444 + user.uid,
 			rpcOptions: {
-				timeout: 20 * s
+				timeout: 2 * s
 			}
 		});
 	}

@@ -1,6 +1,7 @@
 import ClientCore from "./ClientCore";
 import ConnectionStore from "./ui/stores/ConnectionStore";
 import SplashScreen from "./ui/SplashScreen";
+import { s } from "server/units";
 import {
 	default as PermissionStore,
 	NOTIFICATIONS,
@@ -12,6 +13,9 @@ import {
 	default as cache,
 	TOKEN
 } from "./cache";
+const timeouts = {
+	getPOIs: 10 * s
+};
 /**
 * This is a client implementation that can communicate with the server.
 * The client defines event handlers for RPC methods that the server sends and methods to query the server.
@@ -56,10 +60,14 @@ export default new Proxy(new Client(), {
 				args.unshift({
 					token: cache.load(TOKEN)
 				});
-				const message = await target.send(property, undefined, ...args);
+				const message = await target.send({
+					args,
+					instruction: property,
+					timeout: timeouts[property]
+				});
 				const [firstValue] = message.payload.args;
 				if (!firstValue || firstValue && firstValue.error) {
-					throw new Error(`Error trying to proxy ${property} with arguments`, args);
+					throw new Error(`Error trying to proxy ${property} with arguments:`, args);
 				}
 				return message.payload.args;
 			};

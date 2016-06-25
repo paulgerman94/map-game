@@ -380,7 +380,7 @@ SystemJS.config({
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
     "vm": "github:jspm/nodelibs-vm@0.2.0-alpha",
-    "ws-promise-client": "npm:ws-promise-client@3.0.2",
+    "ws-promise-client": "npm:ws-promise-client@4.0.0",
     "zlib": "github:jspm/nodelibs-zlib@0.2.0-alpha"
   },
   packages: {
@@ -435,13 +435,6 @@ SystemJS.config({
         "util-deprecate": "npm:util-deprecate@1.0.2"
       }
     },
-    "npm:buffer@4.6.0": {
-      "map": {
-        "base64-js": "npm:base64-js@1.1.2",
-        "ieee754": "npm:ieee754@1.1.6",
-        "isarray": "npm:isarray@1.0.0"
-      }
-    },
     "npm:readable-stream@1.1.14": {
       "map": {
         "core-util-is": "npm:core-util-is@1.0.2",
@@ -492,7 +485,7 @@ SystemJS.config({
     },
     "github:jspm/nodelibs-buffer@0.2.0-alpha": {
       "map": {
-        "buffer-browserify": "npm:buffer@4.6.0"
+        "buffer-browserify": "npm:buffer@4.7.0"
       }
     },
     "github:jspm/nodelibs-crypto@0.2.0-alpha": {
@@ -979,21 +972,6 @@ SystemJS.config({
         "is-typedarray": "npm:is-typedarray@1.0.0"
       }
     },
-    "npm:ws-rpc-client@1.0.7": {
-      "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.2",
-        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
-        "uuid": "npm:uuid@2.0.2"
-      }
-    },
-    "npm:ws-promise-client@3.0.2": {
-      "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.2",
-        "ws-rpc-client": "npm:ws-rpc-client@1.0.7",
-        "websocket": "npm:websocket@1.0.23",
-        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3"
-      }
-    },
     "npm:material-ui@0.15.0": {
       "map": {
         "react-addons-transition-group": "npm:react-addons-transition-group@15.1.0",
@@ -1058,6 +1036,28 @@ SystemJS.config({
     "npm:ecdsa-sig-formatter@1.0.7": {
       "map": {
         "base64-url": "npm:base64-url@1.2.2"
+      }
+    },
+    "npm:buffer@4.7.0": {
+      "map": {
+        "ieee754": "npm:ieee754@1.1.6",
+        "base64-js": "npm:base64-js@1.1.2",
+        "isarray": "npm:isarray@1.0.0"
+      }
+    },
+    "npm:ws-promise-client@4.0.0": {
+      "map": {
+        "websocket": "npm:websocket@1.0.23",
+        "ws-rpc-client": "npm:ws-rpc-client@2.0.0",
+        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
+        "babel-runtime": "npm:babel-runtime@6.9.2"
+      }
+    },
+    "npm:ws-rpc-client@2.0.0": {
+      "map": {
+        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "uuid": "npm:uuid@2.0.2"
       }
     }
   }
