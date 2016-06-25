@@ -278,6 +278,7 @@ export default class Register extends Component {
 	componentWillMount() {
 		ConnectionStore.on(CONNECTION_DISRUPTED, this.update);
 		ConnectionStore.on(CONNECTION_ESTABLISHED, this.update);
+		::this.update();
 	}
 	/**
 	* Removes all event listeners

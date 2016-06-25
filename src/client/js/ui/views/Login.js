@@ -132,6 +132,9 @@ export default class Login extends React.Component {
 		ConnectionStore.on(CONNECTION_DISRUPTED, this.assumeServerDown);
 		ConnectionStore.on(CONNECTION_ESTABLISHED, this.assumeServerUp);
 		ConnectionStore.on(LOGIN_FAILED, this.assumeBadCredentials);
+		if (!ConnectionStore.isConnected) {
+			::this.assumeServerDown();
+		}
 	}
 	/**
 	* Unregisters all event listeners
