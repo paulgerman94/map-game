@@ -171,7 +171,7 @@ export default class Login extends React.Component {
 						<RaisedButton label="Register" containerElement={
 							<Link to="register"/>
 						}/>
-						<RaisedButton label="Login" primary onClick={this.login} disabled={!this.isLoginValid} style={{
+						<RaisedButton label="Login" primary onClick={this.login} disabled={!this.isLoginValid || !ConnectionStore.isConnected} style={{
 							marginLeft: "0.5rem"
 						}}/>
 					</div>

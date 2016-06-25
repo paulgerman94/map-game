@@ -5,7 +5,12 @@ import { default as React, Component } from "react";
 import { TextField, RaisedButton, CircularProgress } from "material-ui";
 import { browserHistory } from "react-router";
 import { publish } from "../Dispatcher";
-import { LOGIN } from "../stores/ConnectionStore";
+import {
+	default as ConnectionStore,
+	LOGIN,
+	CONNECTION_DISRUPTED,
+	CONNECTION_ESTABLISHED
+} from "../stores/ConnectionStore";
 import { ROUTE as REGISTER_ROUTE } from "../views/Register";
 const emailChecker = emailRegEx({
 	exact: true
@@ -27,6 +32,13 @@ export default class Register extends Component {
 			password: null
 		},
 		password: ["", ""]
+	}
+	/**
+	* Instantiates a new {@link Register} component
+	*/
+	constructor() {
+		super();
+		this.update = ::this.update;
 	}
 	/**
 	* Updates the state's account name based on user input
@@ -261,6 +273,35 @@ export default class Register extends Component {
 		}
 	}
 	/**
+	* Registers all event listeners
+	*/
+	componentWillMount() {
+		ConnectionStore.on(CONNECTION_DISRUPTED, this.update);
+		ConnectionStore.on(CONNECTION_ESTABLISHED, this.update);
+	}
+	/**
+	* Removes all event listeners
+	*/
+	componentWillUnmount() {
+		ConnectionStore.off(CONNECTION_DISRUPTED, this.update);
+		ConnectionStore.off(CONNECTION_ESTABLISHED, this.update);
+	}
+	/**
+	* Redraws the component and sets an error message if the server is offline
+	*/
+	update() {
+		const errors = this.state.errors;
+		if (!ConnectionStore.isConnected) {
+			errors.accountName = "The server is currently down.";
+		}
+		else {
+			errors.accountName = null;
+		}
+		this.setState({
+			errors
+		});
+	}
+	/**
 	* Renders a {@link Register} component displaying a form that the user can use to register a new account
 	* @return {ReactComponent}
 	* 	The component that will be displayed
@@ -291,7 +332,7 @@ export default class Register extends Component {
 						<TextField spellCheck="off" autoComplete="off" autoCapitalize="off" floatingLabelText="Repeat password" type="password" onChange={::this.updateRepeatedPassword} onKeyDown={::this.register} errorText={this.state.errors.password}/>
 					</div>
 					<div className="row center-xs center-sm center-md center-lg">
-						<RaisedButton disabled={!this.isRegistrationValid} primary onClick={::this.register} style={{
+						<RaisedButton disabled={!this.isRegistrationValid || !ConnectionStore.isConnected} primary onClick={::this.register} style={{
 							marginTop: "1rem",
 							marginBottom: "1rem"
 						}} label="Register"/>
