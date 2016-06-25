@@ -370,7 +370,7 @@ SystemJS.config({
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
     "react": "npm:react@15.1.0",
     "react-dom": "npm:react-dom@15.1.0",
-    "react-router": "npm:react-router@2.4.1",
+    "react-router": "npm:react-router@2.5.1",
     "react-tap-event-plugin": "npm:react-tap-event-plugin@1.0.0",
     "source-map": "npm:source-map@0.1.43",
     "stream": "github:jspm/nodelibs-stream@0.2.0-alpha",
@@ -387,7 +387,7 @@ SystemJS.config({
     "npm:babel-types@6.7.7": {
       "map": {
         "babel-runtime": "npm:babel-runtime@5.8.38",
-        "babel-traverse": "npm:babel-traverse@6.9.0",
+        "babel-traverse": "npm:babel-traverse@6.10.4",
         "esutils": "npm:esutils@2.0.2",
         "lodash": "npm:lodash@3.10.1",
         "to-fast-properties": "npm:to-fast-properties@1.0.2"
@@ -404,19 +404,6 @@ SystemJS.config({
     "npm:babel-messages@6.8.0": {
       "map": {
         "babel-runtime": "npm:babel-runtime@6.9.2"
-      }
-    },
-    "npm:babel-traverse@6.9.0": {
-      "map": {
-        "babel-code-frame": "npm:babel-code-frame@6.8.0",
-        "babel-messages": "npm:babel-messages@6.8.0",
-        "babel-runtime": "npm:babel-runtime@6.9.2",
-        "babel-types": "npm:babel-types@6.10.2",
-        "babylon": "npm:babylon@6.8.1",
-        "debug": "npm:debug@2.2.0",
-        "globals": "npm:globals@8.18.0",
-        "invariant": "npm:invariant@2.2.1",
-        "lodash": "npm:lodash@4.13.1"
       }
     },
     "npm:loose-envify@1.2.0": {
@@ -764,7 +751,7 @@ SystemJS.config({
     },
     "npm:pg-native@1.10.0": {
       "map": {
-        "libpq": "npm:libpq@1.8.2",
+        "libpq": "npm:libpq@1.8.3",
         "pg-types": "npm:pg-types@1.6.0",
         "readable-stream": "npm:readable-stream@1.0.31"
       }
@@ -871,14 +858,6 @@ SystemJS.config({
         "loose-envify": "npm:loose-envify@1.2.0"
       }
     },
-    "npm:react-router@2.4.1": {
-      "map": {
-        "history": "npm:history@2.1.2",
-        "invariant": "npm:invariant@2.2.1",
-        "warning": "npm:warning@2.1.0",
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0"
-      }
-    },
     "npm:history@2.1.2": {
       "map": {
         "invariant": "npm:invariant@2.2.1",
@@ -912,12 +891,6 @@ SystemJS.config({
         "lodash.rest": "npm:lodash.rest@4.0.3",
         "lodash.isplainobject": "npm:lodash.isplainobject@4.0.4",
         "lodash._root": "npm:lodash._root@3.0.1"
-      }
-    },
-    "npm:libpq@1.8.2": {
-      "map": {
-        "nan": "npm:nan@2.3.5",
-        "bindings": "npm:bindings@1.2.1"
       }
     },
     "npm:pg-types@1.11.0": {
@@ -1011,11 +984,6 @@ SystemJS.config({
         "nan": "npm:nan@2.3.5"
       }
     },
-    "npm:babylon@6.8.1": {
-      "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.2"
-      }
-    },
     "npm:elliptic@6.3.1": {
       "map": {
         "bn.js": "npm:bn.js@4.11.4",
@@ -1026,7 +994,7 @@ SystemJS.config({
     },
     "npm:babel-types@6.10.2": {
       "map": {
-        "babel-traverse": "npm:babel-traverse@6.9.0",
+        "babel-traverse": "npm:babel-traverse@6.10.4",
         "lodash": "npm:lodash@4.13.1",
         "to-fast-properties": "npm:to-fast-properties@1.0.2",
         "babel-runtime": "npm:babel-runtime@6.9.2",
@@ -1048,16 +1016,49 @@ SystemJS.config({
     "npm:ws-promise-client@4.0.0": {
       "map": {
         "websocket": "npm:websocket@1.0.23",
-        "ws-rpc-client": "npm:ws-rpc-client@2.0.0",
+        "ws-rpc-client": "npm:ws-rpc-client@2.0.1",
         "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
         "babel-runtime": "npm:babel-runtime@6.9.2"
       }
     },
-    "npm:ws-rpc-client@2.0.0": {
+    "npm:react-router@2.5.1": {
+      "map": {
+        "history": "npm:history@2.1.2",
+        "warning": "npm:warning@2.1.0",
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0",
+        "invariant": "npm:invariant@2.2.1",
+        "loose-envify": "npm:loose-envify@1.2.0"
+      }
+    },
+    "npm:babel-traverse@6.10.4": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "babel-types": "npm:babel-types@6.10.2",
+        "invariant": "npm:invariant@2.2.1",
+        "lodash": "npm:lodash@4.13.1",
+        "babylon": "npm:babylon@6.8.2",
+        "debug": "npm:debug@2.2.0",
+        "babel-messages": "npm:babel-messages@6.8.0",
+        "babel-code-frame": "npm:babel-code-frame@6.8.0",
+        "globals": "npm:globals@8.18.0"
+      }
+    },
+    "npm:libpq@1.8.3": {
+      "map": {
+        "nan": "npm:nan@2.3.5",
+        "bindings": "npm:bindings@1.2.1"
+      }
+    },
+    "npm:ws-rpc-client@2.0.1": {
       "map": {
         "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
         "babel-runtime": "npm:babel-runtime@6.9.2",
         "uuid": "npm:uuid@2.0.2"
+      }
+    },
+    "npm:babylon@6.8.2": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2"
       }
     }
   }

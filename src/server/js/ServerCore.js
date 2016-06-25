@@ -1,11 +1,15 @@
 import WS from "ws-promise-server";
 import { log, err } from "./util";
 import { checkToken } from "./crypto";
+import { s } from "./units";
 import * as API from "./api/index";
 const guestFunctions = {
 	isFree: API.isFree,
 	login: API.login,
 	register: API.register
+};
+const timeouts = {
+	drawArea: 5 * s
 };
 /**
 * This class is the protocol part that the server uses to communicate with.
@@ -74,7 +78,8 @@ export default class ServerCore extends WS {
 					return async (...args) => {
 						const returnValue = await target.send({
 							args,
-							instruction: property
+							instruction: property,
+							timeout: timeouts[property]
 						});
 						if (returnValue && returnValue.error) {
 							throw new Error(`Error trying to proxy ${property} with arguments:`, args);
