@@ -1,5 +1,9 @@
 import WS from "ws-promise-client";
 import { s } from "server/units";
+import {
+	default as cache,
+	TOKEN
+} from "./cache";
 /**
 * This base class is the protocol part of the client.
 * It is derived in {@link Client} and is supposed to connect to other `RPCClient`s.
@@ -31,6 +35,13 @@ export class ClientCore extends WS {
 	onMessage(msg) {
 		const message = this.rpcClient.readMessage(msg.data);
 		const { payload } = message;
+		const reply = message.reply;
+		message.reply = (...args) => {
+			args.unshift({
+				token: cache.load(TOKEN)
+			});
+			reply(args);
+		};
 		this.emit(payload.instruction, message, ...payload.args);
 	}
 }

@@ -290,7 +290,6 @@ export default class Dashboard extends React.Component {
 			});
 			this.layers.area.addLayer(areaCircle);
 		}
-		/* TODO: Handle replies in protocol to send token? */
 		message.reply();
 	}
 	/**
