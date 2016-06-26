@@ -17,7 +17,7 @@ export class ClientCore extends WS {
 	constructor() {
 		const isEncrypted = location.protocol === "https:";
 		super(`ws${isEncrypted ? "s" : ""}://${location.host}/socket/<%LINUX_USERNAME%>`, undefined, {
-			reconnectionMinimum: 1000,
+			reconnectionMinimum: s,
 			reconnectionFactor: 1.0,
 			rpcOptions: {
 				timeout: s
@@ -29,11 +29,10 @@ export class ClientCore extends WS {
 	* The function will then read the message and fire a specialized event, depending on the payload instruction.
 	* The event will be fired using the arguments that the other party has provided in the function invocation.
 	* For example, if the instruction was `register` and the data was `"username", "password"`, this method will fire an event `onRegister` providing the parameters `"username", "password"`.
-	* @param {MessageEvent} msg
-	* 	The raw message event that was received over the WebSocket
+	* @param {MessageEvent} message
+	* 	The specialized message event that was received over the RPCClient
 	*/
-	onMessage(msg) {
-		const message = this.rpcClient.readMessage(msg.data);
+	onMessage(message) {
 		const { payload } = message;
 		const reply = message.reply;
 		message.reply = (...args) => {
@@ -42,6 +41,7 @@ export class ClientCore extends WS {
 			});
 			reply(args);
 		};
+		/* Fire a specialized event with a dynamically adjusted reply function */
 		this.emit(payload.instruction, message, ...payload.args);
 	}
 }

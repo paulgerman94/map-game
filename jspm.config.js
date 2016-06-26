@@ -334,7 +334,7 @@ SystemJS.config({
     "history": "npm:history@2.1.2",
     "leaflet": "npm:leaflet@1.0.0-rc.1",
     "email-regex": "npm:email-regex@1.0.0",
-    "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
+    "crystal-event-emitter": "npm:crystal-event-emitter@1.2.1",
     "babel-types": "npm:babel-types@6.7.7",
     "flux": "npm:flux@2.1.1",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
@@ -380,7 +380,7 @@ SystemJS.config({
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
     "vm": "github:jspm/nodelibs-vm@0.2.0-alpha",
-    "ws-promise-client": "npm:ws-promise-client@4.0.0",
+    "ws-promise-client": "npm:ws-promise-client@4.1.1",
     "zlib": "github:jspm/nodelibs-zlib@0.2.0-alpha"
   },
   packages: {
@@ -1013,14 +1013,6 @@ SystemJS.config({
         "isarray": "npm:isarray@1.0.0"
       }
     },
-    "npm:ws-promise-client@4.0.0": {
-      "map": {
-        "websocket": "npm:websocket@1.0.23",
-        "ws-rpc-client": "npm:ws-rpc-client@2.0.1",
-        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
-        "babel-runtime": "npm:babel-runtime@6.9.2"
-      }
-    },
     "npm:react-router@2.5.1": {
       "map": {
         "history": "npm:history@2.1.2",
@@ -1049,16 +1041,24 @@ SystemJS.config({
         "bindings": "npm:bindings@1.2.1"
       }
     },
-    "npm:ws-rpc-client@2.0.1": {
-      "map": {
-        "crystal-event-emitter": "npm:crystal-event-emitter@1.1.3",
-        "babel-runtime": "npm:babel-runtime@6.9.2",
-        "uuid": "npm:uuid@2.0.2"
-      }
-    },
     "npm:babylon@6.8.2": {
       "map": {
         "babel-runtime": "npm:babel-runtime@6.9.2"
+      }
+    },
+    "npm:ws-promise-client@4.1.1": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "ws-rpc-client": "npm:ws-rpc-client@2.1.0",
+        "websocket": "npm:websocket@1.0.23",
+        "crystal-event-emitter": "npm:crystal-event-emitter@1.2.1"
+      }
+    },
+    "npm:ws-rpc-client@2.1.0": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "uuid": "npm:uuid@2.0.2",
+        "crystal-event-emitter": "npm:crystal-event-emitter@1.2.1"
       }
     }
   }

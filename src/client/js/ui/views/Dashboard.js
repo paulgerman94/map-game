@@ -279,18 +279,20 @@ export default class Dashboard extends React.Component {
 	* 	The arguments that are passed by the caller
 	*/
 	drawArea(message, ...args) {
-		const [circles] = args;
-		this.layers.area.clearLayers();
-		for (const { latitude, longitude, radius } of circles) {
-			const areaCircle = L.circle([latitude, longitude], radius, {
-				weight: 1,
-				color: "hsl(220, 100%, 60%)",
-				fillOpacity: 0.0035,
-				opacity: 0.25
-			});
-			this.layers.area.addLayer(areaCircle);
+		if (args.length) {
+			const [circles] = args;
+			this.layers.area.clearLayers();
+			for (const { latitude, longitude, radius } of circles) {
+				const areaCircle = L.circle([latitude, longitude], 0.05 * radius, {
+					weight: 1,
+					color: "hsl(0, 100%, 50%)",
+					fillOpacity: 0.35,
+					opacity: 1
+				});
+				this.layers.area.addLayer(areaCircle);
+			}
+			message.reply();
 		}
-		message.reply();
 	}
 	/**
 	* Sets up all event listeners
