@@ -33,16 +33,14 @@ export class ClientCore extends WS {
 	* 	The specialized message event that was received over the RPCClient
 	*/
 	onMessage(message) {
-		const { payload } = message;
 		const reply = message.reply;
+		/* Fire a specialized event with a dynamically adjusted reply function */
 		message.reply = (...args) => {
 			args.unshift({
 				token: cache.load(TOKEN)
 			});
 			reply(args);
 		};
-		/* Fire a specialized event with a dynamically adjusted reply function */
-		this.emit(payload.instruction, message, ...payload.args);
 	}
 }
 export default ClientCore;

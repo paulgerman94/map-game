@@ -2,6 +2,7 @@ import ClientCore from "./ClientCore";
 import ConnectionStore from "./ui/stores/ConnectionStore";
 import SplashScreen from "./ui/SplashScreen";
 import { s } from "server/units";
+import LocationStore from "./ui/stores/LocationStore";
 import {
 	default as PermissionStore,
 	NOTIFICATIONS,
@@ -39,6 +40,17 @@ class Client extends ClientCore {
 			/* Now that we know whether or not the login succeeded, remove the splash screen */
 			SplashScreen.hide();
 		}
+	}
+	/**
+	* Updates the LocationStore whenever the server broadcasts a `drawArea` event
+	* @param {Message} message
+	* 	The message that was sent over the {@link RPCClient}
+	*/
+	async onDrawArea(message) {
+		const { payload } = message;
+		const [centers] = payload.args;
+		LocationStore.updateArea(centers);
+		message.reply();
 	}
 	/**
 	* Asynchronously updates the notification ID for the client on the server

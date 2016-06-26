@@ -4,6 +4,7 @@ import L from "client/ui/LeafletWrapper";
 import client from "client/client";
 import {
 	default as LocationStore,
+	AREA_UPDATED,
 	FLAG_CACHE_UPDATED
 } from "../stores/LocationStore";
 import {
@@ -273,25 +274,19 @@ export default class Dashboard extends React.Component {
 	}
 	/**
 	* Updates the map's area layer with known circles that were cached on the server
-	* @param {Message} message
-	* 	A message object that can be used to send a reply
-	* @param {...*} args
-	* 	The arguments that are passed by the caller
+	* @param {Array.<object>} circles
+	* 	An array of circle centers to draw with objects providing the properties `latitude`, `longitude` and `radius`
 	*/
-	drawArea(message, ...args) {
-		if (args.length) {
-			const [circles] = args;
-			this.layers.area.clearLayers();
-			for (const { latitude, longitude, radius } of circles) {
-				const areaCircle = L.circle([latitude, longitude], 0.05 * radius, {
-					weight: 1,
-					color: "hsl(0, 100%, 50%)",
-					fillOpacity: 0.35,
-					opacity: 1
-				});
-				this.layers.area.addLayer(areaCircle);
-			}
-			message.reply();
+	drawArea(circles) {
+		this.layers.area.clearLayers();
+		for (const { latitude, longitude, radius } of circles) {
+			const areaCircle = L.circle([latitude, longitude], radius, {
+				weight: 1,
+				color: "hsl(120, 100%, 80%)",
+				fillOpacity: 0.025,
+				opacity: 0.5
+			});
+			this.layers.area.addLayer(areaCircle);
 		}
 	}
 	/**
@@ -299,7 +294,7 @@ export default class Dashboard extends React.Component {
 	*/
 	componentWillMount() {
 		PermissionStore.on(PERMISSION_CHANGED, this.handlePermissionChanges);
-		client.on("drawArea", this.drawArea);
+		LocationStore.on(AREA_UPDATED, this.drawArea);
 		if (StateStore.dashboard) {
 			this.state = StateStore.dashboard;
 		}
@@ -309,6 +304,7 @@ export default class Dashboard extends React.Component {
 	*/
 	componentWillUnmount() {
 		PermissionStore.off(PERMISSION_CHANGED, this.handlePermissionChanges);
+		LocationStore.off(AREA_UPDATED, this.drawArea);
 		navigator.geolocation.clearWatch(this.geoLocationWatchID);
 		client.off("drawArea", this.drawArea);
 		this.map.off("zoomstart", this.appendZoomFix);
