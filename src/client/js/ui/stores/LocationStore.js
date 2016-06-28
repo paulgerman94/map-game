@@ -3,6 +3,7 @@ import { EventEmitter } from "crystal-event-emitter";
 import cache from "client/cache";
 import Flag from "../Flag";
 export const FLAG_CACHE_UPDATED = Symbol("Flag cache updated");
+export const FLAG_SELECTED = Symbol("Flag selected");
 export const AREA_UPDATED = Symbol("Area updated");
 /**
 * This class is a flux store that keeps a global view of the user location and its associated permissions.
@@ -34,6 +35,10 @@ class LocationStore extends EventEmitter {
 	*/
 	handleActions(action) {
 		switch (action.type) {
+			case FLAG_SELECTED: {
+				this.emit(action.type, action.flag);
+				break;
+			}
 			case FLAG_CACHE_UPDATED: {
 				for (const flag of action.flags) {
 					if (!this.flags.some(cachedFlag => cachedFlag.id === flag.id)) {

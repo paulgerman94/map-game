@@ -5,6 +5,9 @@
 	transition: transform 0.3s ease;
 	transform: translateZ(0);
 }
+.leaflet-popup-content-wrapper {
+	word-break: break-word;
+}
 path {
 	transition: d 0.3s ease, stroke 0.3s ease, fill 0.3s ease;
 	transform: translateZ(0);

@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import L from "client/ui/LeafletWrapper";
+import { capitalize } from "client/util";
 import client from "client/client";
 import {
 	default as LocationStore,
 	AREA_UPDATED,
-	FLAG_CACHE_UPDATED
+	FLAG_CACHE_UPDATED,
+	FLAG_SELECTED
 } from "../stores/LocationStore";
 import {
 	default as SettingsStore
@@ -24,16 +26,20 @@ import StateStore from "../stores/StateStore";
 import { Flag, Player } from "../Flag";
 import { publish } from "../Dispatcher";
 import { POI_RADIUS } from "server/constants";
+import { Dialog, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui";
 /**
 * This component contains the dashboard view that the user should see when entering the app as a logged in user.
 * It should a simple map as well as the main game components.
 */
 export default class Dashboard extends React.Component {
 	map;
+	currentFlag;
 	layers = {};
 	state = {
 		view: null,
 		shownFlags: [],
+		showFlagDetails: false,
+		currentMarker: null,
 		zoom: 15,
 		accuracy: 0
 	};
@@ -64,6 +70,7 @@ export default class Dashboard extends React.Component {
 		this.drawArea = ::this.drawArea;
 		this.appendZoomFix = ::this.appendZoomFix;
 		this.removeZoomFix = ::this.removeZoomFix;
+		this.showFlagDialog = ::this.showFlagDialog;
 	}
 	/**
 	* Watches the user coordinates in an interval and sends them to the server. Once the server replies with the corresponding flags, the flags are added to the map.
@@ -158,11 +165,15 @@ export default class Dashboard extends React.Component {
 	* 	An array of {@link Flag} instances that can be drawn on the map
 	*/
 	async createFlags(latitude, longitude) {
+		/* We're using an arrow function anyway, but using `this` will result in a transpilation error… */
 		const [pois] = await client.getPOIs({
 			latitude,
 			longitude
 		});
-		const flags = pois.map(poi => new Flag(poi).specialized);
+		const flags = pois.map(poi => {
+			const flag = new Flag(poi);
+			return flag.specialized;
+		});
 		this.setState({
 			shownFlags: flags
 		});
@@ -295,6 +306,7 @@ export default class Dashboard extends React.Component {
 	componentWillMount() {
 		PermissionStore.on(PERMISSION_CHANGED, this.handlePermissionChanges);
 		LocationStore.on(AREA_UPDATED, this.drawArea);
+		LocationStore.on(FLAG_SELECTED, this.showFlagDialog);
 		if (StateStore.dashboard) {
 			this.state = StateStore.dashboard;
 		}
@@ -305,6 +317,7 @@ export default class Dashboard extends React.Component {
 	componentWillUnmount() {
 		PermissionStore.off(PERMISSION_CHANGED, this.handlePermissionChanges);
 		LocationStore.off(AREA_UPDATED, this.drawArea);
+		LocationStore.off(FLAG_SELECTED, this.showFlagDialog);
 		navigator.geolocation.clearWatch(this.geoLocationWatchID);
 		client.off("drawArea", this.drawArea);
 		this.map.off("zoomstart", this.appendZoomFix);
@@ -385,13 +398,81 @@ export default class Dashboard extends React.Component {
 		}
 	}
 	/**
+	* Sets the current flag and then opens up the flag dialog
+	* @param {Flag} currentFlag
+	* 	The flag whose details the dialog should show
+	*/
+	showFlagDialog(currentFlag) {
+		this.setState({
+			currentFlag,
+			showFlagDetails: true
+		});
+	}
+	/**
+	* Hides the flag dialog
+	*/
+	hideFlagDialog() {
+		this.setState({
+			showFlagDetails: false
+		});
+	}
+	/**
 	* Renders a component with a simple login menu
 	* @return {ReactElement}
 	* 	The React component
 	*/
 	render() {
+		const flag = this.state.currentFlag;
+		const flagAvailable = Boolean(flag);
+		let flagDetails;
+		if (flagAvailable) {
+			const flagDetailsRequested = this.state.showFlagDetails;
+			const title = flagAvailable && flag.name;
+			const { latitude, longitude, id, typeName } = flag;
+			const distance = L.latLng(...this.state.view).distanceTo(L.latLng(latitude, longitude));
+			const { type } = flag.element;
+			flagDetails = (
+				<Dialog title={title} open={flagAvailable && flagDetailsRequested} autoScrollBodyContent={true} onRequestClose={::this.hideFlagDialog}>
+					<Table selectable={false}>
+						<TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+							<TableRow>
+								<TableHeaderColumn>Property</TableHeaderColumn>
+								<TableHeaderColumn>Value</TableHeaderColumn>
+							</TableRow>
+						</TableHeader>
+						<TableBody displayRowCheckbox={false}>
+							<TableRow>
+								<TableRowColumn>Distance</TableRowColumn>
+								<TableRowColumn>{distance.toFixed(2)} m</TableRowColumn>
+							</TableRow>
+							<TableRow>
+								<TableRowColumn>Current owner</TableRowColumn>
+								<TableRowColumn>Nobody</TableRowColumn>
+							</TableRow>
+							<TableRow>
+								<TableRowColumn>GPS Coordinates</TableRowColumn>
+								<TableRowColumn>({latitude}, {longitude})</TableRowColumn>
+							</TableRow>
+							<TableRow>
+								<TableRowColumn>Category</TableRowColumn>
+								<TableRowColumn>{capitalize(typeName)}</TableRowColumn>
+							</TableRow>
+							<TableRow>
+								<TableRowColumn>Type</TableRowColumn>
+								<TableRowColumn>{capitalize(type)}</TableRowColumn>
+							</TableRow>
+							<TableRow>
+								<TableRowColumn>ID</TableRowColumn>
+								<TableRowColumn>{id}</TableRowColumn>
+							</TableRow>
+						</TableBody>
+					</Table>
+				</Dialog>
+			);
+		}
 		return (
 			<div>
+				{flagDetails}
 				<map-container/>
 			</div>
 		);
