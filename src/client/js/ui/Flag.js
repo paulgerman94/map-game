@@ -1,4 +1,8 @@
 import L from "./LeafletWrapper";
+import { publish } from "./Dispatcher";
+import { FLAG_SELECTED } from "./stores/LocationStore";
+/* Leaflet's crappy .bindPopup implementation forces us to use a global here. Sorry, world. */
+window.publish = publish;
 /**
 * This class models a flag on the dashboard map. All flags have a latitude and a longitude; specialized flags (e. g. Restaurant flags) can set an icon and a color property.
 */
@@ -39,6 +43,11 @@ export class Flag {
 		* @property {number} id
 		* 	The flag's id
 		*/
+		/**
+		* @property {string} typeName
+		* 	The flag's type name
+		*/
+		this.typeName = "flag";
 		this.id = element.id;
 		switch (element.type) {
 			case "node": {
@@ -87,13 +96,23 @@ export class Flag {
 	* 	A Leaflet marker with a color and an icon
 	*/
 	get marker() {
-		return L.marker([this.latitude, this.longitude], {
+		if (this.cachedMarker) {
+			return this.cachedMarker;
+		}
+		const marker = L.marker([this.latitude, this.longitude], {
 			icon: L.AwesomeMarkers.icon({
 				icon: this.icon,
 				markerColor: this.color,
 				prefix: "fa"
 			})
-		}).bindPopup(this.name);
+		});
+		this.cachedMarker = marker;
+		marker.on("click", () => {
+			publish(FLAG_SELECTED, {
+				flag: this
+			});
+		});
+		return marker;
 	}
 }
 /**
@@ -110,6 +129,11 @@ export class Restaurant extends Flag {
 	* 	The flag color
 	*/
 	color = "orange";
+	/**
+	* @property {string} typeName
+	* 	The flag's type name
+	*/
+	typeName = "restaurant";
 	/**
 	* Creates a new Restaurant {@link Flag}
 	* @param {object} element
@@ -134,6 +158,11 @@ export class School extends Flag {
 	*/
 	color = "green";
 	/**
+	* @property {string} typeName
+	* 	The flag's type name
+	*/
+	typeName = "school";
+	/**
 	* Creates a new School {@link Flag}
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
@@ -156,6 +185,11 @@ export class Player extends Flag {
 	* 	The flag color
 	*/
 	color = "red";
+	/**
+	* @property {string} typeName
+	* 	The flag's type name
+	*/
+	typeName = "player";
 	/**
 	* Creates a new Restaurant {@link Flag}.
 	* @param {object} element
