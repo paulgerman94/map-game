@@ -24,10 +24,10 @@ self.addEventListener("fetch", e => {
 		console.log("noo");
 	}));
 });
-self.addEventListener("push", () => {
-	self.registration.showNotification("Hi!", {
-		body: "The Message",
-		icon: "images/icon.png",
-		tag: "my-tag"
+self.addEventListener("push", e => {
+	const payload = e.data.json();
+	self.registration.showNotification(payload.subject, {
+		body: payload.body,
+		icon: payload.icon
 	});
 });

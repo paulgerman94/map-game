@@ -3,7 +3,8 @@ import {
 	register as registerUser,
 	login as loginUser,
 	isFree as isDataFree,
-	isCapturable as isFlagCapturable,
+	isCapturable,
+	getFlagInfo,
 	captureFlag,
 	getTeam as getPlayerTeam
 } from "../db";
@@ -188,26 +189,26 @@ export async function isFree({
 	})();
 }
 /**
-* Updates the notification ID of a client
+* Updates the subscription of a client needed for push notifications
 * @param {object} options
 * 	An object
 * @param {object} options.args
-* 	An object containing the notification ID
+* 	An object containing the subscription
 * @param {string} options.client
 * 	The socket that sent the request
 * @param {Message} options.message
 * 	A message object to reply to
 */
-export async function updateNotificationID({
+export async function updateSubscription({
 	args,
 	client,
 	message
 }) {
 	const [, data] = args;
 	const {
-		notificationID
+		subscription
 	} = data;
-	client.properties.notificationID = notificationID;
+	client.properties.subscription = subscription;
 	message.reply({});
 }
 /**
@@ -218,6 +219,8 @@ export async function updateNotificationID({
 * 	An object containing the account name of whoever captures the flag
 * @param {string} options.client
 * 	The socket that sent the request
+* @param {object} options.db
+* 	A `pg-promise` instance of a database connection
 * @param {Message} options.message
 * 	A message object to reply to
 */
@@ -231,43 +234,58 @@ export async function capture({
 	const {
 		id
 	} = data;
+	const { accountName } = client.properties;
 	(async () => {
-		const canCapture = await isFlagCapturable({
+		const flagInfo = await getFlagInfo({
 			db,
 			id
 		});
-		if (canCapture) {
-			log(`${client.properties.accountName} can capture the flag ${id}.`);
+		const isFlagCapturable = await isCapturable({
+			accountName,
+			db,
+			flagInfo
+		});
+		if (isFlagCapturable) {
+			log(`${accountName} can capture the flag ${id}.`);
 			const result = await captureFlag({
+				accountName,
 				db,
-				id,
-				accountName: client.properties.accountName
+				id
 			});
 			if (result) {
-				log(`${client.properties.accountName} has captured the flag ${id}.`);
+				log(`${accountName} has captured the flag ${id}.`);
 				message.reply(result);
+				/* Tell the loser that his flag was stolen */
+				const lastOwnerClient = Array.from(this.clients).find(c => c.properties.accountName === flagInfo.owner);
+				if (lastOwnerClient) {
+					log(`Notifying ${lastOwnerClient.properties.accountName} of his flag loss by ${accountName}…`);
+					this.notifier.notify([lastOwnerClient], {
+						subject: `You've lost a flag`,
+						body: `A flag of yours has been captured by ${accountName}!`
+					});
+				}
 			}
 			else {
-				err(`${client.properties.accountName} failed to capture the flag ${id}.`);
+				err(`${accountName} failed to capture the flag ${id}.`);
 				message.reply(false);
 			}
 		}
 		else {
-			log(`${client.properties.accountName} can't capture the flag ${id}.`);
-			message.reply(canCapture);
+			log(`${accountName} can't capture the flag ${id}.`);
+			message.reply(isFlagCapturable);
 		}
 	})();
 }
 /**
-* Queries the database for the team of a given accoutn name
-/**
-* Updates the notification ID of a client
+* Retrieves the team of a user
 * @param {object} options
 * 	An object
 * @param {object} options.args
-* 	An object containing the account name
+* 	An object containing the account name of whoever's team should be determined
 * @param {string} options.client
 * 	The socket that sent the request
+* @param {object} options.db
+* 	A `pg-promise` instance of a database connection
 * @param {Message} options.message
 * 	A message object to reply to
 */

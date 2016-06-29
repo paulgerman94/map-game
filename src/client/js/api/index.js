@@ -123,19 +123,17 @@ export function logout() {
 * @param {PushSubscription} subscription
 * 	The PushSubscription that determines the client's notification ID
 */
-export function updateNotificationID(subscription) {
-	const { endpoint } = subscription;
-	const notificationID = endpoint.substr(endpoint.lastIndexOf("/") + 1);
-	client.updateNotificationID({
-		notificationID
+export function updateSubscription(subscription) {
+	client.updateSubscription({
+		subscription
 	});
 }
 /**
 * Performs an API call that removes the client's notification ID on the server
 */
-export function removeNotificationID() {
-	client.updateNotificationID({
-		notificationID: null
+export function removeSubscription() {
+	client.updateSubscription({
+		subscription: null
 	});
 }
 /**

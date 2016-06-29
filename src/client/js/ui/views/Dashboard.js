@@ -537,6 +537,7 @@ export default class Dashboard extends React.Component {
 							}
 							catch (e) {
 								/* Capture failed */
+								console.debug(e);
 							}
 						}} disabled={id === undefined || isOwnTeam || hasOwnershipProtection} style={{
 							margin: "0.5rem"

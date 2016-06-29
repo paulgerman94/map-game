@@ -32,7 +32,7 @@ class Client extends ClientCore {
 			/* Try to log in via the session token */
 			await API.login();
 			await API.getTeam(ConnectionStore.user.accountName);
-			this.sendNotificationID();
+			this.sendSubscription();
 		}
 		catch (e) {
 			/* We couldn't log in via the token mechanism */
@@ -56,12 +56,18 @@ class Client extends ClientCore {
 	/**
 	* Asynchronously updates the notification ID for the client on the server
 	*/
-	async sendNotificationID() {
+	async sendSubscription() {
 		const notifications = PermissionStore.get(NOTIFICATIONS);
 		if (notifications.permission === GRANTED && notifications.preference === ENABLED) {
 			const registration = ConnectionStore.serviceWorkerRegistration;
-			const subscription = await registration.pushManager.getSubscription();
-			API.updateNotificationID(subscription);
+			let subscription = await registration.pushManager.getSubscription();
+			/* The subscription may be `null`, especially with regards to cache */
+			if (!subscription) {
+				subscription = await registration.pushManager.subscribe({
+					userVisibleOnly: true
+				});
+			}
+			API.updateSubscription(subscription);
 		}
 	}
 }

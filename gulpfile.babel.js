@@ -276,7 +276,7 @@ gulp.task("watch", async done => {
 		retranspileJS(...args);
 	});
 	/* Retranspile SW JS files and lint them */
-	const serviceWorkerWatcher = gulp.watch(globs.client.sw, watcherOptions, gulp.parallel(
+	gulp.watch(globs.client.sw, watcherOptions, gulp.parallel(
 		"sw",
 		"lint"
 	));
@@ -284,9 +284,6 @@ gulp.task("watch", async done => {
 	gulp.watch("gulpfile.babel.js", watcherOptions, gulp.parallel(
 		"lint"
 	));
-	serviceWorkerWatcher.on("all", (...args) => {
-		retranspileJS(...args);
-	});
 	/* Re-split the config file */
 	const configWatcher = gulp.watch("config.json", watcherOptions);
 	configWatcher.on("change", () => {

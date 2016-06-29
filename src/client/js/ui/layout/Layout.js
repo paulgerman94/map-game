@@ -116,13 +116,13 @@ export default class Layout extends Component {
 		const subscription = await registration.pushManager.subscribe({
 			userVisibleOnly: true
 		});
-		API.updateNotificationID(subscription);
+		API.updateSubscription(subscription);
 	}
 	/**
 	* Disables push notifications for the user on the server
 	*/
 	async disablePushNotifications() {
-		API.removeNotificationID();
+		API.removeSubscription();
 	}
 	/**
 	* Accepts a notification dialog by configuring the settings to whatever the user chooses
@@ -184,6 +184,7 @@ export default class Layout extends Component {
 			this.setState({
 				isLoggedIn: ConnectionStore.isLoggedIn
 			});
+			window.document.title = `Map game | ${ConnectionStore.user.accountName}`;
 		});
 		ConnectionStore.on(LOGOUT, () => {
 			this.setState({

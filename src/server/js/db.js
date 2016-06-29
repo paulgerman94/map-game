@@ -5,7 +5,7 @@ import { log, err } from "./util";
 import { getSQL } from "./fs";
 import { checkPassword, hash } from "./crypto";
 import { km } from "./units";
-import { OWNERSHIP_PROTECTION } from "./constants";
+import { OWNERSHIP_PROTECTION_TIME } from "./constants";
 import POI from "./types/POI";
 export const UNIQUENESS_VIOLATION = "23505";
 const NO_DATABASE = "3D000";
@@ -355,7 +355,8 @@ export async function retrievePOIs({
 }
 /**
 * Determines whether or not a flag is capturable right now.
-* Currently, a flag is only capturable if it is either free or if it has been captured for at least `OWNERSHIP_PROTECTION`.
+* Currently, a flag is only capturable if it is either free or if it has been captured for at least `OWNERSHIP_PROTECTION_TIME`.
+* Also, the capturer must be of the opposite team.
 * @param {object} options
 * 	An option object
 * @param {object} options.db
@@ -367,34 +368,75 @@ export async function retrievePOIs({
 */
 export async function isCapturable({
 	db,
+	id,
+	flagInfo,
+	accountName
+} = {}) {
+	try {
+		const info = flagInfo || await getFlagInfo({
+			db,
+			id
+		});
+		if (info.captured_at === null) {
+			/* Flag has never been captured before */
+			return true;
+		}
+		else {
+			const capturedSince = new Date() - new Date(info.captured_at);
+			if (capturedSince > OWNERSHIP_PROTECTION_TIME) {
+				/* Ownership protection has expired */
+				const newTeam = await getTeam({
+					db,
+					accountName
+				});
+				const oldTeam = await getTeam({
+					db,
+					accountName: info.owner
+				});
+				if (newTeam !== oldTeam) {
+					/* Allow the flag to be captured */
+					return true;
+				}
+				else {
+					/* The same team can't steal from each other */
+					return false;
+				}
+			}
+			else {
+				/* Ownership protection is still active */
+				return false;
+			}
+		}
+	}
+	catch (e) {
+		err(`Couldn't determine if flag ${id} is capturable.`, e);
+		return null;
+	}
+}
+/**
+* Retrieves an object with some ownership information about a flag
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {string} options.id
+* 	The OSM id of the flag to query
+* @return {Promise}
+* 	A {@link Promise} that resolves to an object that contains ownership information about a flag
+*/
+export async function getFlagInfo({
+	db,
 	id
 } = {}) {
 	try {
-		const result = await db.query(`
-		SELECT "pois".captured_at
+		const result = await db.one(`
+		SELECT "pois".captured_at, owner
 		FROM pois
 		WHERE (poi).id = $[id];
 		`, {
 			id
 		});
-		if (result.length) {
-			const [object] = result;
-			if (object.captured_at === null) {
-				/* Flag has never been captured before */
-				return true;
-			}
-			const capturedSince = new Date() - new Date(object.captured_at);
-			if (capturedSince > OWNERSHIP_PROTECTION) {
-				/* Ownership protection has expired */
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
-		else {
-			return true;
-		}
+		return result;
 	}
 	catch (e) {
 		err(e);

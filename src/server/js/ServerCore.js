@@ -54,7 +54,7 @@ export default class ServerCore extends WS {
 		socket
 	}) {
 		if (API[instruction]) {
-			API[instruction]({
+			this::API[instruction]({
 				args,
 				db: this.db,
 				client: socket,
