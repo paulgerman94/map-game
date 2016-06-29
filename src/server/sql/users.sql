@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS users (
 	"display_name" TEXT NOT NULL UNIQUE,
 	"email" TEXT NOT NULL UNIQUE,
 	"hash" TEXT NOT NULL,
-	"permissions" INTEGER NOT NULL
+	"team" team NOT NULL
 );

@@ -135,4 +135,16 @@ export function removeNotificationID() {
 		notificationID: null
 	});
 }
+/**
+* Performs an API call that captures a flag
+* @param {Flag} flag
+* 	The flag to conquer
+*/
+export function capture(flag) {
+	console.log(flag);
+	const id = flag.id;
+	client.capture({
+		id
+	});
+}
 export default from "./getPOIs";

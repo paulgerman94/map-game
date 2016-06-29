@@ -9,7 +9,7 @@ const guestFunctions = {
 	register: API.register
 };
 const timeouts = {
-	drawArea: 5 * s
+	drawArea: 0.5 * s
 };
 /**
 * This class is the protocol part that the server uses to communicate with.
@@ -69,7 +69,6 @@ export default class ServerCore extends WS {
 	* 	The RPCClient instance that has connected to the server
 	*/
 	onConnection(socket) {
-		log("A client has connected.");
 		socket.properties = {};
 		const client = new Proxy(socket, {
 			get: (target, property) => {
@@ -100,9 +99,10 @@ export default class ServerCore extends WS {
 				target[property] = value;
 			}
 		});
+		log(`A client has connected.`);
 		this.emit("connected", client);
 		socket.on("close", () => {
-			log("A client has disconnected.");
+			log(`A client has disconnected.`);
 			this.emit("disconnected", client);
 		});
 		socket.on("message", async msg => {
@@ -117,6 +117,9 @@ export default class ServerCore extends WS {
 				const isValid = await checkToken(token);
 				if (isValid) {
 					if (instruction === "login") {
+						/* Move this to API? Redundant. */
+						client.properties.token = token;
+						client.properties.accountName = isValid.accountName;
 						message.reply(token);
 					}
 					else {

@@ -9,6 +9,21 @@ export const ms = 1;
 */
 export const s = 1000 * ms;
 /**
+* The unit used to denote minutes
+* @type {number}
+*/
+export const min = 60 * s;
+/**
+* The unit used to denote hours
+* @type {number}
+*/
+export const h = 60 * min;
+/**
+* The unit used to denote days
+* @type {number}
+*/
+export const d = 24 * h;
+/**
 * The unit used to denote meters
 * @type {number}
 */

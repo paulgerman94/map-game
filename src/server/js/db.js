@@ -4,7 +4,7 @@ import pgp from "pg-promise";
 import { log, err } from "./util";
 import { getSQL } from "./fs";
 import { checkPassword, hash } from "./crypto";
-import { km } from "./units";
+import { km, h } from "./units";
 import POI from "./types/POI";
 export const UNIQUENESS_VIOLATION = "23505";
 const NO_DATABASE = "3D000";
@@ -117,8 +117,6 @@ export async function connect(retry = 0) {
 * 	The user's display name
 * @param {string} user.password
 * 	The user's password
-* @param {number} user.permissions
-* 	The user's permission mask
 * @return {Promise}
 * 	A {@link Promise} that resolves to whether or not the registration was successful
 */
@@ -127,8 +125,7 @@ export async function register({
 	accountName,
 	email,
 	displayName,
-	password,
-	permissions = 0x100
+	password
 } = {}) {
 	try {
 		await db.query(`
@@ -137,20 +134,20 @@ export async function register({
 			email,
 			hash,
 			display_name,
-			permissions
+			team
 		)
 		VALUES (
 			$[accountName],
 			$[email],
 			$[hash],
 			$[displayName],
-			$[permissions]
+			$[team]
 		)`, {
 			accountName,
 			email,
 			displayName,
-			permissions,
-			hash: await hash(password)
+			hash: await hash(password),
+			team: Math.random() > 0.5 ? "red" : "blue"
 		});
 		return true;
 	}
@@ -347,6 +344,60 @@ export async function retrievePOIs({
 		else {
 			return [];
 		}
+	}
+	catch (e) {
+		err(e);
+		return null;
+	}
+}
+export async function isCapturable({
+	db,
+	id
+} = {}) {
+	try {
+		const result = await db.query(`
+		SELECT "pois".captured_at
+		FROM pois
+		WHERE (poi).id = $[id];
+		`, {
+			id
+		});
+		if (result.length) {
+			const [object] = result;
+			const capturedSince = new Date() - new Date(object.captured_at);
+			if (capturedSince > 24 * h) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
+	}
+	catch (e) {
+		err(e);
+		return null;
+	}
+}
+export async function captureFlag({
+	db,
+	id,
+	accountName
+} = {}) {
+	try {
+		await db.query(`
+		UPDATE pois
+		SET
+			captured_at = CURRENT_TIMESTAMP,
+			owner = $[accountName]
+		WHERE (poi).id = $[id];
+		`, {
+			id,
+			accountName
+		});
+		return true;
 	}
 	catch (e) {
 		err(e);

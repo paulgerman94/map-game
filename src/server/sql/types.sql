@@ -1,11 +1,17 @@
 DROP TYPE IF EXISTS element;
 DROP TYPE IF EXISTS poi;
+DROP TYPE IF EXISTS team;
 /* An element is supposed to be an OSM primitive */
 CREATE TYPE element AS ENUM (
 	'node',
 	'way',
 	'area',
 	'relation'
+);
+/* There are two teams in the game */
+CREATE TYPE team AS ENUM (
+	'red',
+	'blue'
 );
 /*
 * POIs are uniquely defined by their ID and their element type.

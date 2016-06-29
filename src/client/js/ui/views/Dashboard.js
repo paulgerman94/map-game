@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import L from "client/ui/LeafletWrapper";
-import { capitalize } from "client/util";
 import client from "client/client";
+import { capitalize } from "client/util";
+import { capture } from "client/api/index";
 import {
 	default as LocationStore,
 	AREA_UPDATED,
@@ -26,7 +27,16 @@ import StateStore from "../stores/StateStore";
 import { Flag, Player } from "../Flag";
 import { publish } from "../Dispatcher";
 import { POI_RADIUS } from "server/constants";
-import { Dialog, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui";
+import {
+	Dialog,
+	Table,
+	TableBody,
+	TableHeader,
+	TableHeaderColumn,
+	TableRow,
+	TableRowColumn,
+	RaisedButton
+} from "material-ui";
 /**
 * This component contains the dashboard view that the user should see when entering the app as a logged in user.
 * It should a simple map as well as the main game components.
@@ -432,7 +442,18 @@ export default class Dashboard extends React.Component {
 			const distance = L.latLng(...this.state.view).distanceTo(L.latLng(latitude, longitude));
 			const { type } = flag.element;
 			flagDetails = (
-				<Dialog title={title} open={flagAvailable && flagDetailsRequested} autoScrollBodyContent={true} onRequestClose={::this.hideFlagDialog}>
+				<Dialog title={title} open={flagAvailable && flagDetailsRequested} autoScrollBodyContent={true} onRequestClose={::this.hideFlagDialog} actions={
+					<div>
+						<RaisedButton label="Cancel" onClick={::this.hideFlagDialog} style={{
+							margin: "0.5rem"
+						}}/>
+						<RaisedButton label="Capture" primary onClick={() => {
+							capture(flag);
+						}} disabled={false} style={{
+							margin: "0.5rem"
+						}}/>
+					</div>
+				}>
 					<Table selectable={false}>
 						<TableHeader adjustForCheckbox={false} displaySelectAll={false}>
 							<TableRow>

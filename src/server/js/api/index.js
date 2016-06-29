@@ -2,7 +2,9 @@ import Point from "../Point";
 import {
 	register as registerUser,
 	login as loginUser,
-	isFree as isDataFree
+	isFree as isDataFree,
+	isCapturable as isFlagCapturable,
+	captureFlag
 } from "../db";
 import { log, err } from "../util";
 import { createToken } from "../crypto";
@@ -115,6 +117,7 @@ export async function register({
 */
 export async function login({
 	args,
+	client,
 	db,
 	message
 }) {
@@ -139,6 +142,8 @@ export async function login({
 			const token = await createToken({
 				accountName
 			});
+			client.properties.token = token;
+			client.properties.accountName = accountName;
 			message.reply(token);
 		}
 		else {
@@ -203,4 +208,41 @@ export async function updateNotificationID({
 	} = data;
 	client.properties.notificationID = notificationID;
 	message.reply({});
+}
+export async function capture({
+	args,
+	client,
+	db,
+	message
+}) {
+	const [, data] = args;
+	const {
+		id
+	} = data;
+	(async () => {
+		const canCapture = await isFlagCapturable({
+			db,
+			id
+		});
+		if (canCapture) {
+			log(`${client.properties.accountName} can capture the flag ${id}.`);
+			const result = await captureFlag({
+				db,
+				id,
+				accountName: client.properties.accountName
+			});
+			if (result) {
+				log(`${client.properties.accountName} has capture the flag ${id}.`);
+				message.reply(result);
+			}
+			else {
+				err(`${client.properties.accountName} failed to capture the flag ${id}.`);
+				message.reply(false);
+			}
+		}
+		else {
+			log(`${client.properties.accountName} can't capture the flag ${id}.`);
+			message.reply(canCapture);
+		}
+	})();
 }

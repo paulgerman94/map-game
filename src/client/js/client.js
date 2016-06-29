@@ -27,7 +27,7 @@ class Client extends ClientCore {
 	* It will perform tasks that are necessary after a successful connection establishment (i. e. updating the notification ID).
 	*/
 	async onOpen() {
-		console.log("Connection established.");
+		console.debug("Connection established.");
 		try {
 			/* Try to log in via the session token */
 			await API.login();
@@ -47,10 +47,10 @@ class Client extends ClientCore {
 	* 	The message that was sent over the {@link RPCClient}
 	*/
 	async onDrawArea(message) {
+		message.reply();
 		const { payload } = message;
 		const [centers] = payload.args;
 		LocationStore.updateArea(centers);
-		message.reply();
 	}
 	/**
 	* Asynchronously updates the notification ID for the client on the server

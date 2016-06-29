@@ -135,7 +135,7 @@ gulp.task("run-server", done => {
 // 		env: {
 // 			NODE_ENV: "development"
 // 		},
-// 		watch: ["dist/server", "config.js"]
+		// watch: ["dist/server", "config.js"]
 		ignore: [".tmp", "img", "packages", ".babelrc", "*.kate-swp", "gulpfile.*", "*.html", "package.json", "src", "dist/elements", "dist/client"]
 	});
 	done();
