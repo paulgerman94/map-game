@@ -159,12 +159,12 @@ export async function capture(flag) {
 * 	A promise that resolves to the team of accountName
 */
 export async function getTeam(accountName) {
-	const team = await client.getTeam({
+	const [team] = await client.getTeam({
 		accountName
 	});
 	publish(TEAM_RECEIVED, {
 		team
-	})
+	});
 	return team;
 }
 export default from "./getPOIs";

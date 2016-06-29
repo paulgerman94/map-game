@@ -1,8 +1,6 @@
 import L from "./LeafletWrapper";
 import { publish } from "./Dispatcher";
 import { FLAG_SELECTED } from "./stores/LocationStore";
-/* Leaflet's crappy .bindPopup implementation forces us to use a global here. Sorry, world. */
-window.publish = publish;
 /**
 * This class models a flag on the dashboard map. All flags have a latitude and a longitude; specialized flags (e. g. Restaurant flags) can set an icon and a color property.
 */
@@ -21,6 +19,8 @@ export class Flag {
 	* Creates a new {@link Flag} sub-instance
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
+	* @param {object} info
+	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
 	*/
 	constructor(element, info = {}) {
 		this.element = element;
@@ -134,6 +134,8 @@ export class Restaurant extends Flag {
 	* Creates a new Restaurant {@link Flag}
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
+	* @param {object} info
+	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
 	*/
 	constructor(element, info) {
 		super(element, info);
@@ -157,6 +159,8 @@ export class School extends Flag {
 	* Creates a new School {@link Flag}
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
+	* @param {object} info
+	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
 	*/
 	constructor(element, info) {
 		super(element, info);
@@ -180,6 +184,8 @@ export class Player extends Flag {
 	* Creates a new Restaurant {@link Flag}.
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
+	* @param {object} info
+	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
 	*/
 	constructor(element, info) {
 		super(element, info);

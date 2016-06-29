@@ -4,10 +4,8 @@ import emailRegEx from "email-regex";
 import { default as React, Component } from "react";
 import { TextField, RaisedButton, CircularProgress } from "material-ui";
 import { browserHistory } from "react-router";
-import { publish } from "../Dispatcher";
 import {
 	default as ConnectionStore,
-	LOGIN,
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED
 } from "../stores/ConnectionStore";

@@ -352,6 +352,18 @@ export async function retrievePOIs({
 		return null;
 	}
 }
+/**
+* Determines whether or not a flag is capturable right now.
+* Currently, a flag is only capturable if it is either free or if it has been captured for at least 24 hours.
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {string} options.id
+* 	The OSM id of the flag to query
+* @return {Promise}
+* 	A {@link Promise} that resolves to whether or not the flag is capturable right now
+*/
 export async function isCapturable({
 	db,
 	id
@@ -383,6 +395,19 @@ export async function isCapturable({
 		return null;
 	}
 }
+/**
+* Registers that a users has captured a flag
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {string} options.id
+* 	The OSM id of the flag to capture
+* @param {string} options.accountName
+* 	The account name whose team to look up
+* @return {Promise}
+* 	A {@link Promise} that resolves to whether or not the capture was successful
+*/
 export async function captureFlag({
 	db,
 	id,
@@ -406,6 +431,17 @@ export async function captureFlag({
 		return null;
 	}
 }
+/**
+* Retrieves the team for a given account name
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {string} options.accountName
+* 	The account name whose team to look up
+* @return {Promise}
+* 	A {@link Promise} that resolves to a the team name
+*/
 export async function getTeam({
 	db,
 	accountName

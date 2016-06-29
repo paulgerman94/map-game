@@ -316,6 +316,9 @@ export default class Dashboard extends React.Component {
 			this.layers.area.addLayer(areaCircle);
 		}
 	}
+	/**
+	* Redraws the flags from cache and updates the dialog
+	*/
 	update() {
 		this.drawFlags(LocationStore.flags);
 		this.setState({});
@@ -438,6 +441,13 @@ export default class Dashboard extends React.Component {
 			showFlagDetails: false
 		});
 	}
+	/**
+	* Updates the flaw owner and toggles a redraw
+	* @param {Flag} flag
+	* 	The old flag to update
+	* @param {string} owner
+	* 	The account name of whoever owns the flag now
+	*/
 	updateFlagOwner(flag, owner) {
 		flag.info.owner = owner;
 		flag.info.ownedSince = new Date();
@@ -450,7 +460,6 @@ export default class Dashboard extends React.Component {
 		publish(FLAG_CACHE_UPDATED, {
 			flags: [newFlag]
 		});
-
 	}
 	/**
 	* Renders a component with a simple login menu

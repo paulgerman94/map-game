@@ -210,6 +210,17 @@ export async function updateNotificationID({
 	client.properties.notificationID = notificationID;
 	message.reply({});
 }
+/**
+* Captures a flag
+* @param {object} options
+* 	An object
+* @param {object} options.args
+* 	An object containing the account name of whoever captures the flag
+* @param {string} options.client
+* 	The socket that sent the request
+* @param {Message} options.message
+* 	A message object to reply to
+*/
 export async function capture({
 	args,
 	client,
@@ -247,6 +258,19 @@ export async function capture({
 		}
 	})();
 }
+/**
+* Queries the database for the team of a given accoutn name
+/**
+* Updates the notification ID of a client
+* @param {object} options
+* 	An object
+* @param {object} options.args
+* 	An object containing the account name
+* @param {string} options.client
+* 	The socket that sent the request
+* @param {Message} options.message
+* 	A message object to reply to
+*/
 export async function getTeam({
 	args,
 	client,
