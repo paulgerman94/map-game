@@ -238,7 +238,6 @@
     "fingerprintjs2": "^1.4.0",
     "node-fetch": "^1.5.3",
     "passwd-user": "^2.1.0",
-    "web-push": "^2.1.1",
     "web-push-encryption": "^2.0.0"
   },
   "ava": {
