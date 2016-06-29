@@ -6,7 +6,8 @@ import {
 import {
 	LOGIN,
 	LOGOUT,
-	LOGIN_FAILED
+	LOGIN_FAILED,
+	TEAM_RECEIVED
 } from "client/ui/stores/ConnectionStore";
 import { publish } from "client/ui/Dispatcher";
 /**
@@ -149,5 +150,21 @@ export async function capture(flag) {
 	return await client.capture({
 		id
 	});
+}
+/**
+* Performs an API call that gets the team
+* @param {string} accountName
+* 	The name of the account whose team to retrieve
+* @return {Promise}
+* 	A promise that resolves to the team of accountName
+*/
+export async function getTeam(accountName) {
+	const team = await client.getTeam({
+		accountName
+	});
+	publish(TEAM_RECEIVED, {
+		team
+	})
+	return team;
 }
 export default from "./getPOIs";

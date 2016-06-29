@@ -31,6 +31,7 @@ class Client extends ClientCore {
 		try {
 			/* Try to log in via the session token */
 			await API.login();
+			await API.getTeam(ConnectionStore.user.accountName);
 			this.sendNotificationID();
 		}
 		catch (e) {

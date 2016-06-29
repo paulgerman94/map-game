@@ -185,7 +185,8 @@ export default class Dashboard extends React.Component {
 		const flags = pois.map(poi => {
 			const flag = new Flag(poi.metadata, {
 				owner: poi.owner,
-				ownedSince: poi.captured_at
+				ownedSince: poi.captured_at,
+				team: poi.team
 			});
 			return flag.specialized;
 		});
@@ -316,6 +317,7 @@ export default class Dashboard extends React.Component {
 		}
 	}
 	update() {
+		this.drawFlags(LocationStore.flags);
 		this.setState({});
 	}
 	/**
@@ -439,6 +441,7 @@ export default class Dashboard extends React.Component {
 	updateFlagOwner(flag, owner) {
 		flag.info.owner = owner;
 		flag.info.ownedSince = new Date();
+		flag.info.team = ConnectionStore.user.team;
 		/* Specialize the flag */
 		const newFlag = new Flag(flag.element, flag.info).specialized;
 		this.setState({
@@ -447,6 +450,7 @@ export default class Dashboard extends React.Component {
 		publish(FLAG_CACHE_UPDATED, {
 			flags: [newFlag]
 		});
+
 	}
 	/**
 	* Renders a component with a simple login menu

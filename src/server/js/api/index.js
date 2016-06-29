@@ -4,7 +4,8 @@ import {
 	login as loginUser,
 	isFree as isDataFree,
 	isCapturable as isFlagCapturable,
-	captureFlag
+	captureFlag,
+	getTeam as getPlayerTeam
 } from "../db";
 import { log, err } from "../util";
 import { createToken } from "../crypto";
@@ -244,5 +245,24 @@ export async function capture({
 			log(`${client.properties.accountName} can't capture the flag ${id}.`);
 			message.reply(canCapture);
 		}
+	})();
+}
+export async function getTeam({
+	args,
+	client,
+	db,
+	message
+}) {
+	const [, data] = args;
+	const {
+		accountName
+	} = data;
+	(async () => {
+		const team = await getPlayerTeam({
+			db,
+			accountName
+		});
+		client.properties.team = team;
+		message.reply(team);
 	})();
 }

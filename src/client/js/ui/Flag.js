@@ -16,7 +16,7 @@ export class Flag {
 	* @property {string} color
 	* 	The flag color
 	*/
-	color = "blue";
+	color = "darkpurple";
 	/**
 	* Creates a new {@link Flag} sub-instance
 	* @param {object} element
@@ -25,6 +25,7 @@ export class Flag {
 	constructor(element, info = {}) {
 		this.element = element;
 		this.info = info;
+		this.color = info.team || "purple";
 		this.owner = info.owner || "Nobody";
 		this.ownedSince = info.ownedSince;
 		/**
@@ -125,11 +126,6 @@ export class Restaurant extends Flag {
 	*/
 	icon = "cutlery";
 	/**
-	* @property {string} color
-	* 	The flag color
-	*/
-	color = "orange";
-	/**
 	* @property {string} typeName
 	* 	The flag's type name
 	*/
@@ -153,11 +149,6 @@ export class School extends Flag {
 	*/
 	icon = "university";
 	/**
-	* @property {string} color
-	* 	The flag color
-	*/
-	color = "green";
-	/**
 	* @property {string} typeName
 	* 	The flag's type name
 	*/
@@ -180,11 +171,6 @@ export class Player extends Flag {
 	* 	The flag icon
 	*/
 	icon = "male";
-	/**
-	* @property {string} color
-	* 	The flag color
-	*/
-	color = "red";
 	/**
 	* @property {string} typeName
 	* 	The flag's type name

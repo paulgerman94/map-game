@@ -26,6 +26,10 @@ export const CONNECTION_ESTABLISHED = Symbol("Connection established");
 */
 export const SERVICE_WORKER_REGISTERED = Symbol("Service worker registered");
 /**
+* A symbol that denotes that the player's team has been received
+*/
+export const TEAM_RECEIVED = Symbol("Team received");
+/**
 * This class is a flux store that keeps a global view of the connection state.
 * It encompasses information about when the user registers, logs in, etc.
 */
@@ -98,6 +102,14 @@ class ConnectionStore extends EventEmitter {
 			}
 			case SERVICE_WORKER_REGISTERED: {
 				this.serviceWorkerRegistration = action.registration;
+				break;
+			}
+			case TEAM_RECEIVED: {
+				const user = cache.load("user");
+				user.team = action.team;
+				this.user = user;
+				cache.save("user", user);
+				this.emit(action.type, this.user);
 				break;
 			}
 			default: {

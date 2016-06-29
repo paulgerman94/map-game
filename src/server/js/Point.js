@@ -207,7 +207,6 @@ export default class Point {
 	async closest(amenities = [], radius) {
 		try {
 			const locationPOIs = await this.checkLocation(radius);
-			// console.log(locationPOIs)
 			if (locationPOIs) {
 				// log("Found known location.");
 				const pois = await retrievePOIs({

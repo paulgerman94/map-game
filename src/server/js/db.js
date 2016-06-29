@@ -333,9 +333,11 @@ export async function retrievePOIs({
 	try {
 		if (pois.length) {
 			const result = await db.query(`
-			SELECT metadata, owner, captured_at
-			FROM "pois"
-			WHERE "poi" = ANY($[pois]::poi[])
+			SELECT metadata, owner, captured_at, team
+			FROM "pois" p
+			LEFT JOIN users u
+			ON p.owner = u.account_name
+			WHERE "poi" = ANY($[pois]::poi[]);
 			`, {
 				pois
 			});
@@ -398,6 +400,25 @@ export async function captureFlag({
 			accountName
 		});
 		return true;
+	}
+	catch (e) {
+		err(e);
+		return null;
+	}
+}
+export async function getTeam({
+	db,
+	accountName
+} = {}) {
+	try {
+		const result = await db.one(`
+		SELECT team
+		FROM users
+		WHERE account_name = $[accountName];
+		`, {
+			accountName
+		});
+		return result.team;
 	}
 	catch (e) {
 		err(e);
