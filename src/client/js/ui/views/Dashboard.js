@@ -38,6 +38,7 @@ import {
 	TableRowColumn,
 	RaisedButton
 } from "material-ui";
+import { ms } from "server/units";
 /**
 * This component contains the dashboard view that the user should see when entering the app as a logged in user.
 * It should a simple map as well as the main game components.
@@ -495,8 +496,13 @@ export default class Dashboard extends React.Component {
 						}}/>
 						<RaisedButton label="Capture" primary onClick={async () => {
 							try {
+								/* Capture the flag */
 								await capture(flag);
+								/* Update view if successful */
 								::this.updateFlagOwner(flag, ConnectionStore.user.accountName);
+								setTimeout(() => {
+									this.hideFlagDialog();
+								}, 600 * ms);
 							}
 							catch (e) {
 								/* Capture failed */

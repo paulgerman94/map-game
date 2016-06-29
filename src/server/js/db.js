@@ -457,7 +457,7 @@ export async function getTeam({
 		return result.team;
 	}
 	catch (e) {
-		err(e);
+		err(`Couldn't retrieve team for account "${accountName}".`);
 		return null;
 	}
 }

@@ -2,6 +2,7 @@ import WS from "ws-promise-server";
 import { log, err } from "./util";
 import { checkToken } from "./crypto";
 import { s } from "./units";
+import { isFree } from "./db";
 import * as API from "./api/index";
 const guestFunctions = {
 	isFree: API.isFree,
@@ -117,10 +118,20 @@ export default class ServerCore extends WS {
 				const isValid = await checkToken(token);
 				if (isValid) {
 					if (instruction === "login") {
-						/* Move this to API? Redundant. */
-						client.properties.token = token;
-						client.properties.accountName = isValid.accountName;
-						message.reply(token);
+						/* Move this to API? Redundant. A login via the token mechanism should work only if the user really exists */
+						const isUsernameAvailable = (await isFree({
+							db: this.db,
+							accountName: isValid.accountName
+						})).success;
+						if (!isUsernameAvailable) {
+							/* The user is in the database; token login is successful */
+							client.properties.token = token;
+							client.properties.accountName = isValid.accountName;
+							message.reply(token);
+						}
+						else {
+							message.reply(false);
+						}
 					}
 					else {
 						/* If this is not a `login` instruction, run it */

@@ -89,10 +89,10 @@ export async function register({
 			password
 		});
 		if (isSuccessful) {
-			log("Successfully registered", user);
+			log(`Successfully registered "${user.accountName}".`);
 		}
 		else {
-			log("Failed to register", user);
+			log(`Failed to register "${user.accountName}".`);
 		}
 		message.reply(isSuccessful);
 	})();
