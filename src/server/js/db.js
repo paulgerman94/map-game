@@ -379,8 +379,13 @@ export async function isCapturable({
 		});
 		if (result.length) {
 			const [object] = result;
+			if (object.captured_at === null) {
+				/* Flag has never been captured before */
+				return true;
+			}
 			const capturedSince = new Date() - new Date(object.captured_at);
 			if (capturedSince > OWNERSHIP_PROTECTION) {
+				/* Ownership protection has expired */
 				return true;
 			}
 			else {
