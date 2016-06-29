@@ -84,7 +84,8 @@ export default class Login extends React.Component {
 	*/
 	assumeBadCredentials() {
 		this.setState({
-			errorText: "Login failed. Please check your credentials."
+			errorText: "Login failed. Please check your credentials.",
+			isLoggingIn: false
 		});
 	}
 	/**
