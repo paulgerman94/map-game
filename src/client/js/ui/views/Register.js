@@ -11,7 +11,7 @@ import {
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED
 } from "../stores/ConnectionStore";
-import { ROUTE as REGISTER_ROUTE } from "../views/Register";
+import { ROUTE as HOME_ROUTE } from "../views/Home";
 const emailChecker = emailRegEx({
 	exact: true
 });
@@ -254,9 +254,6 @@ export default class Register extends Component {
 					email,
 					password: password[0]
 				});
-				publish(LOGIN, {
-					accountName
-				});
 				isRegistrationSuccessful = true;
 			}
 			catch (e) {
@@ -267,7 +264,7 @@ export default class Register extends Component {
 					isRegistering: false
 				});
 				if (isRegistrationSuccessful) {
-					browserHistory.push(REGISTER_ROUTE);
+					browserHistory.push(HOME_ROUTE);
 				}
 			}
 		}
