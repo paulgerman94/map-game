@@ -183,17 +183,61 @@ export default class Point {
 			out center;
 		`);
 		const cleanCollection = collection.elements.filter(element => element.tags.name);
+		const pois = cleanCollection.map(element => new POI(element.id, element.type, element));
 		/* Cache the results in the database */
 		await addPoint({
 			db: this.db,
 			latitude: this.latitude,
 			longitude: this.longitude,
 			radius,
-			pois: cleanCollection.map(element => new POI(element.id, element.type, element))
+			pois
 		});
-		return cleanCollection.map(x => ({
-			metadata: x
-		}));
+		/* Some of the POIs might already be in the database; if so, they might have an owner. Fetch! */
+		return await retrievePOIs({
+			db: this.db,
+			pois
+		});
+	}
+	/**
+	* Checks whether or not the a list of POIs is contained around a radius
+	* @param {Array.<object>} pois
+	* 	An array of POIs whose containment to check
+	* @param {number} radius
+	* 	The radius of containment
+	* @return {Array.<object>}
+	* 	A filtered array of POIs that are contained within a radius of `radius`
+	*/
+	checkContainment(pois, radius) {
+		/* Only the inner POIs will be contained in the player's POI radius */
+		const contained = pois.map(poi => poi.metadata).filter(metadata => {
+			let point = null;
+			switch (metadata.type) {
+				default:
+				case "node": {
+					point = new Point({
+						latitude: metadata.lat,
+						longitude: metadata.lon
+					});
+					break;
+				}
+				case "way": {
+					point = new Point({
+						latitude: metadata.center.lat,
+						longitude: metadata.center.lon
+					});
+					break;
+				}
+				case "area": {
+					/* TODO: Where to map areas? */
+					point = new Point({
+						latitude: metadata.center.lat,
+						longitude: metadata.center.lon
+					});
+				}
+			}
+			return point.measureDistance(this) <= radius;
+		});
+		return pois.filter(poi => contained.includes(poi.metadata));
 	}
 	/**
 	* Queries an Overpass server for nearby POI seeds
@@ -208,45 +252,17 @@ export default class Point {
 		try {
 			const locationPOIs = await this.checkLocation(radius);
 			if (locationPOIs) {
-				// log("Found known location.");
 				const pois = await retrievePOIs({
 					db: this.db,
 					pois: locationPOIs
 				});
-				/* Only the inner POIs will be contained in the player's POI radius */
-				const contained = pois.map(poi => poi.metadata).filter(metadata => {
-					let point = null;
-					switch (metadata.type) {
-						default:
-						case "node": {
-							point = new Point({
-								latitude: metadata.lat,
-								longitude: metadata.lon
-							});
-							break;
-						}
-						case "way": {
-							point = new Point({
-								latitude: metadata.center.lat,
-								longitude: metadata.center.lon
-							});
-							break;
-						}
-						case "area": {
-							/* TODO: Where to map areas? */
-							point = new Point({
-								latitude: metadata.center.lat,
-								longitude: metadata.center.lon
-							});
-						}
-					}
-					return point.measureDistance(this) <= radius;
-				});
-				return pois.filter(poi => contained.includes(poi.metadata));
+				return this.checkContainment(pois, radius);
 			}
 			else {
 				log("Found new location.");
-				return await this.generatePOIs(amenities, radius);
+				/* Overpass's `around` filter doesn't respect `out center` coordinates; check containment */
+				const pois = await this.generatePOIs(amenities, radius);
+				return this.checkContainment(pois, radius);
 			}
 		}
 		catch (e) {
