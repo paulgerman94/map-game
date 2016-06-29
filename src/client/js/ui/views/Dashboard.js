@@ -4,6 +4,7 @@ import L from "client/ui/LeafletWrapper";
 import client from "client/client";
 import { capitalize } from "client/util";
 import { capture } from "client/api/index";
+import ConnectionStore from "../stores/ConnectionStore";
 import {
 	default as LocationStore,
 	AREA_UPDATED,
@@ -81,6 +82,7 @@ export default class Dashboard extends React.Component {
 		this.appendZoomFix = ::this.appendZoomFix;
 		this.removeZoomFix = ::this.removeZoomFix;
 		this.showFlagDialog = ::this.showFlagDialog;
+		this.update = ::this.update;
 	}
 	/**
 	* Watches the user coordinates in an interval and sends them to the server. Once the server replies with the corresponding flags, the flags are added to the map.
@@ -181,7 +183,10 @@ export default class Dashboard extends React.Component {
 			longitude
 		});
 		const flags = pois.map(poi => {
-			const flag = new Flag(poi);
+			const flag = new Flag(poi.metadata, {
+				owner: poi.owner,
+				ownedSince: poi.captured_at
+			});
 			return flag.specialized;
 		});
 		this.setState({
@@ -310,6 +315,9 @@ export default class Dashboard extends React.Component {
 			this.layers.area.addLayer(areaCircle);
 		}
 	}
+	update() {
+		this.setState({});
+	}
 	/**
 	* Sets up all event listeners
 	*/
@@ -317,6 +325,7 @@ export default class Dashboard extends React.Component {
 		PermissionStore.on(PERMISSION_CHANGED, this.handlePermissionChanges);
 		LocationStore.on(AREA_UPDATED, this.drawArea);
 		LocationStore.on(FLAG_SELECTED, this.showFlagDialog);
+		LocationStore.on(FLAG_CACHE_UPDATED, this.update);
 		if (StateStore.dashboard) {
 			this.state = StateStore.dashboard;
 		}
@@ -328,6 +337,7 @@ export default class Dashboard extends React.Component {
 		PermissionStore.off(PERMISSION_CHANGED, this.handlePermissionChanges);
 		LocationStore.off(AREA_UPDATED, this.drawArea);
 		LocationStore.off(FLAG_SELECTED, this.showFlagDialog);
+		LocationStore.off(FLAG_CACHE_UPDATED, this.update);
 		navigator.geolocation.clearWatch(this.geoLocationWatchID);
 		client.off("drawArea", this.drawArea);
 		this.map.off("zoomstart", this.appendZoomFix);
@@ -426,6 +436,18 @@ export default class Dashboard extends React.Component {
 			showFlagDetails: false
 		});
 	}
+	updateFlagOwner(flag, owner) {
+		flag.info.owner = owner;
+		flag.info.ownedSince = new Date();
+		/* Specialize the flag */
+		const newFlag = new Flag(flag.element, flag.info).specialized;
+		this.setState({
+			currentFlag: newFlag
+		});
+		publish(FLAG_CACHE_UPDATED, {
+			flags: [newFlag]
+		});
+	}
 	/**
 	* Renders a component with a simple login menu
 	* @return {ReactElement}
@@ -441,15 +463,32 @@ export default class Dashboard extends React.Component {
 			const { latitude, longitude, id, typeName } = flag;
 			const distance = L.latLng(...this.state.view).distanceTo(L.latLng(latitude, longitude));
 			const { type } = flag.element;
+			const owner = flag.owner;
+			const amIOwner = flag.owner === ConnectionStore.user.accountName;
+			const ownedSince = flag.ownedSince && new Intl.DateTimeFormat(navigator.language, {
+				weekday: "long",
+				month: "long",
+				day: "numeric",
+				year: "numeric",
+				hour: "numeric",
+				minute: "numeric",
+				hour12: false
+			}).format(new Date(flag.ownedSince));
 			flagDetails = (
 				<Dialog title={title} open={flagAvailable && flagDetailsRequested} autoScrollBodyContent={true} onRequestClose={::this.hideFlagDialog} actions={
 					<div>
 						<RaisedButton label="Cancel" onClick={::this.hideFlagDialog} style={{
 							margin: "0.5rem"
 						}}/>
-						<RaisedButton label="Capture" primary onClick={() => {
-							capture(flag);
-						}} disabled={false} style={{
+						<RaisedButton label="Capture" primary onClick={async () => {
+							try {
+								await capture(flag);
+								::this.updateFlagOwner(flag, ConnectionStore.user.accountName);
+							}
+							catch (e) {
+								/* Capture failed */
+							}
+						}} disabled={amIOwner || id === undefined} style={{
 							margin: "0.5rem"
 						}}/>
 					</div>
@@ -468,7 +507,11 @@ export default class Dashboard extends React.Component {
 							</TableRow>
 							<TableRow>
 								<TableRowColumn>Current owner</TableRowColumn>
-								<TableRowColumn>Nobody</TableRowColumn>
+								<TableRowColumn>{owner}</TableRowColumn>
+							</TableRow>
+							<TableRow>
+								<TableRowColumn>Owned since</TableRowColumn>
+								<TableRowColumn>{ownedSince}</TableRowColumn>
 							</TableRow>
 							<TableRow>
 								<TableRowColumn>GPS Coordinates</TableRowColumn>

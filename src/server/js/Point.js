@@ -191,7 +191,9 @@ export default class Point {
 			radius,
 			pois: cleanCollection.map(element => new POI(element.id, element.type, element))
 		});
-		return cleanCollection;
+		return cleanCollection.map(x => ({
+			metadata: x
+		}));
 	}
 	/**
 	* Queries an Overpass server for nearby POI seeds
@@ -205,6 +207,7 @@ export default class Point {
 	async closest(amenities = [], radius) {
 		try {
 			const locationPOIs = await this.checkLocation(radius);
+			// console.log(locationPOIs)
 			if (locationPOIs) {
 				// log("Found known location.");
 				const pois = await retrievePOIs({
@@ -212,35 +215,35 @@ export default class Point {
 					pois: locationPOIs
 				});
 				/* Only the inner POIs will be contained in the player's POI radius */
-				const contained = pois.filter(poi => {
+				const contained = pois.map(poi => poi.metadata).filter(metadata => {
 					let point = null;
-					switch (poi.type) {
+					switch (metadata.type) {
 						default:
 						case "node": {
 							point = new Point({
-								latitude: poi.lat,
-								longitude: poi.lon
+								latitude: metadata.lat,
+								longitude: metadata.lon
 							});
 							break;
 						}
 						case "way": {
 							point = new Point({
-								latitude: poi.center.lat,
-								longitude: poi.center.lon
+								latitude: metadata.center.lat,
+								longitude: metadata.center.lon
 							});
 							break;
 						}
 						case "area": {
-							/* TODO: How should areas behave? */
+							/* TODO: Where to map areas? */
 							point = new Point({
-								latitude: poi.center.lat,
-								longitude: poi.center.lon
+								latitude: metadata.center.lat,
+								longitude: metadata.center.lon
 							});
 						}
 					}
 					return point.measureDistance(this) <= radius;
 				});
-				return contained;
+				return pois.filter(poi => contained.includes(poi.metadata));
 			}
 			else {
 				log("Found new location.");

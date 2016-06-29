@@ -78,7 +78,9 @@ export async function login(data = {}) {
 	else if (accountName && email || accountName && password) {
 		const isTokenReceived = await getToken(data);
 		if (isTokenReceived) {
-			publish(LOGIN);
+			publish(LOGIN, {
+				accountName
+			});
 		}
 		else {
 			publish(LOGIN_FAILED);
@@ -138,12 +140,13 @@ export function removeNotificationID() {
 /**
 * Performs an API call that captures a flag
 * @param {Flag} flag
-* 	The flag to conquer
+* 	The flag to capture
+* @return {Promise}
+* 	A promise that resolves to whether or not the capture was successful
 */
-export function capture(flag) {
-	console.log(flag);
+export async function capture(flag) {
 	const id = flag.id;
-	client.capture({
+	return await client.capture({
 		id
 	});
 }

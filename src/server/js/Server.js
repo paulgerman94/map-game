@@ -19,9 +19,9 @@ export class Server extends ServerCore {
 	*/
 	constructor(database, options) {
 		super(database, options);
-		setInterval(::this.broadcastArea, 5 * s);
+		// setInterval(::this.broadcastArea, 5 * s);
 		setInterval(() => {
-			this.pushNotification(this.clients, "hi");
+			// this.pushNotification(this.clients, "hi");
 		}, 5 * s);
 	}
 	/**

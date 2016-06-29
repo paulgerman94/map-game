@@ -17,7 +17,7 @@ class LocationStore extends EventEmitter {
 	constructor() {
 		super();
 		const flags = cache.load("flags");
-		this.flags = flags ? flags.map(element => new Flag(element).specialized) : [];
+		this.flags = flags ? flags.map(flag => new Flag(flag.element, flag.info).specialized) : [];
 	}
 	/**
 	* Updates the internal area cache and fires an event to redraw the area
@@ -45,9 +45,17 @@ class LocationStore extends EventEmitter {
 						/* The flag is not in the cache, so add it */
 						this.flags.push(flag);
 					}
+					else {
+						/* It's in the cache, so update it */
+						const index = this.flags.findIndex(f => f.id === flag.id);
+						this.flags[index] = flag;
+					}
 				}
 				/* Cache the flags permanently */
-				cache.save("flags", this.flags.map(flag => flag.element));
+				cache.save("flags", this.flags.map(flag => ({
+					element: flag.element,
+					info: flag.info
+				})));
 				this.emit(action.type);
 				break;
 			}

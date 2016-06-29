@@ -232,7 +232,7 @@ export async function capture({
 				accountName: client.properties.accountName
 			});
 			if (result) {
-				log(`${client.properties.accountName} has capture the flag ${id}.`);
+				log(`${client.properties.accountName} has captured the flag ${id}.`);
 				message.reply(result);
 			}
 			else {

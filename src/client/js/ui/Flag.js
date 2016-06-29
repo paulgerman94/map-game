@@ -22,8 +22,11 @@ export class Flag {
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
 	*/
-	constructor(element) {
+	constructor(element, info = {}) {
 		this.element = element;
+		this.info = info;
+		this.owner = info.owner || "Nobody";
+		this.ownedSince = info.ownedSince;
 		/**
 		* @property {number} latitude
 		* 	The flag's latitude
@@ -39,10 +42,6 @@ export class Flag {
 		* 	The flag's name
 		*/
 		this.name = element.tags.name;
-		/**
-		* @property {number} id
-		* 	The flag's id
-		*/
 		/**
 		* @property {string} typeName
 		* 	The flag's type name
@@ -74,8 +73,9 @@ export class Flag {
 	*/
 	get specialized() {
 		const element = this.element;
+		const info = this.info;
 		if (element.tags.amenity === "restaurant") {
-			return new Restaurant(element);
+			return new Restaurant(element, info);
 		}
 		if (element.tags.amenity === "music_school" ||
 			element.tags.amenity === "dancing_school" ||
@@ -84,7 +84,7 @@ export class Flag {
 			element.tags.amenity === "school" ||
 			element.tags.amenity === "university"
 		) {
-			return new School(element);
+			return new School(element, info);
 		}
 		else {
 			return this;
@@ -139,8 +139,8 @@ export class Restaurant extends Flag {
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
 	*/
-	constructor(element) {
-		super(element);
+	constructor(element, info) {
+		super(element, info);
 	}
 }
 /**
@@ -167,8 +167,8 @@ export class School extends Flag {
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
 	*/
-	constructor(element) {
-		super(element);
+	constructor(element, info) {
+		super(element, info);
 	}
 }
 /**
@@ -195,8 +195,8 @@ export class Player extends Flag {
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
 	*/
-	constructor(element) {
-		super(element);
+	constructor(element, info) {
+		super(element, info);
 	}
 }
 export default Flag;

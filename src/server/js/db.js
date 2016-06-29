@@ -333,13 +333,13 @@ export async function retrievePOIs({
 	try {
 		if (pois.length) {
 			const result = await db.query(`
-			SELECT metadata
+			SELECT metadata, owner, captured_at
 			FROM "pois"
 			WHERE "poi" = ANY($[pois]::poi[])
 			`, {
 				pois
 			});
-			return result.map(poi => poi.metadata);
+			return result;
 		}
 		else {
 			return [];

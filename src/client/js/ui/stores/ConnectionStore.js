@@ -1,5 +1,6 @@
 import dispatcher from "../Dispatcher";
 import { EventEmitter } from "crystal-event-emitter";
+import cache from "client/cache";
 /**
 * A symbol that denotes a login
 */
@@ -74,7 +75,14 @@ class ConnectionStore extends EventEmitter {
 				break;
 			}
 			case LOGIN: {
-				this.user = action.username;
+				let user = cache.load("user");
+				if (action.accountName) {
+					user = {
+						accountName: action.accountName
+					};
+				}
+				this.user = user;
+				cache.save("user", user);
 				this.emit(action.type, this.user);
 				break;
 			}
