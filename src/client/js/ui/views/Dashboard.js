@@ -320,7 +320,7 @@ export default class Dashboard extends React.Component {
 	* Redraws the flags from cache and updates the dialog
 	*/
 	update() {
-		this.drawFlags(LocationStore.flags);
+		this.drawFlags();
 		this.setState({});
 	}
 	/**
