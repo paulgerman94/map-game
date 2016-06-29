@@ -477,7 +477,7 @@ export default class Dashboard extends React.Component {
 			const distance = L.latLng(...this.state.view).distanceTo(L.latLng(latitude, longitude));
 			const { type } = flag.element;
 			const owner = flag.owner;
-			const amIOwner = flag.owner === ConnectionStore.user.accountName;
+			const isOwnTeam = flag.info.team === ConnectionStore.user.team;
 			const ownedSince = flag.ownedSince && new Intl.DateTimeFormat(navigator.language, {
 				weekday: "long",
 				month: "long",
@@ -501,7 +501,7 @@ export default class Dashboard extends React.Component {
 							catch (e) {
 								/* Capture failed */
 							}
-						}} disabled={amIOwner || id === undefined} style={{
+						}} disabled={id === undefined || isOwnTeam} style={{
 							margin: "0.5rem"
 						}}/>
 					</div>
