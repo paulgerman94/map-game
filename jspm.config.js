@@ -393,14 +393,6 @@ SystemJS.config({
         "to-fast-properties": "npm:to-fast-properties@1.0.2"
       }
     },
-    "npm:babel-code-frame@6.8.0": {
-      "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.2",
-        "chalk": "npm:chalk@1.1.3",
-        "esutils": "npm:esutils@2.0.2",
-        "js-tokens": "npm:js-tokens@1.0.3"
-      }
-    },
     "npm:babel-messages@6.8.0": {
       "map": {
         "babel-runtime": "npm:babel-runtime@6.9.2"
@@ -992,15 +984,6 @@ SystemJS.config({
         "hash.js": "npm:hash.js@1.0.3"
       }
     },
-    "npm:babel-types@6.10.2": {
-      "map": {
-        "babel-traverse": "npm:babel-traverse@6.10.4",
-        "lodash": "npm:lodash@4.13.1",
-        "to-fast-properties": "npm:to-fast-properties@1.0.2",
-        "babel-runtime": "npm:babel-runtime@6.9.2",
-        "esutils": "npm:esutils@2.0.2"
-      }
-    },
     "npm:ecdsa-sig-formatter@1.0.7": {
       "map": {
         "base64-url": "npm:base64-url@1.2.2"
@@ -1025,13 +1008,13 @@ SystemJS.config({
     "npm:babel-traverse@6.10.4": {
       "map": {
         "babel-runtime": "npm:babel-runtime@6.9.2",
-        "babel-types": "npm:babel-types@6.10.2",
+        "babel-types": "npm:babel-types@6.11.1",
         "invariant": "npm:invariant@2.2.1",
         "lodash": "npm:lodash@4.13.1",
         "babylon": "npm:babylon@6.8.2",
         "debug": "npm:debug@2.2.0",
         "babel-messages": "npm:babel-messages@6.8.0",
-        "babel-code-frame": "npm:babel-code-frame@6.8.0",
+        "babel-code-frame": "npm:babel-code-frame@6.11.0",
         "globals": "npm:globals@8.18.0"
       }
     },
@@ -1059,6 +1042,23 @@ SystemJS.config({
         "babel-runtime": "npm:babel-runtime@6.9.2",
         "uuid": "npm:uuid@2.0.2",
         "crystal-event-emitter": "npm:crystal-event-emitter@1.2.1"
+      }
+    },
+    "npm:babel-types@6.11.1": {
+      "map": {
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "babel-traverse": "npm:babel-traverse@6.10.4",
+        "esutils": "npm:esutils@2.0.2",
+        "lodash": "npm:lodash@4.13.1",
+        "to-fast-properties": "npm:to-fast-properties@1.0.2"
+      }
+    },
+    "npm:babel-code-frame@6.11.0": {
+      "map": {
+        "js-tokens": "npm:js-tokens@2.0.0",
+        "chalk": "npm:chalk@1.1.3",
+        "esutils": "npm:esutils@2.0.2",
+        "babel-runtime": "npm:babel-runtime@6.9.2"
       }
     }
   }

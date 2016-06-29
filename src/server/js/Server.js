@@ -1,6 +1,6 @@
 import ServerCore from "./ServerCore";
 import { getArea } from "./db";
-import { s } from "./units";
+// import { s } from "./units";
 import GCM from "node-gcm";
 import { err, log } from "./util";
 const notifier = new GCM.Sender(process.env.GCM_KEY);

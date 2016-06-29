@@ -27,7 +27,7 @@ import {
 import StateStore from "../stores/StateStore";
 import { Flag, Player } from "../Flag";
 import { publish } from "../Dispatcher";
-import { POI_RADIUS } from "server/constants";
+import { POI_RADIUS, OWNERSHIP_PROTECTION_TIME } from "server/constants";
 import {
 	Dialog,
 	Table,
@@ -463,6 +463,24 @@ export default class Dashboard extends React.Component {
 		});
 	}
 	/**
+	* Formats a date to the current locale
+	* @param {Date|string} date
+	* 	A string that the {@link Date constructor can map to a valid date}
+	* @return {string}
+	* 	A nice date, formatted to the official standard of the current locale
+	*/
+	formatDate(date) {
+		return new Intl.DateTimeFormat(navigator.language, {
+			weekday: "long",
+			month: "long",
+			day: "numeric",
+			year: "numeric",
+			hour: "numeric",
+			minute: "numeric",
+			hour12: false
+		}).format(new Date(date));
+	}
+	/**
 	* Renders a component with a simple login menu
 	* @return {ReactElement}
 	* 	The React component
@@ -471,6 +489,8 @@ export default class Dashboard extends React.Component {
 		const flag = this.state.currentFlag;
 		const flagAvailable = Boolean(flag);
 		let flagDetails;
+		let protectedUntil = null;
+		let ownershipSince = null;
 		if (flagAvailable) {
 			const flagDetailsRequested = this.state.showFlagDetails;
 			const title = flagAvailable && flag.name;
@@ -479,15 +499,26 @@ export default class Dashboard extends React.Component {
 			const { type } = flag.element;
 			const owner = flag.owner;
 			const isOwnTeam = flag.info.team === ConnectionStore.user.team;
-			const ownedSince = flag.ownedSince && new Intl.DateTimeFormat(navigator.language, {
-				weekday: "long",
-				month: "long",
-				day: "numeric",
-				year: "numeric",
-				hour: "numeric",
-				minute: "numeric",
-				hour12: false
-			}).format(new Date(flag.ownedSince));
+			const ownedSince = flag.ownedSince && this.formatDate(flag.ownedSince);
+			const hasOwnershipProtection = flag.ownedSince && new Date() - new Date(flag.ownedSince) <= OWNERSHIP_PROTECTION_TIME;
+			if (owner !== "Nobody") {
+				ownershipSince = (
+					<TableRow>
+						<TableRowColumn>Owned since</TableRowColumn>
+						<TableRowColumn>{ownedSince}</TableRowColumn>
+					</TableRow>
+				);
+			}
+			if (hasOwnershipProtection) {
+				const protectionEnds = new Date(flag.ownedSince);
+				protectionEnds.setMilliseconds(protectionEnds.getMilliseconds() + OWNERSHIP_PROTECTION_TIME);
+				protectedUntil = (
+					<TableRow>
+						<TableRowColumn>Protected until</TableRowColumn>
+						<TableRowColumn>{this.formatDate(protectionEnds)}</TableRowColumn>
+					</TableRow>
+				);
+			}
 			flagDetails = (
 				<Dialog title={title} open={flagAvailable && flagDetailsRequested} autoScrollBodyContent={true} onRequestClose={::this.hideFlagDialog} actions={
 					<div>
@@ -507,7 +538,7 @@ export default class Dashboard extends React.Component {
 							catch (e) {
 								/* Capture failed */
 							}
-						}} disabled={id === undefined || isOwnTeam} style={{
+						}} disabled={id === undefined || isOwnTeam || hasOwnershipProtection} style={{
 							margin: "0.5rem"
 						}}/>
 					</div>
@@ -528,10 +559,8 @@ export default class Dashboard extends React.Component {
 								<TableRowColumn>Current owner</TableRowColumn>
 								<TableRowColumn>{owner}</TableRowColumn>
 							</TableRow>
-							<TableRow>
-								<TableRowColumn>Owned since</TableRowColumn>
-								<TableRowColumn>{ownedSince}</TableRowColumn>
-							</TableRow>
+							{ownershipSince}
+							{protectedUntil}
 							<TableRow>
 								<TableRowColumn>GPS Coordinates</TableRowColumn>
 								<TableRowColumn>({latitude}, {longitude})</TableRowColumn>

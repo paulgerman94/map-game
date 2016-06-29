@@ -25,7 +25,7 @@
     "babel-plugin-transform-property-literals": "^6.8.0",
     "babel-plugin-transform-simplify-comparison-operators": "^6.8.0",
     "babel-preset-es2015": "^6.9.0",
-    "babel-preset-react": "^6.11.0",
+    "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.9.0",
     "bcrypt": "^0.8.7",
@@ -66,12 +66,13 @@
     "nodemon": "^1.9.2",
     "npm": "^3.10.2",
     "nyc": "^6.6.1",
-    "pg-promise": "^5.0.3",
+    "pg-promise": "^5.0.5",
     "pgtools": "^0.1.1",
     "postcss-import": "^8.1.2",
     "postcss-nested": "^1.0.0",
     "postcss-scss": "^0.1.8",
-    "source-map-support": "^0.4.0",
+    "source-map-support": "^0.4.1",
+    "systemjs": "^0.19.31",
     "username": "^2.2.2",
     "ws-promise-server": "^2.0.4"
   },
@@ -190,6 +191,12 @@
         "ignore": [
           "test.js"
         ]
+      },
+      "npm:lodash@4.13.1": {
+        "map": {
+          "buffer": "@empty",
+          "process": "@empty"
+        }
       },
       "npm:ms@0.7.1": {
         "jspmNodeConversion": false,

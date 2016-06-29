@@ -78,6 +78,7 @@ export async function execute(query) {
 	const api = await waitForFreeAPI();
 	const server = api.url;
 	const url = `${server}/interpreter?data=[out:json];${source}out center;`;
+	console.log(url);
 	const response = await fetch(url);
 	const currentConnections = connections.get(api);
 	connections.set(api, currentConnections - 1);

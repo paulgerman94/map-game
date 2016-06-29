@@ -4,7 +4,8 @@ import pgp from "pg-promise";
 import { log, err } from "./util";
 import { getSQL } from "./fs";
 import { checkPassword, hash } from "./crypto";
-import { km, h } from "./units";
+import { km } from "./units";
+import { OWNERSHIP_PROTECTION } from "./constants";
 import POI from "./types/POI";
 export const UNIQUENESS_VIOLATION = "23505";
 const NO_DATABASE = "3D000";
@@ -354,7 +355,7 @@ export async function retrievePOIs({
 }
 /**
 * Determines whether or not a flag is capturable right now.
-* Currently, a flag is only capturable if it is either free or if it has been captured for at least 24 hours.
+* Currently, a flag is only capturable if it is either free or if it has been captured for at least `OWNERSHIP_PROTECTION`.
 * @param {object} options
 * 	An option object
 * @param {object} options.db
@@ -379,7 +380,7 @@ export async function isCapturable({
 		if (result.length) {
 			const [object] = result;
 			const capturedSince = new Date() - new Date(object.captured_at);
-			if (capturedSince > 24 * h) {
+			if (capturedSince > OWNERSHIP_PROTECTION) {
 				return true;
 			}
 			else {

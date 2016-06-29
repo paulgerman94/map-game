@@ -1,3 +1,4 @@
+import "babel-core/register";
 import "babel-polyfill";
 import "source-map-support/register";
 import Server from "./Server";
