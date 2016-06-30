@@ -11,23 +11,21 @@ export class Flag {
 	*/
 	icon = "question";
 	/**
-	* @property {string} color
-	* 	The flag color
-	*/
-	color = "darkpurple";
-	/**
 	* Creates a new {@link Flag} sub-instance
 	* @param {object} element
 	* 	An OSM primitive (node, way, area, relation)
 	* @param {object} info
 	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
 	*/
-	constructor(element, info = {}) {
-		this.element = element;
-		this.info = info;
-		this.color = info.team || "purple";
-		this.owner = info.owner || "Nobody";
-		this.ownedSince = info.ownedSince;
+	constructor(descriptor) {
+		this.descriptor = descriptor;
+		this.metadata = descriptor.metadata;
+		for (const property in descriptor) {
+			if (!this.hasOwnProperty(property)) {
+				this[property] = descriptor[property];
+			}
+		}
+		this.team = this.team || "purple";
 		/**
 		* @property {number} latitude
 		* 	The flag's latitude
@@ -42,22 +40,22 @@ export class Flag {
 		* @property {String} name
 		* 	The flag's name
 		*/
-		this.name = element.tags.name;
+		this.name = this.metadata.tags.name;
 		/**
 		* @property {string} typeName
 		* 	The flag's type name
 		*/
 		this.typeName = "flag";
-		this.id = element.id;
-		switch (element.type) {
+		this.id = this.metadata.id;
+		switch (this.metadata.type) {
 			case "node": {
-				this.latitude = element.lat;
-				this.longitude = element.lon;
+				this.latitude = this.metadata.lat;
+				this.longitude = this.metadata.lon;
 				break;
 			}
 			case "way": {
-				this.latitude = element.center.lat;
-				this.longitude = element.center.lon;
+				this.latitude = this.metadata.center.lat;
+				this.longitude = this.metadata.center.lon;
 				break;
 			}
 			case "area": {
@@ -73,19 +71,18 @@ export class Flag {
 	* 	A specialized instance of a subclass of {@link Flag}
 	*/
 	get specialized() {
-		const element = this.element;
-		const info = this.info;
-		if (element.tags.amenity === "restaurant") {
-			return new Restaurant(element, info);
+		const { metadata } = this;
+		if (metadata.tags.amenity === "restaurant") {
+			return new Restaurant(this.descriptor);
 		}
-		if (element.tags.amenity === "music_school" ||
-			element.tags.amenity === "dancing_school" ||
-			element.tags.amenity === "driving_school" ||
-			element.tags.amenity === "language_school" ||
-			element.tags.amenity === "school" ||
-			element.tags.amenity === "university"
+		if (metadata.tags.amenity === "music_school" ||
+			metadata.tags.amenity === "dancing_school" ||
+			metadata.tags.amenity === "driving_school" ||
+			metadata.tags.amenity === "language_school" ||
+			metadata.tags.amenity === "school" ||
+			metadata.tags.amenity === "university"
 		) {
-			return new School(element, info);
+			return new School(this.descriptor);
 		}
 		else {
 			return this;
@@ -97,23 +94,23 @@ export class Flag {
 	* 	A Leaflet marker with a color and an icon
 	*/
 	get marker() {
-		if (this.cachedMarker) {
-			return this.cachedMarker;
-		}
 		const marker = L.marker([this.latitude, this.longitude], {
 			icon: L.AwesomeMarkers.icon({
 				icon: this.icon,
-				markerColor: this.color,
+				markerColor: this.team,
 				prefix: "fa"
 			})
 		});
-		this.cachedMarker = marker;
 		marker.on("click", () => {
 			publish(FLAG_SELECTED, {
 				flag: this
 			});
 		});
 		return marker;
+	}
+	updateDescriptor(property, value) {
+		this[property] = value;
+		this.descriptor[property] = value;
 	}
 }
 /**
@@ -137,8 +134,8 @@ export class Restaurant extends Flag {
 	* @param {object} info
 	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
 	*/
-	constructor(element, info) {
-		super(element, info);
+	constructor(descriptor) {
+		super(descriptor);
 	}
 }
 /**
@@ -162,8 +159,8 @@ export class School extends Flag {
 	* @param {object} info
 	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
 	*/
-	constructor(element, info) {
-		super(element, info);
+	constructor(descriptor) {
+		super(descriptor);
 	}
 }
 /**
@@ -187,8 +184,8 @@ export class Player extends Flag {
 	* @param {object} info
 	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
 	*/
-	constructor(element, info) {
-		super(element, info);
+	constructor(descriptor) {
+		super(descriptor);
 	}
 }
 export default Flag;

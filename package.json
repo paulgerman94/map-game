@@ -236,6 +236,7 @@
   "dependencies": {
     "babel-polyfill": "^6.9.1",
     "fingerprintjs2": "^1.4.0",
+    "humps": "^1.1.0",
     "node-fetch": "^1.5.3",
     "passwd-user": "^2.1.0",
     "web-push-encryption": "^2.0.0"

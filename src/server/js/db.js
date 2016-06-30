@@ -1,10 +1,11 @@
 import config from "map-game/config.json";
 import pgTools from "pgtools";
 import pgp from "pg-promise";
-import { log, err } from "./util";
+import { log, err, warn } from "./util";
 import { getSQL } from "./fs";
 import { checkPassword, hash } from "./crypto";
-import { km } from "./units";
+import { km, h } from "./units";
+import humps from "humps";
 import { OWNERSHIP_PROTECTION_TIME } from "./constants";
 import POI from "./types/POI";
 export const UNIQUENESS_VIOLATION = "23505";
@@ -334,7 +335,7 @@ export async function retrievePOIs({
 	try {
 		if (pois.length) {
 			const result = await db.query(`
-			SELECT metadata, owner, captured_at, team
+			SELECT metadata, owner, captured_at, locked_until, team
 			FROM "pois" p
 			LEFT JOIN users u
 			ON p.owner = u.account_name
@@ -342,7 +343,7 @@ export async function retrievePOIs({
 			`, {
 				pois
 			});
-			return result;
+			return humps.camelizeKeys(result);
 		}
 		else {
 			return [];
@@ -377,13 +378,12 @@ export async function isCapturable({
 			db,
 			id
 		});
-		if (info.captured_at === null) {
+		if (!info.capturedAt) {
 			/* Flag has never been captured before */
 			return true;
 		}
 		else {
-			const capturedSince = new Date() - new Date(info.captured_at);
-			if (capturedSince > OWNERSHIP_PROTECTION_TIME) {
+			if (new Date() > new Date(info.lockedUntil)) {
 				/* Ownership protection has expired */
 				const newTeam = await getTeam({
 					db,
@@ -399,11 +399,13 @@ export async function isCapturable({
 				}
 				else {
 					/* The same team can't steal from each other */
+					warn(`"${accountName}" tried to capture the flag of an own team member.`);
 					return false;
 				}
 			}
 			else {
 				/* Ownership protection is still active */
+				warn(`"${accountName}" tried to capture an ownership-protected flag.`);
 				return false;
 			}
 		}
@@ -430,13 +432,13 @@ export async function getFlagInfo({
 } = {}) {
 	try {
 		const result = await db.one(`
-		SELECT "pois".captured_at, owner
+		SELECT "pois".captured_at, "pois".locked_until, owner
 		FROM pois
 		WHERE (poi).id = $[id];
 		`, {
 			id
 		});
-		return result;
+		return humps.camelizeKeys(result);
 	}
 	catch (e) {
 		err(e);
@@ -453,24 +455,29 @@ export async function getFlagInfo({
 * 	The OSM id of the flag to capture
 * @param {string} options.accountName
 * 	The account name whose team to look up
+* @param {string} options.lockFor
+* 	An SQL interval string that denotes how long the flag should be locked
 * @return {Promise}
 * 	A {@link Promise} that resolves to whether or not the capture was successful
 */
 export async function captureFlag({
 	db,
 	id,
-	accountName
+	accountName,
+	lockFor = "24 h"
 } = {}) {
 	try {
 		await db.query(`
 		UPDATE pois
 		SET
 			captured_at = CURRENT_TIMESTAMP,
+			locked_until = CURRENT_TIMESTAMP + interval $[lockFor],
 			owner = $[accountName]
 		WHERE (poi).id = $[id];
 		`, {
 			id,
-			accountName
+			accountName,
+			lockFor
 		});
 		return true;
 	}

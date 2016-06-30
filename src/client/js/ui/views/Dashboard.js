@@ -179,18 +179,11 @@ export default class Dashboard extends React.Component {
 	*/
 	async createFlags(latitude, longitude) {
 		/* We're using an arrow function anyway, but using `this` will result in a transpilation error… */
-		const [pois] = await client.getPOIs({
+		const [descriptors] = await client.getPOIs({
 			latitude,
 			longitude
 		});
-		const flags = pois.map(poi => {
-			const flag = new Flag(poi.metadata, {
-				owner: poi.owner,
-				ownedSince: poi.captured_at,
-				team: poi.team
-			});
-			return flag.specialized;
-		});
+		const flags = descriptors.map(descriptor => new Flag(descriptor).specialized);
 		this.setState({
 			shownFlags: flags
 		});
@@ -250,12 +243,14 @@ export default class Dashboard extends React.Component {
 		/* Create or update the player marker */
 		if (!this.layers.player.marker) {
 			const playerMarker = this.layers.player.marker = new Player({
-				lon: longitude,
-				lat: latitude,
-				tags: {
-					name: "You"
-				},
-				type: "node"
+				metadata: {
+					lon: longitude,
+					lat: latitude,
+					tags: {
+						name: "You"
+					},
+					type: "node"
+				}
 			}).marker;
 			this.layers.player.marker = playerMarker;
 			this.layers.player.addLayer(playerMarker);
@@ -450,16 +445,15 @@ export default class Dashboard extends React.Component {
 	* 	The account name of whoever owns the flag now
 	*/
 	updateFlagOwner(flag, owner) {
-		flag.info.owner = owner;
-		flag.info.ownedSince = new Date();
-		flag.info.team = ConnectionStore.user.team;
-		/* Specialize the flag */
-		const newFlag = new Flag(flag.element, flag.info).specialized;
-		this.setState({
-			currentFlag: newFlag
-		});
+		for (const [property, value] of [
+			["owner", owner],
+			["team", ConnectionStore.user.team],
+			["capturedAt", new Date()]
+		]) {
+			flag.updateDescriptor(property, value);
+		}
 		publish(FLAG_CACHE_UPDATED, {
-			flags: [newFlag]
+			flags: [flag]
 		});
 	}
 	/**
@@ -491,31 +485,44 @@ export default class Dashboard extends React.Component {
 		let flagDetails;
 		let protectedUntil = null;
 		let ownershipSince = null;
+		let capturedAtDate = null;
+		let hasOwnershipProtection = false;
+		let flagID = null;
 		if (flagAvailable) {
 			const flagDetailsRequested = this.state.showFlagDetails;
 			const title = flagAvailable && flag.name;
 			const { latitude, longitude, id, typeName } = flag;
 			const distance = L.latLng(...this.state.view).distanceTo(L.latLng(latitude, longitude));
-			const { type } = flag.element;
-			const owner = flag.owner;
-			const isOwnTeam = flag.info.team === ConnectionStore.user.team;
-			const ownedSince = flag.ownedSince && this.formatDate(flag.ownedSince);
-			const hasOwnershipProtection = flag.ownedSince && new Date() - new Date(flag.ownedSince) <= OWNERSHIP_PROTECTION_TIME;
-			if (owner !== "Nobody") {
+			const { type } = flag.metadata;
+			const isOwnTeam = flag.team === ConnectionStore.user.team;
+			const capturedAt = flag.capturedAt;
+			if (id) {
+				flagID = (
+					<TableRow>
+						<TableRowColumn>ID</TableRowColumn>
+						<TableRowColumn>{id}</TableRowColumn>
+					</TableRow>
+				);
+			}
+			if (capturedAt) {
+				capturedAtDate = this.formatDate(flag.capturedAt);
+				if (new Date() < new Date(flag.lockedUntil)) {
+					hasOwnershipProtection = true;
+				}
+			}
+			if (flag.owner) {
 				ownershipSince = (
 					<TableRow>
-						<TableRowColumn>Owned since</TableRowColumn>
-						<TableRowColumn>{ownedSince}</TableRowColumn>
+						<TableRowColumn>Captured at</TableRowColumn>
+						<TableRowColumn>{capturedAtDate}</TableRowColumn>
 					</TableRow>
 				);
 			}
 			if (hasOwnershipProtection) {
-				const protectionEnds = new Date(flag.ownedSince);
-				protectionEnds.setMilliseconds(protectionEnds.getMilliseconds() + OWNERSHIP_PROTECTION_TIME);
 				protectedUntil = (
 					<TableRow>
 						<TableRowColumn>Protected until</TableRowColumn>
-						<TableRowColumn>{this.formatDate(protectionEnds)}</TableRowColumn>
+						<TableRowColumn>{this.formatDate(flag.lockedUntil)}</TableRowColumn>
 					</TableRow>
 				);
 			}
@@ -558,7 +565,7 @@ export default class Dashboard extends React.Component {
 							</TableRow>
 							<TableRow>
 								<TableRowColumn>Current owner</TableRowColumn>
-								<TableRowColumn>{owner}</TableRowColumn>
+								<TableRowColumn>{flag.owner || "Nobody"}</TableRowColumn>
 							</TableRow>
 							{ownershipSince}
 							{protectedUntil}
@@ -574,10 +581,7 @@ export default class Dashboard extends React.Component {
 								<TableRowColumn>Type</TableRowColumn>
 								<TableRowColumn>{capitalize(type)}</TableRowColumn>
 							</TableRow>
-							<TableRow>
-								<TableRowColumn>ID</TableRowColumn>
-								<TableRowColumn>{id}</TableRowColumn>
-							</TableRow>
+							{flagID}
 						</TableBody>
 					</Table>
 				</Dialog>
