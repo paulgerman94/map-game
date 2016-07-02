@@ -142,6 +142,7 @@ gulp.task("run-server", done => {
 });
 gulp.task("html", () => {
 	return gulp.src("src/client/html/*.html")
+		.pipe(replace(/<%[^%]+%>/g, replacer))
 		.pipe(htmlMin({
 			collapseWhitespace: true,
 			removeComments: true,
