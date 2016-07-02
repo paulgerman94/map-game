@@ -2,7 +2,10 @@ import ClientCore from "./ClientCore";
 import ConnectionStore from "./ui/stores/ConnectionStore";
 import SplashScreen from "./ui/SplashScreen";
 import { s } from "server/units";
-import LocationStore from "./ui/stores/LocationStore";
+import {
+	default as LocationStore,
+	FLAG_CACHE_UPDATED
+} from "./ui/stores/LocationStore";
 import {
 	default as PermissionStore,
 	NOTIFICATIONS,
@@ -10,6 +13,7 @@ import {
 	ENABLED
 } from "./ui/stores/PermissionStore";
 import * as API from "./api/index";
+import { publish } from "./ui/Dispatcher";
 import {
 	default as cache,
 	TOKEN
@@ -52,6 +56,29 @@ class Client extends ClientCore {
 		const { payload } = message;
 		const [centers] = payload.args;
 		LocationStore.updateArea(centers);
+	}
+	/**
+	* Updates the flag information once the player is messaged that a nearby flag has been captured, if available
+	* @param {Message} message
+	* 	The message that was sent over the {@link RPCClient} containing the new flag information
+	*/
+	onRegisterCapture(message) {
+		message.reply();
+		const { payload } = message;
+		const [capture] = payload.args;
+		const { id, newFlagInfo } = capture;
+		const { capturedAt, lockedUntil, owner, team } = newFlagInfo;
+		const capturedDate = new Date(capturedAt);
+		const lockedDate = new Date(lockedUntil);
+		publish(FLAG_CACHE_UPDATED, {
+			flags: [{
+				id,
+				owner,
+				team,
+				capturedAt: capturedDate,
+				lockedUntil: lockedDate
+			}]
+		});
 	}
 	/**
 	* Asynchronously updates the notification ID for the client on the server

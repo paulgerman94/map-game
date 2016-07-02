@@ -4,7 +4,7 @@ import pgp from "pg-promise";
 import { log, err, warn } from "./util";
 import { getSQL } from "./fs";
 import { checkPassword, hash } from "./crypto";
-import { km, h } from "./units";
+import { km } from "./units";
 import humps from "humps";
 import { OWNERSHIP_PROTECTION_TIME } from "./constants";
 import POI from "./types/POI";
@@ -432,7 +432,7 @@ export async function getFlagInfo({
 } = {}) {
 	try {
 		const result = await db.one(`
-		SELECT "pois".captured_at, "pois".locked_until, owner
+		SELECT captured_at, locked_until, owner, (poi).element AS osm_type
 		FROM pois
 		WHERE (poi).id = $[id];
 		`, {
@@ -464,7 +464,7 @@ export async function captureFlag({
 	db,
 	id,
 	accountName,
-	lockFor = "24 h"
+	lockFor = OWNERSHIP_PROTECTION_TIME
 } = {}) {
 	try {
 		await db.query(`

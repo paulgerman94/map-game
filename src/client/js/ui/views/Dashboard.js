@@ -27,7 +27,7 @@ import {
 import StateStore from "../stores/StateStore";
 import { Flag, Player } from "../Flag";
 import { publish } from "../Dispatcher";
-import { POI_RADIUS, OWNERSHIP_PROTECTION_TIME } from "server/constants";
+import { POI_RADIUS } from "server/constants";
 import {
 	Dialog,
 	Table,
@@ -90,7 +90,9 @@ export default class Dashboard extends React.Component {
 	*/
 	async receiveUserCoordinates() {
 		this.geoLocationWatchID = navigator.geolocation.watchPosition(async position => {
+			/* Cache the last GeoLocation */
 			const { coords } = position;
+			LocationStore.updateCoordinates(coords);
 			const {
 				accuracy,
 				latitude,

@@ -44,21 +44,22 @@ export default class ServerCore extends WS {
 	* 	The instruction to execute
 	* @param {Message} options.message
 	* 	An RPC message object that can be used to send a reply
-	* @param {RPCClient} options.socket
+	* @param {RPCClient} options.client
 	* 	The RPC client that has called the function
 	*/
 	handleRequest({
 		args,
 		instruction,
 		message,
-		socket
+		client
 	}) {
 		if (API[instruction]) {
-			this::API[instruction]({
+			API[instruction]({
 				args,
 				db: this.db,
-				client: socket,
-				message
+				client,
+				message,
+				server: this
 			});
 		}
 	}
@@ -73,6 +74,12 @@ export default class ServerCore extends WS {
 		socket.properties = {};
 		const client = new Proxy(socket, {
 			get: (target, property) => {
+				if (property === "inspect") {
+					return () => {
+						/* The proxy should at least be printable */
+						return target;
+					};
+				}
 				const lookUp = target[property];
 				if (!lookUp) {
 					return async (...args) => {
@@ -100,13 +107,14 @@ export default class ServerCore extends WS {
 				target[property] = value;
 			}
 		});
+		/* Register the client */
 		log(`A client has connected.`);
 		this.emit("connected", client);
-		socket.on("close", () => {
+		client.on("close", () => {
 			log(`A client has disconnected.`);
 			this.emit("disconnected", client);
 		});
-		socket.on("message", async msg => {
+		client.on("message", async msg => {
 			const message = msg.data;
 			const { payload } = message;
 			const { instruction, args } = payload;
@@ -139,7 +147,7 @@ export default class ServerCore extends WS {
 							args,
 							instruction,
 							message,
-							socket
+							client
 						});
 					}
 				}
@@ -154,7 +162,7 @@ export default class ServerCore extends WS {
 						args,
 						instruction,
 						message,
-						socket
+						client
 					});
 				}
 				else {

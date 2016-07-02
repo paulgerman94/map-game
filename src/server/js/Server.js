@@ -2,7 +2,6 @@ import ServerCore from "./ServerCore";
 import { getArea } from "./db";
 // import { s } from "./units";
 import PushNotifier from "./PushNotifier";
-// import { err, log } from "./util";
 /**
 * This class includes the main API that clients will communicate with.
 * It's responsible for game-related actions as well as answering client requests.
@@ -21,9 +20,6 @@ export class Server extends ServerCore {
 		super(database, options);
 		this.notifier = new PushNotifier(this);
 		// setInterval(::this.broadcastArea, 5 * s);
-		// setInterval(() => {
-		// 	this.notifier.notify(this.clients, "hi");
-		// }, 5 * s);
 	}
 	/**
 	* This method is fired when a new client connects to the server.

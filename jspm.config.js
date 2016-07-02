@@ -31,8 +31,8 @@ SystemJS.config({
         "classnames": "npm:classnames@2.2.4",
         "imports-loader": "npm:imports-loader@0.6.5",
         "radium": "npm:radium@0.17.1",
-        "react": "npm:react@15.1.0",
-        "react-dom": "npm:react-dom@15.1.0"
+        "react": "npm:react@15.2.0",
+        "react-dom": "npm:react-dom@15.2.0"
       }
     },
     "npm:ast-transform@0.0.0": {
@@ -160,7 +160,7 @@ SystemJS.config({
     },
     "npm:react-flexr@2.1.0-beta": {
       "map": {
-        "react": "npm:react@15.1.0",
+        "react": "npm:react@15.2.0",
         "stilr": "npm:stilr@1.2.4"
       }
     },
@@ -266,7 +266,7 @@ SystemJS.config({
     "npm:stilr@1.2.4": {
       "map": {
         "babel-runtime": "npm:babel-runtime@6.9.2",
-        "react": "npm:react@15.1.0"
+        "react": "npm:react@15.2.0"
       }
     },
     "npm:through2@0.4.2": {
@@ -368,9 +368,9 @@ SystemJS.config({
     "pgtools": "npm:pgtools@0.0.2",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.9",
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
-    "react": "npm:react@15.1.0",
-    "react-dom": "npm:react-dom@15.1.0",
-    "react-router": "npm:react-router@2.5.1",
+    "react": "npm:react@15.2.0",
+    "react-dom": "npm:react-dom@15.2.0",
+    "react-router": "npm:react-router@2.5.2",
     "react-tap-event-plugin": "npm:react-tap-event-plugin@1.0.0",
     "source-map": "npm:source-map@0.1.43",
     "stream": "github:jspm/nodelibs-stream@0.2.0-alpha",
@@ -380,7 +380,7 @@ SystemJS.config({
     "url": "github:jspm/nodelibs-url@0.2.0-alpha",
     "util": "github:jspm/nodelibs-util@0.2.0-alpha",
     "vm": "github:jspm/nodelibs-vm@0.2.0-alpha",
-    "ws-promise-client": "npm:ws-promise-client@4.1.1",
+    "ws-promise-client": "npm:ws-promise-client@4.1.2",
     "zlib": "github:jspm/nodelibs-zlib@0.2.0-alpha"
   },
   packages: {
@@ -858,13 +858,6 @@ SystemJS.config({
         "deep-equal": "npm:deep-equal@1.0.1"
       }
     },
-    "npm:react@15.1.0": {
-      "map": {
-        "fbjs": "npm:fbjs@0.8.3",
-        "object-assign": "npm:object-assign@4.1.0",
-        "loose-envify": "npm:loose-envify@1.2.0"
-      }
-    },
     "npm:fbjs@0.8.3": {
       "map": {
         "immutable": "npm:immutable@3.8.1",
@@ -902,7 +895,7 @@ SystemJS.config({
     "npm:inline-style-prefixer@1.0.4": {
       "map": {
         "inline-style-prefix-all": "npm:inline-style-prefix-all@2.0.2",
-        "bowser": "npm:bowser@1.3.0"
+        "bowser": "npm:bowser@1.4.0"
       }
     },
     "npm:node-fetch@1.5.3": {
@@ -924,26 +917,13 @@ SystemJS.config({
         "core-js": "npm:core-js@2.4.0"
       }
     },
-    "npm:websocket@1.0.23": {
-      "map": {
-        "nan": "npm:nan@2.3.5",
-        "debug": "npm:debug@2.2.0",
-        "typedarray-to-buffer": "npm:typedarray-to-buffer@3.1.2",
-        "yaeti": "npm:yaeti@0.0.4"
-      }
-    },
-    "npm:typedarray-to-buffer@3.1.2": {
-      "map": {
-        "is-typedarray": "npm:is-typedarray@1.0.0"
-      }
-    },
     "npm:material-ui@0.15.0": {
       "map": {
-        "react-addons-transition-group": "npm:react-addons-transition-group@15.1.0",
+        "react-addons-transition-group": "npm:react-addons-transition-group@15.2.0",
         "recompose": "npm:recompose@0.17.0",
         "lodash.merge": "npm:lodash.merge@4.4.0",
-        "react-addons-update": "npm:react-addons-update@15.1.0",
-        "react-addons-create-fragment": "npm:react-addons-create-fragment@15.1.0",
+        "react-addons-update": "npm:react-addons-update@15.2.0",
+        "react-addons-create-fragment": "npm:react-addons-create-fragment@15.2.0",
         "simple-assign": "npm:simple-assign@0.1.0",
         "lodash.throttle": "npm:lodash.throttle@4.0.1",
         "react-event-listener": "npm:react-event-listener@0.1.2",
@@ -996,15 +976,6 @@ SystemJS.config({
         "isarray": "npm:isarray@1.0.0"
       }
     },
-    "npm:react-router@2.5.1": {
-      "map": {
-        "history": "npm:history@2.1.2",
-        "warning": "npm:warning@2.1.0",
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0",
-        "invariant": "npm:invariant@2.2.1",
-        "loose-envify": "npm:loose-envify@1.2.0"
-      }
-    },
     "npm:babel-traverse@6.10.4": {
       "map": {
         "babel-runtime": "npm:babel-runtime@6.9.2",
@@ -1029,14 +1000,6 @@ SystemJS.config({
         "babel-runtime": "npm:babel-runtime@6.9.2"
       }
     },
-    "npm:ws-promise-client@4.1.1": {
-      "map": {
-        "babel-runtime": "npm:babel-runtime@6.9.2",
-        "ws-rpc-client": "npm:ws-rpc-client@2.1.0",
-        "websocket": "npm:websocket@1.0.23",
-        "crystal-event-emitter": "npm:crystal-event-emitter@1.2.1"
-      }
-    },
     "npm:ws-rpc-client@2.1.0": {
       "map": {
         "babel-runtime": "npm:babel-runtime@6.9.2",
@@ -1059,6 +1022,50 @@ SystemJS.config({
         "chalk": "npm:chalk@1.1.3",
         "esutils": "npm:esutils@2.0.2",
         "babel-runtime": "npm:babel-runtime@6.9.2"
+      }
+    },
+    "npm:react-router@2.5.2": {
+      "map": {
+        "history": "npm:history@2.1.2",
+        "invariant": "npm:invariant@2.2.1",
+        "loose-envify": "npm:loose-envify@1.2.0",
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0",
+        "warning": "npm:warning@2.1.0"
+      }
+    },
+    "npm:ws-promise-client@4.1.2": {
+      "map": {
+        "ws": "npm:ws@1.1.1",
+        "ws-rpc-client": "npm:ws-rpc-client@2.1.0",
+        "babel-runtime": "npm:babel-runtime@6.9.2",
+        "crystal-event-emitter": "npm:crystal-event-emitter@1.2.1"
+      }
+    },
+    "npm:ws@1.1.1": {
+      "map": {
+        "bufferutil": "npm:bufferutil@1.2.1",
+        "options": "npm:options@0.0.6",
+        "ultron": "npm:ultron@1.0.2",
+        "utf-8-validate": "npm:utf-8-validate@1.2.1"
+      }
+    },
+    "npm:react@15.2.0": {
+      "map": {
+        "loose-envify": "npm:loose-envify@1.2.0",
+        "object-assign": "npm:object-assign@4.1.0",
+        "fbjs": "npm:fbjs@0.8.3"
+      }
+    },
+    "npm:bufferutil@1.2.1": {
+      "map": {
+        "bindings": "npm:bindings@1.2.1",
+        "nan": "npm:nan@2.3.5"
+      }
+    },
+    "npm:utf-8-validate@1.2.1": {
+      "map": {
+        "bindings": "npm:bindings@1.2.1",
+        "nan": "npm:nan@2.3.5"
       }
     }
   }

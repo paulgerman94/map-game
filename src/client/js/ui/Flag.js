@@ -12,10 +12,8 @@ export class Flag {
 	icon = "question";
 	/**
 	* Creates a new {@link Flag} sub-instance
-	* @param {object} element
-	* 	An OSM primitive (node, way, area, relation)
-	* @param {object} info
-	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
+	* @param {object} descriptor
+	* 	An object containing an OSM primitive and the game information about the flag
 	*/
 	constructor(descriptor) {
 		this.descriptor = descriptor;
@@ -108,6 +106,13 @@ export class Flag {
 		});
 		return marker;
 	}
+	/**
+	* Updates the flag descriptor in a way that can safely be cached *and* rendered
+	* @param {string} property
+	* 	The name of the property to update
+	* @param {*} value
+	* 	The value to assign to the property
+	*/
 	updateDescriptor(property, value) {
 		this[property] = value;
 		this.descriptor[property] = value;
@@ -129,10 +134,8 @@ export class Restaurant extends Flag {
 	typeName = "restaurant";
 	/**
 	* Creates a new Restaurant {@link Flag}
-	* @param {object} element
-	* 	An OSM primitive (node, way, area, relation)
-	* @param {object} info
-	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
+	* @param {object} descriptor
+	* 	An object containing an OSM primitive and the game information about the flag
 	*/
 	constructor(descriptor) {
 		super(descriptor);
@@ -154,10 +157,8 @@ export class School extends Flag {
 	typeName = "school";
 	/**
 	* Creates a new School {@link Flag}
-	* @param {object} element
-	* 	An OSM primitive (node, way, area, relation)
-	* @param {object} info
-	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
+	* @param {object} descriptor
+	* 	An object containing an OSM primitive and the game information about the flag
 	*/
 	constructor(descriptor) {
 		super(descriptor);
@@ -179,10 +180,8 @@ export class Player extends Flag {
 	typeName = "player";
 	/**
 	* Creates a new Restaurant {@link Flag}.
-	* @param {object} element
-	* 	An OSM primitive (node, way, area, relation)
-	* @param {object} info
-	* 	Game information needed to recreate the flag from cache (i. e. owner, own date, …)
+	* @param {object} descriptor
+	* 	An object containing an OSM primitive and the game information about the flag
 	*/
 	constructor(descriptor) {
 		super(descriptor);

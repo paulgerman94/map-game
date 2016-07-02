@@ -16,6 +16,7 @@ class LocationStore extends EventEmitter {
 	*/
 	constructor() {
 		super();
+		this.coordinates = cache.load("coordinates");
 		const flags = cache.load("flags");
 		this.flags = flags ? flags.map(flag => new Flag(flag).specialized) : [];
 	}
@@ -27,6 +28,19 @@ class LocationStore extends EventEmitter {
 	updateArea(centers) {
 		this.centers = centers;
 		this.emit(AREA_UPDATED, this.centers);
+	}
+	/**
+	* Updates the player coordinates in the cache
+	* @param {object} coordinates
+	* 	The `coords` object returned from the GeoLocation API
+	*/
+	updateCoordinates(coordinates) {
+		this.coordinates = coordinates;
+		cache.save("coordinates", {
+			accuracy: coordinates.accuracy,
+			latitude: coordinates.latitude,
+			longitude: coordinates.longitude
+		});
 	}
 	/**
 	* Handles a flux action and manipulates the store depending on the action
@@ -43,12 +57,31 @@ class LocationStore extends EventEmitter {
 				for (const flag of action.flags) {
 					if (!this.flags.some(cachedFlag => cachedFlag.id === flag.id)) {
 						/* The flag is not in the cache, so add it */
-						this.flags.push(flag);
+						if (flag instanceof Flag) {
+							/* Never push a partial update (object) in the flag array */
+							this.flags.push(flag);
+						}
 					}
 					else {
 						/* It's in the cache, so update it */
 						const index = this.flags.findIndex(f => f.id === flag.id);
-						this.flags[index] = flag;
+						let foundFlag = this.flags[index];
+						if (flag instanceof Flag) {
+							/* Just exchange the flag */
+							foundFlag = flag;
+						}
+						else {
+							/* Perform a partial update */
+							const partial = [
+								"capturedAt",
+								"lockedUntil",
+								"owner",
+								"team"
+							];
+							for (const property of partial) {
+								foundFlag.updateDescriptor(property, flag[property]);
+							}
+						}
 					}
 				}
 				/* Cache the flags permanently */

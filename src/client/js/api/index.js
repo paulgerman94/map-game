@@ -71,6 +71,7 @@ export async function login(data = {}) {
 		}
 		catch (e) {
 			/* Network error, token expiration, etc. */
+			console.log("Removing token, because", e);
 			cache.remove(TOKEN);
 			publish(LOGIN_FAILED);
 			throw new Error("There was a token error.");

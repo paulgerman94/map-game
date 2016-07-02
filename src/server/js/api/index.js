@@ -6,11 +6,13 @@ import {
 	isCapturable,
 	getFlagInfo,
 	captureFlag,
+	retrievePOIs,
 	getTeam as getPlayerTeam
 } from "../db";
 import { log, err } from "../util";
 import { createToken } from "../crypto";
 import { POI_RADIUS } from "../constants";
+import POI from "../types/POI";
 /**
 * @param {object} options An object
 * @param {Array.<number>} options.args
@@ -22,6 +24,7 @@ import { POI_RADIUS } from "../constants";
 */
 export async function getPOIs({
 	args,
+	client,
 	db,
 	message
 }) {
@@ -31,6 +34,7 @@ export async function getPOIs({
 			latitude,
 			longitude
 		} = coordinates;
+		client.properties.coordinates = coordinates;
 		const point = new Point({
 			db,
 			latitude,
@@ -228,7 +232,8 @@ export async function capture({
 	args,
 	client,
 	db,
-	message
+	message,
+	server
 }) {
 	const [, data] = args;
 	const {
@@ -250,19 +255,75 @@ export async function capture({
 			const result = await captureFlag({
 				accountName,
 				db,
+				client,
 				id
 			});
 			if (result) {
 				log(`${accountName} has captured the flag ${id}.`);
 				message.reply(result);
 				/* Tell the loser that his flag was stolen */
-				const lastOwnerClient = Array.from(this.clients).find(c => c.properties.accountName === flagInfo.owner);
+				const lastOwnerClient = Array.from(server.clients).find(c => c.properties.accountName === flagInfo.owner);
 				if (lastOwnerClient) {
 					log(`Notifying ${lastOwnerClient.properties.accountName} of his flag loss by ${accountName}…`);
-					this.notifier.notify([lastOwnerClient], {
+					server.notifier.notify([lastOwnerClient], {
 						subject: `You've lost a flag`,
 						body: `A flag of yours has been captured by ${accountName}!`
 					});
+				}
+				/* Search for online players around the capturer */
+				const [descriptor] = await retrievePOIs({
+					db,
+					pois: [new POI(id, flagInfo.osmType)]
+				});
+				/* TODO: Map the descriptor to the virtual position */
+				let flagPosition;
+				const { metadata } = descriptor;
+				if (metadata.type === "node") {
+					flagPosition = {
+						latitude: metadata.lat,
+						longitude: metadata.lon
+					};
+				}
+				else if (metadata.type === "way") {
+					flagPosition = {
+						latitude: metadata.center.lat,
+						longitude: metadata.center.lon
+					};
+				}
+				else {
+					err("Unhandled POI type.");
+				}
+				const newFlagInfo = await getFlagInfo({
+					db,
+					id
+				});
+				const newTeam = await getPlayerTeam({
+					db,
+					accountName
+				});
+				newFlagInfo.team = newTeam;
+				for (const bystander of server.clients) {
+					/* Skip self */
+					if (bystander === client) {
+						continue;
+					}
+					const clientCoordinates = bystander.properties.coordinates;
+					if (clientCoordinates) {
+						const clientPoint = new Point({
+							latitude: clientCoordinates.latitude,
+							longitude: clientCoordinates.longitude
+						});
+						const flagPoint = new Point({
+							latitude: flagPosition.latitude,
+							longitude: flagPosition.longitude
+						});
+						if (flagPoint.measureDistance(clientPoint) <= POI_RADIUS) {
+							bystander.registerCapture({
+								id,
+								newFlagInfo
+							});
+						}
+					}
 				}
 			}
 			else {
