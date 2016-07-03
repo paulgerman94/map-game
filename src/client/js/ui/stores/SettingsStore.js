@@ -3,6 +3,7 @@ import { EventEmitter } from "crystal-event-emitter";
 import cache from "client/cache";
 /**
 * A symbol that denotes that the game camera's follow mode has been configured
+* @type {symbol}
 */
 export const CAMERA_FOLLOW_CONFIGURED = Symbol("Camera follow configured");
 /**

@@ -3,30 +3,37 @@ import { EventEmitter } from "crystal-event-emitter";
 import cache from "client/cache";
 /**
 * A symbol that denotes a login
+* @type {symbol}
 */
 export const LOGIN = Symbol("Login");
 /**
 * A symbol that denotes a failed login
+* @type {symbol}
 */
 export const LOGIN_FAILED = Symbol("Login failed");
 /**
 * A symbol that denotes a logout
+* @type {symbol}
 */
 export const LOGOUT = Symbol("Logout");
 /**
 * A symbol that denotes a disrupted connection
+* @type {symbol}
 */
 export const CONNECTION_DISRUPTED = Symbol("Connection disrupted");
 /**
 * A symbol that denotes an established connection
+* @type {symbol}
 */
 export const CONNECTION_ESTABLISHED = Symbol("Connection established");
 /**
 * A symbol that denotes that a service worker has been registered
+* @type {symbol}
 */
 export const SERVICE_WORKER_REGISTERED = Symbol("Service worker registered");
 /**
 * A symbol that denotes that the player's team has been received
+* @type {symbol}
 */
 export const TEAM_RECEIVED = Symbol("Team received");
 /**

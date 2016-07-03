@@ -2,6 +2,7 @@ import dispatcher from "../Dispatcher";
 import EventEmitter from "crystal-event-emitter";
 /**
 * A symbol that denotes that the menu was toggled
+* @type {symbol}
 */
 export const MENU_TOGGLED = Symbol("Menu toggled");
 /**

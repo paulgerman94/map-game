@@ -8,6 +8,10 @@ import { km } from "./units";
 import humps from "humps";
 import { OWNERSHIP_PROTECTION_TIME } from "./constants";
 import POI from "./types/POI";
+/**
+* Denotes a uniqueness violation in the database
+* @type {symbol}
+*/
 export const UNIQUENESS_VIOLATION = "23505";
 const NO_DATABASE = "3D000";
 const pgpDB = pgp();

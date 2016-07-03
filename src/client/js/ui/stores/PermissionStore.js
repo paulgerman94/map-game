@@ -1,40 +1,65 @@
 // import dispatcher from "../Dispatcher";
 import { EventEmitter } from "crystal-event-emitter";
 import cache from "client/cache";
-const CACHE_KEY = "permissions";
+/**
+* The `"granted"` permission string that browsers can respond with
+*/
 export const GRANTED = "granted";
+/**
+* The `"denied"` permission string that browsers can respond with
+*/
 export const DENIED = "denied";
+/**
+* The `"prompt"` permission string that browsers can respond with
+*/
 export const PROMPT = "prompt";
-export const LOCATION = Symbol("Location");
-export const NOTIFICATIONS = Symbol("Notifications");
+/**
+* Indicates that the user would prefer to have a certain feature enabled
+*/
 export const ENABLED = true;
+/**
+* Indicates that the user would prefer to have a certain feature disabled
+*/
 export const DISABLED = false;
+/**
+* Indicates that the user hasn't decided on whether or not he'd like a certain feature to be enabled or disabled
+*/
 export const UNSET = null;
-const permissionTypes = [
-	[LOCATION, "geolocation"],
-	[NOTIFICATIONS, "notifications"]
-];
-export const PERMISSIONS = {
-	GRANTED,
-	DENIED,
-	PROMPT
-};
+/**
+* A symbol that references the permission to know the user's location (`GeoLocation`)
+* @type {symbol}
+*/
+export const LOCATION = Symbol("Location");
+/**
+* A symbol that references the permission to send push notifications to the user (`Notification`)
+* @type {symbol}
+*/
+export const NOTIFICATIONS = Symbol("Notifications");
 /**
 * A symbol that denotes that the player's notification preferences have changed
+* @type {symbol}
 */
 export const PREFERENCE_CHANGED = Symbol("Preference changed");
 /**
 * A symbol that denotes that the browsers's notification setup has changed
+* @type {symbol}
 */
 export const PERMISSION_CHANGED = Symbol("Permission changed");
 /**
 * A symbol that denotes that a permission request should be displayed with a dialog in the GUI
+* @type {symbol}
 */
 export const PERMISSION_REQUESTED = Symbol("Permission requested");
 /**
 * A symbol that denotes that a permission setup request should be displayed with a dialog in the GUI
+* @type {symbol}
 */
 export const PERMISSION_SETUP_REQUESTED = Symbol("Permission setup requested");
+const permissionTypes = [
+	[LOCATION, "geolocation"],
+	[NOTIFICATIONS, "notifications"]
+];
+const CACHE_KEY = "permissions";
 /**
 * This class models a permission that consists of the actual browser permission and the user's preference
 */

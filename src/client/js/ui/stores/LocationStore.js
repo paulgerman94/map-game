@@ -2,8 +2,21 @@ import dispatcher from "../Dispatcher";
 import { EventEmitter } from "crystal-event-emitter";
 import cache from "client/cache";
 import Flag from "../Flag";
+/**
+* A symbol that denotes that the internal flag cache has been updated (e. g. if new flags have been received)
+* @type {symbol}
+*/
 export const FLAG_CACHE_UPDATED = Symbol("Flag cache updated");
+/**
+* A symbol that denotes that a flag has been selected by the user
+* @type {symbol}
+*/
 export const FLAG_SELECTED = Symbol("Flag selected");
+/**
+* This symbol denotes that the known area ("flag-associations") has been updated.
+* This is currently a debug feature only due to performance implications.
+* @type {symbol}
+*/
 export const AREA_UPDATED = Symbol("Area updated");
 /**
 * This class is a flux store that keeps a global view of the user location and its associated permissions.

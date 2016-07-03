@@ -6,6 +6,9 @@ import {
 	LOGIN,
 	LOGOUT
 } from "../stores/ConnectionStore";
+/**
+* The URL route where this view should be available
+*/
 export const ROUTE = "/";
 /**
 * This component contains the home view that the user should see when entering the app.

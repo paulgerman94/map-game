@@ -13,6 +13,9 @@ import { ROUTE as HOME_ROUTE } from "../views/Home";
 const emailChecker = emailRegEx({
 	exact: true
 });
+/**
+* The URL route where this view should be available
+*/
 export const ROUTE = "register";
 /**
 * This class is a React component that displays a {@link Register} component and automatically fetches its content asynchronously.
