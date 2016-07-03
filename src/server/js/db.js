@@ -573,11 +573,10 @@ export async function isFree(obj) {
 			selected
 		});
 		result.success = true;
+		return result;
 	}
 	catch (e) {
 		result.success = false;
-	}
-	finally {
 		return result;
 	}
 }

@@ -6,44 +6,60 @@ import { FLAG_SELECTED } from "./stores/LocationStore";
 */
 export class Flag {
 	/**
-	* @property {string} icon
-	* 	The flag icon
-	*/
-	icon = "question";
-	/**
-	* Creates a new {@link Flag} sub-instance
+	* Creates a new {@link Flag} instance
 	* @param {object} descriptor
 	* 	An object containing an OSM primitive and the game information about the flag
 	*/
 	constructor(descriptor) {
+		/**
+		* The flag icon, given by a `font-awesome` string
+		* @type {string}
+		*/
+		this.icon = "question";
+		/**
+		* A descriptor containing all the information about a flag and from which it can be generated
+		* @type {object}
+		*/
 		this.descriptor = descriptor;
+		/**
+		* An object containing only the OSM portion of the descriptor
+		* @type {object}
+		*/
 		this.metadata = descriptor.metadata;
 		for (const property in descriptor) {
 			if (!this.hasOwnProperty(property)) {
 				this[property] = descriptor[property];
 			}
 		}
+		/**
+		* The team color that a flag belongs to or `"purple"` if the flag belongs to no team
+		* @type {string}
+		*/
 		this.team = this.team || "purple";
 		/**
-		* @property {number} latitude
-		* 	The flag's latitude
+		* The flag's latitude
+		* @type {number}
 		*/
 		this.latitude = NaN;
 		/**
-		* @property {number} longitude
-		* 	The flag's longitude
+		* The flag's longitude
+		* @type {number}
 		*/
 		this.longitude = NaN;
 		/**
-		* @property {String} name
-		* 	The flag's name
+		* The flag's name
+		* @type {string}
 		*/
 		this.name = this.metadata.tags.name;
 		/**
-		* @property {string} typeName
-		* 	The flag's type name
+		* The flag's type name
+		* @type {string}
 		*/
 		this.typeName = "flag";
+		/**
+		* A shortcut to access the OSM metadata's `id` property
+		* @type {number}
+		*/
 		this.id = this.metadata.id;
 		switch (this.metadata.type) {
 			case "node": {
@@ -123,22 +139,22 @@ export class Flag {
 */
 export class Restaurant extends Flag {
 	/**
-	* @property {string} icon
-	* 	The flag icon
-	*/
-	icon = "cutlery";
-	/**
-	* @property {string} typeName
-	* 	The flag's type name
-	*/
-	typeName = "restaurant";
-	/**
 	* Creates a new Restaurant {@link Flag}
 	* @param {object} descriptor
 	* 	An object containing an OSM primitive and the game information about the flag
 	*/
 	constructor(descriptor) {
 		super(descriptor);
+		/**
+		* The flag icon, given by a `font-awesome` string
+		* @type {string}
+		*/
+		this.icon = "cutlery";
+		/**
+		* The flag's type name
+		* @type {string}
+		*/
+		this.typeName = "restaurant";
 	}
 }
 /**
@@ -146,22 +162,22 @@ export class Restaurant extends Flag {
 */
 export class School extends Flag {
 	/**
-	* @property {string} icon
-	* 	The flag icon
-	*/
-	icon = "university";
-	/**
-	* @property {string} typeName
-	* 	The flag's type name
-	*/
-	typeName = "school";
-	/**
 	* Creates a new School {@link Flag}
 	* @param {object} descriptor
 	* 	An object containing an OSM primitive and the game information about the flag
 	*/
 	constructor(descriptor) {
 		super(descriptor);
+		/**
+		* The flag icon, given by a `font-awesome` string
+		* @type {string}
+		*/
+		this.icon = "university";
+		/**
+		* The flag's type name
+		* @type {string}
+		*/
+		this.typeName = "school";
 	}
 }
 /**
@@ -169,22 +185,22 @@ export class School extends Flag {
 */
 export class Player extends Flag {
 	/**
-	* @property {string} icon
-	* 	The flag icon
-	*/
-	icon = "male";
-	/**
-	* @property {string} typeName
-	* 	The flag's type name
-	*/
-	typeName = "player";
-	/**
-	* Creates a new Restaurant {@link Flag}.
+	* Creates a new Restaurant {@link Flag}
 	* @param {object} descriptor
 	* 	An object containing an OSM primitive and the game information about the flag
 	*/
 	constructor(descriptor) {
 		super(descriptor);
+		/**
+		* The flag icon
+		* @type {string}
+		*/
+		this.icon = "male";
+		/**
+		* The flag's type name
+		* @type {string}
+		*/
+		this.typeName = "player";
 	}
 }
 export default Flag;

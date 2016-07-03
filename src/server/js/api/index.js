@@ -203,7 +203,7 @@ export async function isFree({
 * @param {Message} options.message
 * 	A message object to reply to
 */
-export async function updateSubscription({
+export function updateSubscription({
 	args,
 	client,
 	message
