@@ -48,7 +48,7 @@ function chooseFreeAPI() {
 * @return {Promise}
 * 	A Promise that resolves to a free API some time in the future. Resolving will automatically reserve the connection.
 */
-async function waitForFreeAPI() {
+function waitForFreeAPI() {
 	const api = chooseFreeAPI();
 	if (api === null) {
 		return new Promise(resolve => {
