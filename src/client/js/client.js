@@ -28,7 +28,7 @@ const timeouts = {
 class Client extends ClientCore {
 	/**
 	* This method fires whenever the connection is (re-)established.
-	* It will perform tasks that are necessary after a successful connection establishment (i. e. updating the notification ID).
+	* It will perform tasks that are necessary after a successful connection establishment (i.e. updating the notification ID).
 	*/
 	async onOpen() {
 		console.debug("Connection established.");

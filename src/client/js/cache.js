@@ -3,7 +3,7 @@
 */
 export const TOKEN = "token";
 /**
-* This class models a cache, i. e. an object that simplifies cache access. Since cookies are dead, this project makes heavy use of WebStorage. This class offers a simple API to load, save, and remove properties or assign values to them.
+* This class models a cache, i.e. an object that simplifies cache access. Since cookies are dead, this project makes heavy use of WebStorage. This class offers a simple API to load, save, and remove properties or assign values to them.
 */
 class Cache {
 	/**
@@ -75,4 +75,7 @@ class Cache {
 		return this.data.hasOwnProperty(property);
 	}
 }
+/**
+* The {@link Cache} singleton instance
+*/
 export default new Cache();

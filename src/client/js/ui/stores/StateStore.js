@@ -7,4 +7,7 @@ class StateStore extends EventEmitter {
 }
 const stateStore = new StateStore();
 // dispatcher.register(::stateStore.handleActions);
+/**
+* The {@link StateStore} singleton instance
+*/
 export default stateStore;

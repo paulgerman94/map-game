@@ -10,12 +10,16 @@ export const CAMERA_FOLLOW_CONFIGURED = Symbol("Camera follow configured");
 * This class is a flux store that keeps a global view of the game settings.
 */
 class SettingsStore extends EventEmitter {
-	isCameraFollowing = cache.has("isCameraFollowing") ? cache.load("isCameraFollowing") : true;
 	/**
 	* Creates a new {@link SettingsStore}
 	*/
 	constructor() {
 		super();
+		/**
+		* Whether the camera should follow the player or not
+		* @type {boolean}
+		*/
+		this.isCameraFollowing = cache.has("isCameraFollowing") ? cache.load("isCameraFollowing") : true;
 	}
 	/**
 	* Handles a flux action and manipulates the store depending on the action
@@ -38,4 +42,7 @@ class SettingsStore extends EventEmitter {
 }
 const settingsStore = new SettingsStore();
 dispatcher.register(::settingsStore.handleActions);
+/**
+* The {@link SettingsStore} singleton instance
+*/
 export default settingsStore;

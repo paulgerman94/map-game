@@ -3,13 +3,16 @@ WebPush.setGCMAPIKey(process.env.GCM_KEY);
 /**
 * The sole purpose of this class is to send out push notifications to users' phones and browsers.
 */
-export class PushNotifier {
+export default class PushNotifier {
 	/**
 	* Constructs a new {@link PushNotifier} instance
 	* @param {Server} server
 	* 	A reference to a {@link Server} object that can be used when a broadcast should be performed
 	*/
 	constructor(server) {
+		/**
+		* A reference to a {@link Server} object that can be used when a broadcast should be performed
+		*/
 		this.server = server;
 	}
 	/**
@@ -41,4 +44,3 @@ export class PushNotifier {
 		}
 	}
 }
-export default PushNotifier;

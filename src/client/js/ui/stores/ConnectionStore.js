@@ -42,20 +42,26 @@ export const TEAM_RECEIVED = Symbol("Team received");
 */
 class ConnectionStore extends EventEmitter {
 	/**
-	* The user that is logged in
-	* @property {object} [user=null]
+	* Instantiates a new {@link ConnectionStore}
 	*/
-	user = null;
-	/**
-	* States whether the client is connected to the server or not
-	* @property {boolean} isConnected
-	*/
-	isConnected;
-	/**
-	* The service worker registration that is created upon starting the app
-	* @property {ServiceWorkerRegistration} serviceWorkerRegistration
-	*/
-	serviceWorkerRegistration;
+	constructor() {
+		super();
+		/**
+		* The user that is logged in
+		* @type {object}
+		*/
+		this.user = null;
+		/**
+		* States whether the client is connected to the server or not
+		* @type {boolean}
+		*/
+		this.isConnected = false;
+		/**
+		* The service worker registration that is created upon starting the app
+		* @type {ServiceWorkerRegistration}
+		*/
+		this.serviceWorkerRegistration = null;
+	}
 	/**
 	* Whether or not the user is currently logged in
 	* @return {boolean}
@@ -127,4 +133,7 @@ class ConnectionStore extends EventEmitter {
 }
 const connectionStore = new ConnectionStore();
 dispatcher.register(::connectionStore.handleActions);
+/**
+* The {@link ConnectionStore} singleton instance
+*/
 export default connectionStore;

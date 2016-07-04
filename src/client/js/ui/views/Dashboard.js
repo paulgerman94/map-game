@@ -44,34 +44,6 @@ import { ms } from "server/units";
 * It should a simple map as well as the main game components.
 */
 export default class Dashboard extends React.Component {
-	map;
-	currentFlag;
-	layers = {};
-	state = {
-		view: null,
-		shownFlags: [],
-		showFlagDetails: false,
-		currentMarker: null,
-		zoom: 15,
-		accuracy: 0
-	};
-	styles = {
-		layers: {
-			player: {
-				reach: {
-					failed: {
-						color: "hsl(8, 100%, 80%)"
-					},
-					loading: {
-						color: "hsl(228, 100%, 80%)"
-					},
-					ready: {
-						color: "hsl(228, 100%, 50%)"
-					}
-				}
-			}
-		}
-	};
 	/**
 	* Instantiates a new {@link Dashboard} component
 	*/
@@ -84,6 +56,59 @@ export default class Dashboard extends React.Component {
 		this.removeZoomFix = ::this.removeZoomFix;
 		this.showFlagDialog = ::this.showFlagDialog;
 		this.update = ::this.update;
+		/**
+		* The map instance that LeafletJS uses internally
+		* @type {object}
+		*/
+		this.map = null;
+		/**
+		* The flag that the user has last clicked on
+		* @type {Flag}
+		*/
+		this.currentFlag = null;
+		/**
+		* The Leaflet layers where markers and other elements will be drawn to
+		* {@type} object
+		*/
+		this.layers = {};
+		/**
+		* The React component's state
+		* @type {object}
+		*/
+		this.state = {
+			view: null,
+			shownFlags: [],
+			showFlagDetails: false,
+			currentMarker: null,
+			zoom: 15,
+			accuracy: 0
+		};
+		/**
+		* The React component's visual styles
+		* @type {object}
+		*/
+		this.styles = {
+			layers: {
+				player: {
+					reach: {
+						failed: {
+							color: "hsl(8, 100%, 80%)"
+						},
+						loading: {
+							color: "hsl(228, 100%, 80%)"
+						},
+						ready: {
+							color: "hsl(228, 100%, 50%)"
+						}
+					}
+				}
+			}
+		};
+		/**
+		* The ID to use whenever the GeoLocation API's `watchPosition` callback should be cleared
+		* @type {number}
+		*/
+		this.geoLocationWatchID = 0;
 	}
 	/**
 	* Watches the user coordinates in an interval and sends them to the server. Once the server replies with the corresponding flags, the flags are added to the map.

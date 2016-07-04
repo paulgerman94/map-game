@@ -10,10 +10,16 @@ export const MENU_TOGGLED = Symbol("Menu toggled");
 */
 class LayoutStore extends EventEmitter {
 	/**
-	* @type {boolean}
-	* 	Whether or not the menu is visible
+	* Instantiates a new {@link LayoutStore}
 	*/
-	isMenuVisible = false;
+	constructor() {
+		super();
+		/**
+		* Whether or not the menu is visible
+		* @type {boolean}
+		*/
+		this.isMenuVisible = false;
+	}
 	/**
 	* Handles a flux action and manipulates the store depending on the action
 	* @param {string} action
@@ -32,4 +38,7 @@ class LayoutStore extends EventEmitter {
 }
 const layoutStore = new LayoutStore();
 dispatcher.register(::layoutStore.handleActions);
+/**
+* The {@link LayoutStore} singleton instance
+*/
 export default layoutStore;

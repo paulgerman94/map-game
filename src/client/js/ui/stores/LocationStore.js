@@ -3,7 +3,7 @@ import { EventEmitter } from "crystal-event-emitter";
 import cache from "client/cache";
 import Flag from "../Flag";
 /**
-* A symbol that denotes that the internal flag cache has been updated (e. g. if new flags have been received)
+* A symbol that denotes that the internal flag cache has been updated (e.g. if new flags have been received)
 * @type {symbol}
 */
 export const FLAG_CACHE_UPDATED = Symbol("Flag cache updated");
@@ -22,16 +22,27 @@ export const AREA_UPDATED = Symbol("Area updated");
 * This class is a flux store that keeps a global view of the user location and its associated permissions.
 */
 class LocationStore extends EventEmitter {
-	flags;
-	centers;
 	/**
 	* Instantiates a new {@link LocationStore} and sets up the flag cache
 	*/
 	constructor() {
 		super();
+		/**
+		* An object that caches the GeoLocation API's last result and thus the user's last coordinates
+		* @type {object}
+		*/
 		this.coordinates = cache.load("coordinates");
+		/**
+		* An array of coordinate objects that can be used to display "flag associations" when debugging
+		* @type {Array.<Flag>}
+		*/
+		this.centers = [];
 		const flags = cache.load("flags");
-		this.flags = flags ? flags.map(flag => new Flag(flag).specialized) : [];
+		/**
+		* An array of {@link Flag} objects that the memory contains ready to be rendered
+		* @type {Array.<Flag>}
+		*/
+		this.flags = flags ? flags.map(descriptor => new Flag(descriptor).specialized) : [];
 	}
 	/**
 	* Updates the internal area cache and fires an event to redraw the area
@@ -110,4 +121,7 @@ class LocationStore extends EventEmitter {
 }
 const locationStore = new LocationStore();
 dispatcher.register(::locationStore.handleActions);
+/**
+* The {@link LocationStore} singleton instance
+*/
 export default locationStore;

@@ -6,9 +6,7 @@ import PushNotifier from "./PushNotifier";
 * This class includes the main API that clients will communicate with.
 * It's responsible for game-related actions as well as answering client requests.
 */
-export class Server extends ServerCore {
-	notifier;
-	clients = new Set();
+export default class Server extends ServerCore {
 	/**
 	* Creates a new {@link Server} instance
 	* @param {object} database
@@ -18,7 +16,16 @@ export class Server extends ServerCore {
 	*/
 	constructor(database, options) {
 		super(database, options);
+		/**
+		* The notifier that the server uses to access the Push API
+		* @type {PushNotifier}
+		*/
 		this.notifier = new PushNotifier(this);
+		/**
+		* A list of clients that the server can use to see who's connected
+		* @type {Array.<RPCClient>}
+		*/
+		this.clients = new Set();
 		// setInterval(::this.broadcastArea, 5 * s);
 	}
 	/**
@@ -59,4 +66,3 @@ export class Server extends ServerCore {
 		}
 	}
 }
-export default Server;

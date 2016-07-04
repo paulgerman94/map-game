@@ -103,7 +103,7 @@ export default class Point {
 		return d;
 	}
 	/**
-	* Determines if a location is already known (i. e. cached in the database).
+	* Determines if a location is already known (i.e. cached in the database).
 	* This is done by constructing a regular n-gon around this point, and performing a containment check for each vertex.
 	* In this containment check, if every vertex can be found in an already known circle (we call this a `flag association`), then the n-gon is assumed to be contained in an already known flag association.
 	* @param {number} radius

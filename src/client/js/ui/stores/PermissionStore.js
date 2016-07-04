@@ -23,6 +23,7 @@ export const ENABLED = true;
 export const DISABLED = false;
 /**
 * Indicates that the user hasn't decided on whether or not he'd like a certain feature to be enabled or disabled
+* @type {null}
 */
 export const UNSET = null;
 /**
@@ -132,12 +133,16 @@ class PreferenceChangeEvent extends PermissionDeltaEvent {
 * This class is a store that keeps a global view of the user permissions.
 */
 class PermissionStore extends EventEmitter {
-	permissions = new Map();
 	/**
 	* Instantiates a new {@link PermissionStore} and sets the user preferences from cache
 	*/
 	constructor() {
 		super();
+		/**
+		* Maps permissions to the player's actual preferences
+		* @type {Map}
+		*/
+		this.permissions = new Map();
 		/* If we've never saved permissions before, the cache is pretty new */
 		if (!cache.has(CACHE_KEY)) {
 			cache.save(CACHE_KEY, {});
@@ -163,7 +168,7 @@ class PermissionStore extends EventEmitter {
 	}
 	/**
 	* This method Infers the preference given that the {@link Permission}'s permission property has changed.
-	* Note that inferrence is necessary since the user can revoke permissions at any time, which has implications on the app's runtime behavior (e. g. think of in-game user settings that must be changed accordingly).
+	* Note that inferrence is necessary since the user can revoke permissions at any time, which has implications on the app's runtime behavior (e.g. think of in-game user settings that must be changed accordingly).
 	* @param {symbol} type
 	* 	The {@link Permission} type for which to perform preference inference
 	* @param {boolean|null} preference
@@ -288,4 +293,7 @@ class PermissionStore extends EventEmitter {
 }
 const permissionStore = new PermissionStore();
 // dispatcher.register(::permissionStore.handleActions);
+/**
+* The {@link PermissionStore} singleton instance
+*/
 export default permissionStore;

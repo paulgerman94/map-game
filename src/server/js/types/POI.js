@@ -4,7 +4,6 @@ const pgpDB = pgp();
 * This class is mostly used as a custom SQL serialization representation for a composite type
 */
 export class POI {
-	_rawDBType = true;
 	/**
 	* Constructs a new POI instance for database communication
 	* @param {number} id
@@ -15,8 +14,25 @@ export class POI {
 	* 	The raw OSM element (to be saved as metadata in the database) to be associated with this POI
 	*/
 	constructor(id, type, element) {
+		/**
+		* Tells `pg-promise` that this type is to be parsed as it is
+		* @type {boolean}
+		*/
+		this._rawDBType = true;
+		/**
+		* The OSM ID that the POI can be linked to
+		* @type {number}
+		*/
 		this.id = id;
+		/**
+		* The type of OSM element that we're dealing with
+		* @type {string}
+		*/
 		this.type = type;
+		/**
+		* The raw OSM element (to be saved as metadata in the database) to be associated with this POI
+		* @type {object}
+		*/
 		this.element = element;
 	}
 	/**
@@ -25,9 +41,9 @@ export class POI {
 	* 	A string that is safe to use within SQL queries
 	*/
 	formatDBType() {
-		return pgpDB.as.format("poi(${id}, ${element})", {
+		return pgpDB.as.format("poi(${id}, ${type})", {
 			id: this.id,
-			element: this.type
+			type: this.type
 		});
 	}
 	/**
