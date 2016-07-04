@@ -16,6 +16,7 @@
     "babel": "^6.5.2",
     "babel-cli": "^6.10.1",
     "babel-eslint": "^6.1.0",
+    "babel-plugin-__coverage__": "^11.0.0",
     "babel-plugin-module-alias": "^1.5.0",
     "babel-plugin-transform-es2015-modules-systemjs": "^6.9.0",
     "babel-plugin-transform-es2015-modules-umd": "^6.8.0",
@@ -262,13 +263,19 @@
   },
   "nyc": {
     "include": [
-      "src/server/js/**/*.js"
+      "src/**/*.js"
     ],
-    "sourceMaps": "inline",
+    "sourceMap": false,
+    "instrument": false,
+    "require": [
+       "babel-register"
+    ],
     "exclude": [
       "dist",
-      "packages"
+      "components",
+      "packages",
+      "node_modules"
     ],
-    "all": true
+    "all": false
   }
 }
