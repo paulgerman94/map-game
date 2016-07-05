@@ -28,6 +28,7 @@ import path from "path";
 import postCSS from "gulp-postcss";
 import postCSSImport from "postcss-import";
 import scss from "postcss-scss";
+process.env.FORCE_COLOR = true;
 let unixUsername = null;
 /**
 * Replaces custom literals by values in the build process. This is needed so that every developer can work on his own build without interfering with the others.
@@ -73,7 +74,8 @@ function transpileJS(source, destination) {
 		.pipe(sourceMaps.init())
 		.pipe(replace(/<%[^%]+%>/g, replacer))
 		.pipe(babel())
-		.on("error", function() {
+		.on("error", function(e) {
+			console.error(e);
 			this.emit("end");
 		})
 		.pipe(uglify())
@@ -127,7 +129,6 @@ const globs = {
 		js: `${paths.server.js.src}/**/*.js`
 	}
 };
-process.env.FORCE_COLOR = true;
 gulp.task("run-server", done => {
 	nodemon({
 		script: `${paths.server.js.dest}/index.js`,
@@ -351,10 +352,8 @@ gulp.task("doc", () => {
 				gulp.parallel(
 					gulp.series(
 						"js",
-						gulp.series(
-							"build-static-assets",
-							"bundle-jspm"
-						)
+						"build-static-assets",
+						"bundle-jspm"
 					),
 					"html",
 					gulp.series(

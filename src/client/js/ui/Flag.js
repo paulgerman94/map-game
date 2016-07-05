@@ -189,13 +189,31 @@ export class Player extends Flag {
 	* @param {object} descriptor
 	* 	An object containing an OSM primitive and the game information about the flag
 	*/
-	constructor(descriptor) {
-		super(descriptor);
+	constructor({
+		latitude,
+		longitude,
+		user
+	}) {
+		super({
+			metadata: {
+				lat: latitude,
+				lon: longitude,
+				tags: {
+					name: user.displayName
+				},
+				type: "node"
+			}
+		});
 		/**
 		* The flag icon
 		* @type {string}
 		*/
 		this.icon = "male";
+		/**
+		* The team color that a flag belongs to
+		* @type {string}
+		*/
+		this.team = user.team;
 		/**
 		* The flag's type name
 		* @type {string}

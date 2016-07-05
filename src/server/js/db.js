@@ -521,6 +521,36 @@ export async function getTeam({
 	}
 }
 /**
+* Queries for a user's user information
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {string} options.accountName
+* 	The account name whose team to look up
+* @return {Promise}
+* 	A {@link Promise} that resolves to a the team name
+*/
+export async function queryUserInformation({
+	db,
+	accountName
+} = {}) {
+	try {
+		const result = await db.one(`
+		SELECT account_name, display_name, team
+		FROM users
+		WHERE account_name = $[accountName];
+		`, {
+			accountName
+		});
+		return humps.camelizeKeys(result);
+	}
+	catch (e) {
+		err(`Couldn't retrieve user information for account "${accountName}".`);
+		return null;
+	}
+}
+/**
 * Transforms a underscore-cased string to camelcase
 * @param {string} string
 * 	The string to be transformed

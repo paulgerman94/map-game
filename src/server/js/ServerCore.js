@@ -2,7 +2,7 @@ import WS from "ws-promise-server";
 import { log, err } from "./util";
 import { checkToken } from "./crypto";
 import { s } from "./units";
-import { isFree } from "./db";
+import { isFree, queryUserInformation } from "./db";
 import * as API from "./api/index";
 const guestFunctions = {
 	isFree: API.isFree,
@@ -134,8 +134,12 @@ export default class ServerCore extends WS {
 						if (!isUsernameAvailable) {
 							/* The user is in the database; token login is successful */
 							client.properties.token = token;
-							client.properties.accountName = isValid.accountName;
-							message.reply(token);
+							const user = await queryUserInformation({
+								db: this.db,
+								accountName: isValid.accountName
+							});
+							client.properties.user = user;
+							message.reply(token, user);
 						}
 						else {
 							message.reply(false);

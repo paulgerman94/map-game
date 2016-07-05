@@ -7,7 +7,8 @@ import {
 	getFlagInfo,
 	captureFlag,
 	retrievePOIs,
-	getTeam as getPlayerTeam
+	getTeam as getPlayerTeam,
+	queryUserInformation
 } from "../db";
 import { log, err } from "../util";
 import { createToken } from "../crypto";
@@ -149,8 +150,12 @@ export async function login({
 				accountName
 			});
 			client.properties.token = token;
-			client.properties.accountName = accountName;
-			message.reply(token);
+			const user = await queryUserInformation({
+				db,
+				accountName
+			});
+			client.properties.user = user;
+			message.reply(token, user);
 		}
 		else {
 			err(`A user tried to login "${accountName}" but failed.`);
@@ -262,9 +267,9 @@ export async function capture({
 				log(`${accountName} has captured the flag ${id}.`);
 				message.reply(result);
 				/* Tell the loser that his flag was stolen */
-				const lastOwnerClient = Array.from(server.clients).find(c => c.properties.accountName === flagInfo.owner);
+				const lastOwnerClient = Array.from(server.clients).find(c => c.properties.user.accountName === flagInfo.owner);
 				if (lastOwnerClient) {
-					log(`Notifying ${lastOwnerClient.properties.accountName} of his flag loss by ${accountName}…`);
+					log(`Notifying ${lastOwnerClient.properties.user.accountName} of his flag loss by ${accountName}…`);
 					server.notifier.notify([lastOwnerClient], {
 						subject: `You've lost a flag`,
 						body: `A flag of yours has been captured by ${accountName}!`
@@ -338,7 +343,7 @@ export async function capture({
 	})();
 }
 /**
-* Retrieves the team of a user
+* Retrieves user information about a user (like display name and team)
 * @param {object} options
 * 	An object
 * @param {object} options.args
@@ -350,7 +355,7 @@ export async function capture({
 * @param {Message} options.message
 * 	A message object to reply to
 */
-export async function getTeam({
+export async function getUserInformation({
 	args,
 	client,
 	db,
@@ -361,11 +366,11 @@ export async function getTeam({
 		accountName
 	} = data;
 	(async () => {
-		const team = await getPlayerTeam({
+		const user = await queryUserInformation({
 			db,
 			accountName
 		});
-		client.properties.team = team;
-		message.reply(team);
+		client.properties.user = user;
+		message.reply(user);
 	})();
 }

@@ -270,14 +270,9 @@ export default class Dashboard extends React.Component {
 		/* Create or update the player marker */
 		if (!this.layers.player.marker) {
 			const playerMarker = this.layers.player.marker = new Player({
-				metadata: {
-					lon: longitude,
-					lat: latitude,
-					tags: {
-						name: "You"
-					},
-					type: "node"
-				}
+				latitude,
+				longitude,
+				user: ConnectionStore.user
 			}).marker;
 			this.layers.player.marker = playerMarker;
 			this.layers.player.addLayer(playerMarker);

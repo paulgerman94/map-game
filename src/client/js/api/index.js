@@ -7,7 +7,7 @@ import {
 	LOGIN,
 	LOGOUT,
 	LOGIN_FAILED,
-	TEAM_RECEIVED
+	USER_RECEIVED
 } from "client/ui/stores/ConnectionStore";
 import { publish } from "client/ui/Dispatcher";
 /**
@@ -20,23 +20,22 @@ import { publish } from "client/ui/Dispatcher";
 * 	The user email to log into
 * @param {string} data.password
 * 	The user's password
-* @return {boolean}
-* 	Whether or not the token could be received
+* @return {object}
+* 	The user object if successful, `null` if unsuccessful
 */
 async function getToken(data) {
 	try {
-		const value = await client.login(data);
-		const [token] = value;
+		const [token, user] = await client.login(data);
 		if (token) {
 			cache.save(TOKEN, token);
-			return true;
+			return user;
 		}
 		else {
-			return false;
+			return null;
 		}
 	}
 	catch (e) {
-		return false;
+		return null;
 	}
 }
 /**
@@ -63,11 +62,13 @@ export async function login(data = {}) {
 	if (token) {
 		/* Try to login with the token */
 		try {
-			await client.login({
+			const [, user] = await client.login({
 				token
 			});
 			cache.save(TOKEN, token);
-			publish(LOGIN);
+			publish(LOGIN, {
+				user
+			});
 		}
 		catch (e) {
 			/* Network error, token expiration, etc. */
@@ -78,10 +79,10 @@ export async function login(data = {}) {
 		}
 	}
 	else if (accountName && email || accountName && password) {
-		const isTokenReceived = await getToken(data);
-		if (isTokenReceived) {
+		const user = await getToken(data);
+		if (user) {
 			publish(LOGIN, {
-				accountName
+				user
 			});
 		}
 		else {
@@ -151,19 +152,19 @@ export async function capture(flag) {
 	});
 }
 /**
-* Performs an API call that gets the team
+* Performs an API call that gets user information like the display name and team
 * @param {string} accountName
 * 	The name of the account whose team to retrieve
 * @return {Promise}
-* 	A promise that resolves to the team of accountName
+* 	A promise that resolves to the user's user information
 */
-export async function getTeam(accountName) {
-	const [team] = await client.getTeam({
+export async function getUserInformation(accountName) {
+	const [user] = await client.getUserInformation({
 		accountName
 	});
-	publish(TEAM_RECEIVED, {
-		team
+	publish(USER_RECEIVED, {
+		user
 	});
-	return team;
+	return user;
 }
 export default from "./getPOIs";

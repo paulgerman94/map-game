@@ -259,7 +259,7 @@
       ]
     },
     "require": [
-      "babel-polyfill",
+      "babel-register",
       "ava-jspm-loader"
     ]
   },
