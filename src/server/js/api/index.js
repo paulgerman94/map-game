@@ -268,10 +268,10 @@ export async function capture({
 				log(`"${accountName}" has captured the flag ${id}.`);
 				message.reply(result);
 				/* Tell the loser that his flag was stolen */
-				const lastOwnerClient = Array.from(server.clients).find(c => c.properties.user.accountName === flagInfo.owner);
-				if (lastOwnerClient) {
-					log(`Notifying "${lastOwnerClient.properties.user.accountName}" of his flag loss by "${accountName}"…`);
-					server.notifier.notify([lastOwnerClient], {
+				const lastOwnerClients = Array.from(server.clients).filter(c => c.properties.user.accountName === flagInfo.owner);
+				if (lastOwnerClients.length) {
+					log(`Notifying "${lastOwnerClients[0].properties.user.accountName}" of his flag loss by "${accountName}"…`);
+					server.notifier.notify(lastOwnerClients, {
 						subject: `You've lost a flag`,
 						body: `A flag of yours has been captured by ${accountName}!`
 					});
