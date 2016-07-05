@@ -154,8 +154,11 @@ gulp.task("html", () => {
 gulp.task("js", () => {
 	const client = transpileJS(globs.client.js, paths.client.js.dest);
 	const server = transpileJS(globs.server.js, paths.server.js.dest);
-	const jspm = transformJSPM();
-	return merge(client, server, jspm);
+	return merge(client, server);
+});
+gulp.task("build-static-assets", shell.task(`npm run bundle`));
+gulp.task("bundle-jspm", () => {
+	return transformJSPM();
 });
 gulp.task("sw", () => {
 	return transpileJS(globs.client.sw, paths.client.sw.dest);
@@ -346,7 +349,13 @@ gulp.task("doc", () => {
 			"lint",
 			gulp.series(
 				gulp.parallel(
-					"js",
+					gulp.series(
+						"js",
+						gulp.series(
+							"build-static-assets",
+							"bundle-jspm"
+						)
+					),
 					"html",
 					gulp.series(
 						"fonts",

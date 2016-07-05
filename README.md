@@ -5,8 +5,8 @@
 $ pacman -S python2
 # gulp is a task runner
 # jspm is a module transformer
-# bower is a package manager for web assets
-$ npm install -g gulp jspm bower
+# bower is a web asset manager
+$ npm install -g gulp@next jspm@beta bower
 ```
 ## Installation
 ```bash
@@ -16,11 +16,7 @@ $ bower install
 $ npm install
 # Install all web dependencies
 $ jspm install
-# Transpile the JavaScript
-$ gulp js
-# Bundle JavaScript for better web performance
-$ npm run bundle
-# Transpile the rest and start the game server
+# Transpile, bundle, start game server
 $ gulp
 ```
 ## Requirement ideas

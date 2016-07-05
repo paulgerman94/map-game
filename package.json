@@ -13,6 +13,7 @@
     "array-includes": "^3.0.2",
     "autoprefixer": "^6.3.7",
     "ava": "^0.15.2",
+    "ava-jspm-loader": "^1.0.2",
     "babel": "^6.5.2",
     "babel-cli": "^6.10.1",
     "babel-eslint": "^6.1.0",
@@ -44,7 +45,7 @@
     "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.0",
     "gulp-esdoc": "^0.2.0",
-    "gulp-eslint": "^3.0.0",
+    "gulp-eslint": "^3.0.1",
     "gulp-google-webfonts": "0.0.12",
     "gulp-htmlmin": "^2.0.0",
     "gulp-jsonminify": "^1.0.0",
@@ -258,7 +259,8 @@
       ]
     },
     "require": [
-      "babel-polyfill"
+      "babel-polyfill",
+      "ava-jspm-loader"
     ]
   },
   "nyc": {
@@ -268,7 +270,7 @@
     "sourceMap": false,
     "instrument": false,
     "require": [
-       "babel-register"
+      "babel-register"
     ],
     "exclude": [
       "dist",
