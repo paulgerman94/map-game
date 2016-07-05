@@ -409,7 +409,7 @@ export async function isCapturable({
 			}
 			else {
 				/* Ownership protection is still active */
-				warn(`"${accountName}" tried to capture an ownership-protected flag.`);
+				warn(`"${accountName}" tried to capture an ownership-protected flag ${info.lockedUntil}.`);
 				return false;
 			}
 		}

@@ -244,7 +244,8 @@ export async function capture({
 	const {
 		id
 	} = data;
-	const { accountName } = client.properties;
+	const { user } = client.properties;
+	const { accountName } = user;
 	(async () => {
 		const flagInfo = await getFlagInfo({
 			db,
@@ -256,7 +257,7 @@ export async function capture({
 			flagInfo
 		});
 		if (isFlagCapturable) {
-			log(`${accountName} can capture the flag ${id}.`);
+			log(`"${accountName}" can capture the flag ${id}.`);
 			const result = await captureFlag({
 				accountName,
 				db,
@@ -264,12 +265,12 @@ export async function capture({
 				id
 			});
 			if (result) {
-				log(`${accountName} has captured the flag ${id}.`);
+				log(`"${accountName}" has captured the flag ${id}.`);
 				message.reply(result);
 				/* Tell the loser that his flag was stolen */
 				const lastOwnerClient = Array.from(server.clients).find(c => c.properties.user.accountName === flagInfo.owner);
 				if (lastOwnerClient) {
-					log(`Notifying ${lastOwnerClient.properties.user.accountName} of his flag loss by ${accountName}…`);
+					log(`Notifying "${lastOwnerClient.properties.user.accountName}" of his flag loss by "${accountName}"…`);
 					server.notifier.notify([lastOwnerClient], {
 						subject: `You've lost a flag`,
 						body: `A flag of yours has been captured by ${accountName}!`
@@ -332,12 +333,12 @@ export async function capture({
 				}
 			}
 			else {
-				err(`${accountName} failed to capture the flag ${id}.`);
+				err(`"${accountName}" failed to capture the flag ${id}.`);
 				message.reply(false);
 			}
 		}
 		else {
-			log(`${accountName} can't capture the flag ${id}.`);
+			log(`"${accountName}" can't capture the flag ${id}.`);
 			message.reply(isFlagCapturable);
 		}
 	})();

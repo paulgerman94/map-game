@@ -19,7 +19,7 @@ import {
 	TOKEN
 } from "./cache";
 const timeouts = {
-	getPOIs: 10 * s
+	getPOIs: 25 * s
 };
 /**
 * This is a client implementation that can communicate with the server.

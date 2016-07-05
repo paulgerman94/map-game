@@ -89,10 +89,9 @@ class LocationStore extends EventEmitter {
 					else {
 						/* It's in the cache, so update it */
 						const index = this.flags.findIndex(f => f.id === flag.id);
-						let foundFlag = this.flags[index];
 						if (flag instanceof Flag) {
 							/* Just exchange the flag */
-							foundFlag = flag;
+							this.flags[index] = flag;
 						}
 						else {
 							/* Perform a partial update */
@@ -103,7 +102,7 @@ class LocationStore extends EventEmitter {
 								"team"
 							];
 							for (const property of partial) {
-								foundFlag.updateDescriptor(property, flag[property]);
+								this.flags[index].updateDescriptor(property, flag[property]);
 							}
 						}
 					}

@@ -149,6 +149,7 @@ export default class Dashboard extends React.Component {
 			}
 			catch (e) {
 				/* Update the player to signal failure */
+				console.log("Coloring reach red because", e);
 				reachStyle = this.styles.layers.player.reach.failed;
 			}
 			finally {
