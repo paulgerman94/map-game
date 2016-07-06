@@ -1,4 +1,5 @@
 language: node_js
+dist: trusty
 node_js:
   - "6"
   - "6.1"
@@ -8,3 +9,14 @@ install:
   - bower install
   - jspm install
 script: gulp
+addons:
+  apt:
+    sources:
+    # Add PPAs with more up-to-date toolchains
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.6
+    packages:
+    # Install toolchains
+    - gcc-5
+    - g++-5
+    - clang-3.6
