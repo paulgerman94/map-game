@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+	- "6"
+	- "6.1"
+install:
+	- npm install -g gulp@next jspm@beta bower
+	- npm install
+	- bower install
+	- jspm install
+script: gulp
