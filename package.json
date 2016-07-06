@@ -3,7 +3,7 @@
   "description": "",
   "main": "gulpfile.babel.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "gulp test",
     "bundle": "touch dist/client/js/lib.js; rm dist/client/js/lib.js*; jspm bundle -d 'dist/client/js/**/*.js - [dist/client/js/**/*.js]' dist/client/js/lib.js"
   },
   "author": "kdex",
@@ -79,18 +79,6 @@
     "passwd-user": "^2.1.0",
     "web-push-encryption": "^2.0.0"
   },
-  "ava": {
-    "babel": {
-      "presets": [
-        "es2015",
-        "stage-0"
-      ]
-    },
-    "require": [
-      "babel-register",
-      "ava-jspm-loader"
-    ]
-  },
   "jspm": {
     "directories": {
       "packages": "packages"
@@ -162,6 +150,25 @@
       }
     }
   },
+  "ava": {
+    "files": [
+      "test/**/*",
+      "!node_modules/**/*",
+      "!packages/**/*"
+    ],
+    "babel": {
+      "presets": [
+        "es2015",
+        "stage-0",
+        "react"
+      ]
+    },
+    "require": [
+      "babel-register",
+      "babel-polyfill",
+      "ava-jspm-loader"
+    ]
+  },
   "nyc": {
     "include": [
       "src/**/*.js"
@@ -172,11 +179,12 @@
       "babel-register"
     ],
     "exclude": [
-      "dist",
-      "components",
-      "packages",
-      "node_modules"
+      "dist/**/*",
+      "components/**/*",
+      "**/test/**/*",
+      "packages/**/*",
+      "node_modules/**/*"
     ],
-    "all": false
+    "all": true
   }
 }

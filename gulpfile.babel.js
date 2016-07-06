@@ -1,5 +1,4 @@
 import "babel-polyfill";
-import ava from "gulp-ava";
 import autoPrefixer from "autoprefixer";
 import babel from "gulp-babel";
 import concat from "gulp-concat";
@@ -320,10 +319,7 @@ function splitConfig() {
 gulp.task("split-config", () => {
 	return splitConfig();
 });
-gulp.task("test", () =>
-	gulp.src("test/**/*.js")
-		.pipe(ava())
-);
+gulp.task("test", shell.task(`ava`));
 gulp.task("cover", shell.task(`nyc --cache gulp test`));
 gulp.task("lint", () => {
 	return gulp.src(["gulpfile.babel.js", globs.server.js, `${paths.client.js.src}/**/*.js`])
