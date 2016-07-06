@@ -16,7 +16,7 @@
 			"tokenSecret": "yourTokenSecret"
 		},
 		"psql": {
-			"user": "kdex",
+			"user": "postgres",
 			"port": 5432,
 			"host": "localhost",
 			"database": "map-game"
