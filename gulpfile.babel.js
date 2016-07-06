@@ -54,7 +54,7 @@ function replacer(match) {
 * 	A stream of the virtual files being transformed
 */
 function transformJSPM() {
-	return gulp.src(["packages/system.js", "jspm.browser.js", "jspm.config.js", "dist/client/js/lib.js"])
+	return gulp.src(["packages/system.js", "jspm.config.js", "dist/client/js/lib.js"])
 		.pipe(replace(/<%[^%]+%>/g, replacer))
 		.pipe(concat("packages.js"))
 // 		.pipe(uglify())
