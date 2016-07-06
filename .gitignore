@@ -36,3 +36,5 @@ node_modules
 packages.js
 # Bower
 components
+# nyc output
+.nyc_output
