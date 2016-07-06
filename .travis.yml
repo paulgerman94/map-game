@@ -1,24 +1,20 @@
-sudo: true
+sudo: required
 language: node_js
 dist: trusty
 env:
-  - CXX=g++-5
-  - CC=gcc-5
+  global:
+    - CXX=g++-5 CC=gcc-5
 node_js:
   - "6"
   - "6.1"
-before_install:
-  # Install PostgresQL 9.5
-  - sudo /etc/init.d/postgresql stop
-  - wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-  - sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main 9.5" >> /etc/apt/sources.list.d/postgresql.list'
-  - sudo apt-get update
-  - sudo apt-get install postgresql-9.5
 install:
   - npm install -g gulpjs/gulp.git#4.0 jspm@beta bower
   - npm install
   - bower install
   - jspm install
+before_script:
+  - sudo cp /etc/postgresql/9.4/main/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
+  - sudo /etc/init.d/postgresql restart
 script: gulp
 addons:
   apt:
@@ -26,8 +22,14 @@ addons:
     # Add PPAs with more up-to-date toolchains
     - ubuntu-toolchain-r-test
     - llvm-toolchain-precise-3.6
+    # PostgresQL
+    - precise-pgdg-9.5
     packages:
     # Install toolchains
     - gcc-5
     - g++-5
     - clang-3.6
+    # PostgresQL
+    - postgresql-9.5
+    - postgresql-contrib-9.5
+  postgresql: 9.5
