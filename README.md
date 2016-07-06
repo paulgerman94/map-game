@@ -1,12 +1,7 @@
 # map-game
 ## Dependencies
 ```bash
-# gyp requires python2
-$ pacman -S python2
-# gulp is a task runner
-# jspm is a module transformer
-# bower is a web asset manager
-$ npm install -g gulp@next jspm@beta bower
+$ npm install -g gulpjs/gulp.git#4.0 jspm@beta bower
 ```
 ## Installation
 ```bash
