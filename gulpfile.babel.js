@@ -336,29 +336,34 @@ gulp.task("doc", () => {
 			}]
 		}));
 });
+gulp.task("build",
+	gulp.parallel(
+		"json",
+		"sw",
+		"lint",
+		gulp.series(
+			gulp.parallel(
+				gulp.series(
+					"js",
+					"build-static-assets",
+					"bundle-jspm"
+				),
+				"html",
+				gulp.series(
+					"fonts",
+					"css"
+				)
+			),
+			"run-server"
+		)
+	)
+);
 (async () => {
 	unixUsername = await getUsername();
 	gulp.task("default",
 		gulp.parallel(
 			"watch",
-			"json",
-			"sw",
-			"lint",
-			gulp.series(
-				gulp.parallel(
-					gulp.series(
-						"js",
-						"build-static-assets",
-						"bundle-jspm"
-					),
-					"html",
-					gulp.series(
-						"fonts",
-						"css"
-					)
-				),
-				"run-server"
-			)
+			"build"
 		)
 	);
 })();
