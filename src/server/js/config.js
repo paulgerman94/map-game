@@ -1,1 +1,1 @@
-export default from "map-game/config.json";
+export default from "../../../config.json";

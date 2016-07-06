@@ -8,11 +8,6 @@ SystemJS.config({
   browserConfig: {
     "baseURL": "/<%LINUX_USERNAME%>"
   },
-  devConfig: {
-    "map": {
-      "plugin-babel": "npm:systemjs-plugin-babel@0.0.12"
-    }
-  },
   packages: {
     "server/": {
       "main": "index.js",
@@ -21,7 +16,20 @@ SystemJS.config({
     "client/": {
       "main": "index.js",
       "defaultExtension": "js"
+    },
+    "npm:react-router@2.5.2": {
+      "map": {
+        "history": "npm:history@2.1.2",
+        "invariant": "npm:invariant@2.2.1",
+        "warning": "npm:warning@2.1.0",
+        "loose-envify": "npm:loose-envify@1.2.0",
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0"
+      }
     }
+  },
+  map: {
+    "plugin-babel": "npm:systemjs-plugin-babel@0.0.12",
+    "react-router": "npm:react-router@2.5.2"
   }
 });
 
@@ -43,7 +51,7 @@ SystemJS.config({
     "events": "github:jspm/nodelibs-events@0.2.0-alpha",
     "flux": "npm:flux@2.1.1",
     "fs": "github:jspm/nodelibs-fs@0.2.0-alpha",
-    "history": "npm:history@3.0.0",
+    "history": "npm:history@2.1.2",
     "http": "github:jspm/nodelibs-http@0.2.0-alpha",
     "https": "github:jspm/nodelibs-https@0.2.0-alpha",
     "leaflet": "npm:leaflet@1.0.0-rc.1",
@@ -53,7 +61,6 @@ SystemJS.config({
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
     "react": "npm:react@15.2.0",
     "react-dom": "npm:react-dom@15.2.0",
-    "react-router": "npm:react-router@2.5.2",
     "react-tap-event-plugin": "npm:react-tap-event-plugin@1.0.0",
     "stream": "github:jspm/nodelibs-stream@0.2.0-alpha",
     "string_decoder": "github:jspm/nodelibs-string_decoder@0.2.0-alpha",
@@ -65,22 +72,6 @@ SystemJS.config({
     "zlib": "github:jspm/nodelibs-zlib@0.2.0-alpha"
   },
   packages: {
-    "npm:react-router@2.5.2": {
-      "map": {
-        "history": "npm:history@2.1.2",
-        "invariant": "npm:invariant@2.2.1",
-        "warning": "npm:warning@2.1.0",
-        "loose-envify": "npm:loose-envify@1.2.0",
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0"
-      }
-    },
-    "npm:history@3.0.0": {
-      "map": {
-        "invariant": "npm:invariant@2.2.1",
-        "query-string": "npm:query-string@4.2.2",
-        "warning": "npm:warning@2.1.0"
-      }
-    },
     "npm:history@2.1.2": {
       "map": {
         "invariant": "npm:invariant@2.2.1",
@@ -99,12 +90,6 @@ SystemJS.config({
     "npm:invariant@2.2.1": {
       "map": {
         "loose-envify": "npm:loose-envify@1.2.0"
-      }
-    },
-    "npm:query-string@4.2.2": {
-      "map": {
-        "object-assign": "npm:object-assign@4.1.0",
-        "strict-uri-encode": "npm:strict-uri-encode@1.1.0"
       }
     },
     "npm:warning@2.1.0": {

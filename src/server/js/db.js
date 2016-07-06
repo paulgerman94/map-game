@@ -1,4 +1,4 @@
-import config from "map-game/config.json";
+import config from "./config";
 import pgTools from "pgtools";
 import pgp from "pg-promise";
 import { log, err, warn } from "./util";

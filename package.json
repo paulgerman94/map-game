@@ -1,5 +1,4 @@
 {
-  "name": "map-game",
   "version": "1.0.0",
   "description": "",
   "main": "gulpfile.babel.js",
@@ -10,7 +9,6 @@
   "author": "kdex",
   "license": "GPL-3.0",
   "devDependencies": {
-    "array-includes": "^3.0.2",
     "autoprefixer": "^6.3.7",
     "ava": "^0.15.2",
     "ava-jspm-loader": "^1.0.2",
@@ -18,7 +16,6 @@
     "babel-cli": "^6.10.1",
     "babel-eslint": "^6.1.0",
     "babel-plugin-__coverage__": "^11.0.0",
-    "babel-plugin-module-alias": "^1.5.0",
     "babel-plugin-transform-es2015-modules-systemjs": "^6.9.0",
     "babel-plugin-transform-es2015-modules-umd": "^6.8.0",
     "babel-plugin-transform-member-expression-literals": "^6.8.0",
@@ -55,12 +52,10 @@
     "gulp-replace": "^0.5.4",
     "gulp-shell": "^0.5.2",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-style-modules": "^0.1.0",
     "gulp-tap": "^0.1.3",
     "gulp-uglify": "^1.5.4",
     "gulp-util": "^3.0.7",
     "install": "^0.8.1",
-    "ip-regex": "^1.0.3",
     "jsonwebtoken": "^7.0.1",
     "jspm": "^0.17.0-beta.22",
     "merge2": "^1.0.2",
@@ -79,7 +74,6 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
-    "fingerprintjs2": "^1.4.0",
     "humps": "^1.1.0",
     "node-fetch": "^1.5.3",
     "passwd-user": "^2.1.0",
@@ -98,8 +92,6 @@
     ]
   },
   "jspm": {
-    "name": "map-game",
-    "main": "map-game.js",
     "directories": {
       "packages": "packages"
     },
@@ -107,15 +99,13 @@
       "crystal-event-emitter": "npm:crystal-event-emitter@^1.3.1",
       "email-regex": "npm:email-regex@^1.0.0",
       "flux": "npm:flux@^2.1.1",
-      "history": "npm:history@^3.0.0",
+      "history": "npm:history@2",
       "leaflet": "npm:leaflet@1.0.0-rc.1",
       "material-ui": "npm:material-ui@^0.15.1",
       "react-router": "npm:react-router@^2.5.2",
       "ws-promise-client": "npm:ws-promise-client@^4.1.2"
     },
-    "devDependencies": {
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12"
-    },
+    "devDependencies": {},
     "peerDependencies": {
       "assert": "github:jspm/nodelibs-assert@^0.2.0-alpha",
       "buffer": "github:jspm/nodelibs-buffer@^0.2.0-alpha",

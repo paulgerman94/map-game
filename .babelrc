@@ -1,12 +1,5 @@
 {
-	"plugins": [[
-		"module-alias", [{
-			"src": "./src/client/js",
-			"expose": "client"
-		}, {
-			"src": "./",
-			"expose": "map-game"
-		}]],
+	"plugins": [
 		"transform-simplify-comparison-operators",
 		"transform-property-literals",
 		"transform-minify-booleans",
