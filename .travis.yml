@@ -3,7 +3,7 @@ language: node_js
 dist: trusty
 env:
   global:
-    - CXX=g++-5 CC=gcc-5 PGUSER=postgres PGHOST=127.0.0.1
+    - CXX=g++-5 CC=gcc-5
 node_js:
   - "6"
   - "6.1"
@@ -23,13 +23,13 @@ addons:
     - ubuntu-toolchain-r-test
     - llvm-toolchain-precise-3.6
     # PostgresQL
-    - precise-pgdg-9.5
+    #- precise-pgdg-9.5
     packages:
     # Install toolchains
     - gcc-5
     - g++-5
     - clang-3.6
     # PostgresQL
-    - postgresql-9.5
-    - postgresql-contrib-9.5
-  postgresql: 9.5
+    #- postgresql-9.5
+    #- postgresql-contrib-9.5
+  postgresql: 9.4
