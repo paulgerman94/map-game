@@ -1,4 +1,5 @@
 # map-game
+[![Build Status](https://travis-ci.org/kdex/map-game.svg?branch=master)](https://travis-ci.org/kdex/map-game)
 ## Dependencies
 ```bash
 $ npm install -g gulpjs/gulp.git#4.0 jspm@beta bower
