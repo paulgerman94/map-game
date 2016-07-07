@@ -39,5 +39,6 @@ addons:
 after_success:
   # Update the official documentation
   - gulp update-doc
-  # Update the coverage
+  # Perform a coverage test
+  - gulp cover
   - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls
