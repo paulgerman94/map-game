@@ -1,4 +1,6 @@
-# map-game
+<p align="center">
+  <img src="https://cloud.githubusercontent.com/assets/4442505/16643126/ed81b6b0-4411-11e6-90bc-9d573097408b.png">
+</p>
 [![Build Status](https://travis-ci.org/kdex/map-game.svg?branch=master)](https://travis-ci.org/kdex/map-game)
 [![Documentation coverage](https://doc.esdoc.org/github.com/kdex/map-game/badge.svg)](https://doc.esdoc.org/github.com/kdex/map-game/)
 ## Installation
