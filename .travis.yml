@@ -12,9 +12,6 @@ install:
   - npm install
   - bower install
   - jspm install
-#before_script:
-  #- sudo cp /etc/postgresql/9.4/main/pg_hba.conf /etc/postgresql/9.5/main/pg_hba.conf
-  #- sudo /etc/init.d/postgresql restart
 script: gulp build
 addons:
   apt:
@@ -22,14 +19,10 @@ addons:
     # Add PPAs with more up-to-date toolchains
     - ubuntu-toolchain-r-test
     - llvm-toolchain-precise-3.6
-    # PostgresQL
-    #- precise-pgdg-9.5
     packages:
     # Install toolchains
     - gcc-5
     - g++-5
     - clang-3.6
-    # PostgresQL
-    #- postgresql-9.5
-    #- postgresql-contrib-9.5
+    - postgresql-9.4-postgis-2.1 # Workaround https://github.com/travis-ci/travis-ci/issues/5178
   postgresql: 9.4
