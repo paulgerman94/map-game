@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "",
+  "description": "A web app that procedurally generates content based on your GeoLocation",
   "main": "gulpfile.babel.js",
   "scripts": {
     "test": "gulp test",
@@ -8,6 +8,10 @@
   },
   "author": "kdex",
   "license": "GPL-3.0",
+  "repository": {
+    "type" : "git",
+    "url": "https://github.com/kdex/map-game.git"
+  },
   "devDependencies": {
     "autoprefixer": "^6.3.7",
     "ava": "^0.15.2",

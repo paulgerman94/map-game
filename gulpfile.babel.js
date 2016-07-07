@@ -7,6 +7,7 @@ import del from "del";
 import esDoc from "gulp-esdoc";
 import esLint from "gulp-eslint";
 import fs from "fs";
+import fetch from "node-fetch";
 import getUser from "passwd-user";
 import getUsername from "username";
 import googleWebFonts from "gulp-google-webfonts";
@@ -335,6 +336,19 @@ gulp.task("doc", () => {
 				name: "esdoc-es7-plugin"
 			}]
 		}));
+});
+gulp.task("update-doc", async done => {
+	const reply = await fetch("https://doc.esdoc.org/api/create", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded"
+		},
+		body: "gitUrl=git@github.com:kdex/map-game.git"
+	});
+	if (reply.status !== 200) {
+		console.error("An error occurred while trying to update the official documentation.");
+	}
+	done();
 });
 gulp.task("build",
 	gulp.parallel(
