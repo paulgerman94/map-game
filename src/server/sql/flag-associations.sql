@@ -4,4 +4,5 @@ CREATE TABLE IF NOT EXISTS "flag-associations" (
 	"pois" poi[] NOT NULL,
 	"radius" REAL NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "pois-location" ON "flag-associations" USING btree ("location");
+# Once Travis supports PostgreSQL 9.5, this should be CREATE INDEX IF NOT EXISTS.
+CREATE INDEX "pois-location" ON "flag-associations" USING btree ("location");

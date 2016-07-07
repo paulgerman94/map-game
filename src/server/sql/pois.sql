@@ -6,4 +6,5 @@ CREATE TABLE IF NOT EXISTS "pois" (
 	"locked_until" TIMESTAMP WITH TIME ZONE,
 	"metadata" json NOT NULL
 );
-CREATE INDEX IF NOT EXISTS "pois-id-element" ON "pois" USING btree (((poi).id), ((poi).element));
+# Once Travis supports PostgreSQL 9.5, this should be CREATE INDEX IF NOT EXISTS.
+CREATE INDEX "pois-id-element" ON "pois" USING btree (((poi).id), ((poi).element));
