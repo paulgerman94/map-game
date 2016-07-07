@@ -17,7 +17,11 @@ install:
   - npm install
   - bower install
   - jspm install
-script: gulp build
+script:
+  # Check if the project still builds
+  - gulp build
+  # Check if all tests run
+  - gulp test
 addons:
   apt:
     sources:

@@ -341,29 +341,29 @@ gulp.task("build",
 		"json",
 		"sw",
 		"lint",
-		gulp.series(
-			gulp.parallel(
-				gulp.series(
-					"js",
-					"build-static-assets",
-					"bundle-jspm"
-				),
-				"html",
-				gulp.series(
-					"fonts",
-					"css"
-				)
+		gulp.parallel(
+			gulp.series(
+				"js",
+				"build-static-assets",
+				"bundle-jspm"
 			),
-			"run-server"
+			"html",
+			gulp.series(
+				"fonts",
+				"css"
+			)
 		)
 	)
 );
 (async () => {
 	unixUsername = await getUsername();
 	gulp.task("default",
-		gulp.parallel(
-			"watch",
-			"build"
+		gulp.series(
+			gulp.parallel(
+				"watch",
+				"build"
+			),
+			"run-server"
 		)
 	);
 })();
