@@ -3,6 +3,7 @@
 </p>
 [![Build Status](https://travis-ci.org/kdex/map-game.svg?branch=master)](https://travis-ci.org/kdex/map-game)
 [![Documentation coverage](https://doc.esdoc.org/github.com/kdex/map-game/badge.svg)](https://doc.esdoc.org/github.com/kdex/map-game/)
+[![Coverage Status](https://coveralls.io/repos/github/kdex/map-game/badge.svg?branch=master)](https://coveralls.io/github/kdex/map-game?branch=master)
 ## Installation
 ### Preliminaries
 For this guide, we assume that you already have a proper developing environment set up. Internally, this project uses `bcrypt` for its security, which is why a C++ compiler that requires the **C++ 11** standard has to be installed for it to compile. If your default C++ compiler does not support C++ 11, please set your `CXX` environment variable accordingly.
