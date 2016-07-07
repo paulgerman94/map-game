@@ -1,5 +1,6 @@
 # map-game
 [![Build Status](https://travis-ci.org/kdex/map-game.svg?branch=master)](https://travis-ci.org/kdex/map-game)
+[![Documentation coverage](https://doc.esdoc.org/github.com/kdex/map-game/badge.svg)](https://doc.esdoc.org/github.com/kdex/map-game/)
 ## Dependencies
 ```bash
 $ npm install -g gulpjs/gulp.git#4.0 jspm@beta bower
@@ -15,6 +16,8 @@ $ jspm install
 # Transpile, bundle, start game server
 $ gulp
 ```
+## Documentation
+The official documentation can be found [here](https://doc.esdoc.org/github.com/kdex/map-game/).
 ## Requirement ideas
 - Should work in the forest; i. e. the users should be able to have no service
 
