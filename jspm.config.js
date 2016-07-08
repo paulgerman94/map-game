@@ -16,20 +16,10 @@ SystemJS.config({
     "client/": {
       "main": "index.js",
       "defaultExtension": "js"
-    },
-    "npm:react-router@2.5.2": {
-      "map": {
-        "history": "npm:history@2.1.2",
-        "invariant": "npm:invariant@2.2.1",
-        "warning": "npm:warning@2.1.0",
-        "loose-envify": "npm:loose-envify@1.2.0",
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0"
-      }
     }
   },
   map: {
-    "plugin-babel": "npm:systemjs-plugin-babel@0.0.12",
-    "react-router": "npm:react-router@2.5.2"
+    "plugin-babel": "npm:systemjs-plugin-babel@0.0.12"
   }
 });
 
@@ -40,6 +30,7 @@ SystemJS.config({
     "github:*/*.json"
   ],
   map: {
+    "react-router": "npm:react-router@2.5.2",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
     "buffer": "github:jspm/nodelibs-buffer@0.2.0-alpha",
     "child_process": "github:jspm/nodelibs-child_process@0.2.0-alpha",
@@ -72,6 +63,15 @@ SystemJS.config({
     "zlib": "github:jspm/nodelibs-zlib@0.2.0-alpha"
   },
   packages: {
+    "npm:react-router@2.5.2": {
+      "map": {
+        "history": "npm:history@2.1.2",
+        "invariant": "npm:invariant@2.2.1",
+        "warning": "npm:warning@2.1.0",
+        "loose-envify": "npm:loose-envify@1.2.0",
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0"
+      }
+    },
     "npm:history@2.1.2": {
       "map": {
         "invariant": "npm:invariant@2.2.1",
@@ -488,7 +488,7 @@ SystemJS.config({
     },
     "npm:inline-style-prefixer@1.0.4": {
       "map": {
-        "bowser": "npm:bowser@1.4.0",
+        "bowser": "npm:bowser@1.4.1",
         "inline-style-prefix-all": "npm:inline-style-prefix-all@2.0.2"
       }
     }

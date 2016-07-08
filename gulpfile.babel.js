@@ -321,7 +321,7 @@ gulp.task("split-config", () => {
 	return splitConfig();
 });
 gulp.task("test", shell.task(`ava`));
-gulp.task("cover", shell.task(`nyc --cache gulp test`));
+gulp.task("cover", shell.task(`NODE_ENV=test nyc gulp test`));
 gulp.task("lint", () => {
 	return gulp.src(["gulpfile.babel.js", globs.server.js, `${paths.client.js.src}/**/*.js`])
 		.pipe(esLint())
