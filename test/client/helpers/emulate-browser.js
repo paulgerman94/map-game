@@ -1,0 +1,13 @@
+import { mocks } from "mock-browser";
+import raf from "raf";
+const { MockBrowser } = mocks;
+const browser = new MockBrowser();
+global.window = browser.getWindow();
+global.document = browser.getDocument();
+global.navigator = browser.getNavigator();
+global.localStorage = browser.getLocalStorage();
+global.location = browser.getLocation();
+global.history = browser.getHistory();
+global.sessionStorage = browser.getSessionStorage();
+global.window.requestAnimationFrame = raf.handle;
+global.window.cancelAnimationFrame = raf.cancel;
