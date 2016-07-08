@@ -20,7 +20,7 @@ install:
 script:
   # Check if the project still builds
   - gulp build
-  # Check if all tests run
+  # Check if all tests run, measure coverage
   - gulp test
 addons:
   apt:
@@ -39,6 +39,5 @@ addons:
 after_success:
   # Update the official documentation
   - gulp update-doc
-  # Perform a coverage test
-  - gulp cover
+  # Update coverage report
   - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls

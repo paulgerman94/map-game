@@ -320,8 +320,7 @@ function splitConfig() {
 gulp.task("split-config", () => {
 	return splitConfig();
 });
-gulp.task("test", shell.task(`ava`));
-gulp.task("cover", shell.task(`NODE_ENV=test nyc gulp test`));
+gulp.task("test", shell.task(`NODE_ENV=test nyc ava`));
 gulp.task("lint", () => {
 	return gulp.src(["gulpfile.babel.js", globs.server.js, `${paths.client.js.src}/**/*.js`])
 		.pipe(esLint())
