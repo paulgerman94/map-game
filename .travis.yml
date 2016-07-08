@@ -22,6 +22,12 @@ script:
   - gulp build
   # Check if all tests run, measure coverage
   - gulp test
+after_script:
+  # If it builds, update the official documentation
+  - gulp update-doc
+  # Update coverage report
+  - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls
+  # Update build status
 addons:
   apt:
     sources:
@@ -36,8 +42,3 @@ addons:
     # Workaround: https://github.com/travis-ci/travis-ci/issues/5178
     - postgresql-9.4-postgis-2.1
   postgresql: 9.4
-after_success:
-  # Update the official documentation
-  - gulp update-doc
-  # Update coverage report
-  - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls
