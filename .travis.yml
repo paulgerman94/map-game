@@ -3,7 +3,7 @@ language: node_js
 dist: trusty
 env:
   global:
-    - CXX=g++-5 CC=gcc-5
+    - CXX=g++-5 CC=gcc-5 NODE_ENV=test
 node_js:
   - "6"
   - "6.1"
