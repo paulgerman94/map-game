@@ -50,8 +50,8 @@ SystemJS.config({
     "os": "github:jspm/nodelibs-os@0.2.0-alpha",
     "path": "github:jspm/nodelibs-path@0.2.0-alpha",
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
-    "react": "npm:react@15.2.0",
-    "react-dom": "npm:react-dom@15.2.0",
+    "react": "npm:react@15.2.1",
+    "react-dom": "npm:react-dom@15.2.1",
     "react-tap-event-plugin": "npm:react-tap-event-plugin@1.0.0",
     "stream": "github:jspm/nodelibs-stream@0.2.0-alpha",
     "string_decoder": "github:jspm/nodelibs-string_decoder@0.2.0-alpha",
@@ -78,13 +78,6 @@ SystemJS.config({
         "query-string": "npm:query-string@3.0.3",
         "warning": "npm:warning@2.1.0",
         "deep-equal": "npm:deep-equal@1.0.1"
-      }
-    },
-    "npm:react@15.2.0": {
-      "map": {
-        "object-assign": "npm:object-assign@4.1.0",
-        "loose-envify": "npm:loose-envify@1.2.0",
-        "fbjs": "npm:fbjs@0.8.3"
       }
     },
     "npm:invariant@2.2.1": {
@@ -453,12 +446,12 @@ SystemJS.config({
     "npm:material-ui@0.15.1": {
       "map": {
         "lodash": "npm:lodash@4.13.1",
-        "react-addons-transition-group": "npm:react-addons-transition-group@15.2.0",
+        "react-addons-transition-group": "npm:react-addons-transition-group@15.2.1",
         "recompose": "npm:recompose@0.19.0",
         "warning": "npm:warning@2.1.0",
         "simple-assign": "npm:simple-assign@0.1.0",
         "react-event-listener": "npm:react-event-listener@0.2.1",
-        "react-addons-create-fragment": "npm:react-addons-create-fragment@15.2.0",
+        "react-addons-create-fragment": "npm:react-addons-create-fragment@15.2.1",
         "keycode": "npm:keycode@2.1.2",
         "inline-style-prefixer": "npm:inline-style-prefixer@1.0.4"
       }
@@ -490,6 +483,13 @@ SystemJS.config({
       "map": {
         "bowser": "npm:bowser@1.4.1",
         "inline-style-prefix-all": "npm:inline-style-prefix-all@2.0.2"
+      }
+    },
+    "npm:react@15.2.1": {
+      "map": {
+        "fbjs": "npm:fbjs@0.8.3",
+        "object-assign": "npm:object-assign@4.1.0",
+        "loose-envify": "npm:loose-envify@1.2.0"
       }
     }
   }

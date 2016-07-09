@@ -116,7 +116,7 @@
       "os": "github:jspm/nodelibs-os@^0.2.0-alpha",
       "path": "github:jspm/nodelibs-path@^0.2.0-alpha",
       "process": "github:jspm/nodelibs-process@^0.2.0-alpha",
-      "react": "npm:react@^15.2.0",
+      "react": "npm:react@^15.2.1",
       "react-dom": "npm:react-dom@^15.2.0",
       "react-tap-event-plugin": "npm:react-tap-event-plugin@^1.0.0",
       "stream": "github:jspm/nodelibs-stream@^0.2.0-alpha",
