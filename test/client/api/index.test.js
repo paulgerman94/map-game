@@ -1,3 +1,5 @@
 import test from "ava";
-// import "client/api/index";
+test.serial(async t => {
+	await System.import("client/api/index");
+});
 test.todo("test this module");

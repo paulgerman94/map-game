@@ -1,3 +1,5 @@
 import test from "ava";
-import "client/ClientCore";
+test.serial(async t => {
+	await System.import("client/ClientCore");
+});
 test.todo("test this module");

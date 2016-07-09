@@ -1,5 +1,7 @@
 import test from "ava";
-import { capitalize } from "client/util";
+test.serial(async t => {
+	global.capitalize = (await System.import("client/util")).capitalize;
+});
 test("first letter is capitalized", t => {
 	t.is(capitalize("hello"), "Hello");
 });

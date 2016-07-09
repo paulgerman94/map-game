@@ -1,5 +1,7 @@
 import test from "ava";
-import cache from "client/cache";
+test.serial(async t => {
+	global.cache = (await System.import("client/cache")).default;
+});
 test(`the uninitialized cache doesn't have a "data" property`, t => {
 	t.false(localStorage.hasOwnProperty("data"));
 });
