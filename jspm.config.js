@@ -46,7 +46,7 @@ SystemJS.config({
     "http": "github:jspm/nodelibs-http@0.2.0-alpha",
     "https": "github:jspm/nodelibs-https@0.2.0-alpha",
     "leaflet": "npm:leaflet@1.0.0-rc.1",
-    "material-ui": "npm:material-ui@0.15.1",
+    "material-ui": "npm:material-ui@0.15.2",
     "os": "github:jspm/nodelibs-os@0.2.0-alpha",
     "path": "github:jspm/nodelibs-path@0.2.0-alpha",
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
@@ -443,25 +443,6 @@ SystemJS.config({
         "os-browserify": "npm:os-browserify@0.2.1"
       }
     },
-    "npm:material-ui@0.15.1": {
-      "map": {
-        "lodash": "npm:lodash@4.13.1",
-        "react-addons-transition-group": "npm:react-addons-transition-group@15.2.1",
-        "recompose": "npm:recompose@0.19.0",
-        "warning": "npm:warning@2.1.0",
-        "simple-assign": "npm:simple-assign@0.1.0",
-        "react-event-listener": "npm:react-event-listener@0.2.1",
-        "react-addons-create-fragment": "npm:react-addons-create-fragment@15.2.1",
-        "keycode": "npm:keycode@2.1.2",
-        "inline-style-prefixer": "npm:inline-style-prefixer@1.0.4"
-      }
-    },
-    "npm:recompose@0.19.0": {
-      "map": {
-        "fbjs": "npm:fbjs@0.8.3",
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0"
-      }
-    },
     "npm:react-tap-event-plugin@1.0.0": {
       "map": {
         "fbjs": "npm:fbjs@0.2.1"
@@ -479,17 +460,43 @@ SystemJS.config({
         "whatwg-fetch": "npm:whatwg-fetch@0.9.0"
       }
     },
-    "npm:inline-style-prefixer@1.0.4": {
-      "map": {
-        "bowser": "npm:bowser@1.4.1",
-        "inline-style-prefix-all": "npm:inline-style-prefix-all@2.0.2"
-      }
-    },
     "npm:react@15.2.1": {
       "map": {
         "fbjs": "npm:fbjs@0.8.3",
         "object-assign": "npm:object-assign@4.1.0",
         "loose-envify": "npm:loose-envify@1.2.0"
+      }
+    },
+    "npm:material-ui@0.15.2": {
+      "map": {
+        "warning": "npm:warning@3.0.0",
+        "simple-assign": "npm:simple-assign@0.1.0",
+        "react-addons-create-fragment": "npm:react-addons-create-fragment@15.2.1",
+        "react-addons-transition-group": "npm:react-addons-transition-group@15.2.1",
+        "keycode": "npm:keycode@2.1.2",
+        "lodash": "npm:lodash@4.13.1",
+        "react-event-listener": "npm:react-event-listener@0.2.1",
+        "recompose": "npm:recompose@0.20.2",
+        "inline-style-prefixer": "npm:inline-style-prefixer@2.0.1"
+      }
+    },
+    "npm:warning@3.0.0": {
+      "map": {
+        "loose-envify": "npm:loose-envify@1.2.0"
+      }
+    },
+    "npm:recompose@0.20.2": {
+      "map": {
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0",
+        "fbjs": "npm:fbjs@0.8.3",
+        "symbol-observable": "npm:symbol-observable@0.2.4",
+        "change-emitter": "npm:change-emitter@0.1.2"
+      }
+    },
+    "npm:inline-style-prefixer@2.0.1": {
+      "map": {
+        "hyphenate-style-name": "npm:hyphenate-style-name@1.0.1",
+        "bowser": "npm:bowser@1.4.1"
       }
     }
   }
