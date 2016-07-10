@@ -1,6 +1,8 @@
 import test from "ava";
+let cache;
 test.serial(async t => {
-	global.cache = (await System.import("client/cache")).default;
+	cache = (await System.import("client/cache")).default;
+	t.pass();
 });
 test(`the uninitialized cache doesn't have a "data" property`, t => {
 	t.false(localStorage.hasOwnProperty("data"));
@@ -24,4 +26,11 @@ test(`values of arbitrary type can be saved in and loaded from the cache`, t => 
 test(`the cache can be queried for property existence`, t => {
 	cache.save("number", 3);
 	t.true(cache.has("number"));
+});
+test(`removed properties are deleted from the cache`, t => {
+	const key = "meow";
+	cache.save(key, 3);
+	t.true(cache.has(key));
+	cache.remove(key);
+	t.false(cache.has(key));
 });
