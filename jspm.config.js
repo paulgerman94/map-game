@@ -324,7 +324,7 @@ SystemJS.config({
         "create-hash": "npm:create-hash@1.1.2",
         "evp_bytestokey": "npm:evp_bytestokey@1.0.0",
         "pbkdf2": "npm:pbkdf2@3.0.4",
-        "asn1.js": "npm:asn1.js@4.6.2"
+        "asn1.js": "npm:asn1.js@4.8.0"
       }
     },
     "npm:elliptic@6.3.1": {
@@ -360,13 +360,6 @@ SystemJS.config({
     "npm:hash.js@1.0.3": {
       "map": {
         "inherits": "npm:inherits@2.0.1"
-      }
-    },
-    "npm:asn1.js@4.6.2": {
-      "map": {
-        "bn.js": "npm:bn.js@4.11.4",
-        "inherits": "npm:inherits@2.0.1",
-        "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
       }
     },
     "npm:flux@2.1.1": {
@@ -428,13 +421,13 @@ SystemJS.config({
     },
     "npm:bufferutil@1.2.1": {
       "map": {
-        "nan": "npm:nan@2.3.5",
+        "nan": "npm:nan@2.4.0",
         "bindings": "npm:bindings@1.2.1"
       }
     },
     "npm:utf-8-validate@1.2.1": {
       "map": {
-        "nan": "npm:nan@2.3.5",
+        "nan": "npm:nan@2.4.0",
         "bindings": "npm:bindings@1.2.1"
       }
     },
@@ -497,6 +490,13 @@ SystemJS.config({
       "map": {
         "hyphenate-style-name": "npm:hyphenate-style-name@1.0.1",
         "bowser": "npm:bowser@1.4.1"
+      }
+    },
+    "npm:asn1.js@4.8.0": {
+      "map": {
+        "bn.js": "npm:bn.js@4.11.4",
+        "inherits": "npm:inherits@2.0.1",
+        "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
       }
     }
   }
