@@ -13,7 +13,7 @@ import {
 } from "../db";
 import { log, err } from "../util";
 import { createToken } from "../crypto";
-import { POI_RADIUS } from "../constants";
+import { POI_RADIUS, CAPTURE_FLAG_POINTS } from "../constants";
 import POI from "../types/POI";
 /**
 * @param {object} options An object
@@ -268,10 +268,10 @@ export async function capture({
 			if (result) {
 				log(`"${accountName}" has captured the flag ${id}.`);
 				message.reply(result);
-				result = await addScore({
+				const result = await addScore({
 					db,
 					accountName,
-					100
+					pointsToAdd: CAPTURE_FLAG_POINTS
 				});
 				/* Tell the loser that his flag was stolen */
 				const lastOwnerClients = Array.from(server.clients).filter(c => c.properties.user.accountName === flagInfo.owner);

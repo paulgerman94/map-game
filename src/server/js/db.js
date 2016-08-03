@@ -457,7 +457,7 @@ export async function getFlagInfo({
 * 	A `pg-promise` database instance
 * @param {string} options.accountName
 * 	The account name whose team to look up
-* @param {int} options.pointsToAdd
+* @param {number} options.pointsToAdd
 * 	How many points to add
 * @return {Promise}
 * 	A {@link Promise} that resolves to whether or not the points were added
@@ -471,12 +471,13 @@ export async function addScore({
 		await db.query(`
 		UPDATE users
 		SET
-			points = points + $[pointsToAdd],
-		WHERE accountName = $[accountName];
+			score = score + $[pointsToAdd]
+		WHERE account_name = $[accountName];
 		`, {
 			pointsToAdd,
 			accountName
 		});
+		log(`Added ${pointsToAdd} to user "${accountName}".`);
 		return true;
 	}
 	catch (e) {
