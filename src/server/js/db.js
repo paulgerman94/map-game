@@ -450,6 +450,41 @@ export async function getFlagInfo({
 	}
 }
 /**
+* Add points to user score
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {string} options.accountName
+* 	The account name whose team to look up
+* @param {int} options.pointsToAdd
+* 	How many points to add
+* @return {Promise}
+* 	A {@link Promise} that resolves to whether or not the points were added
+*/
+export async function addScore({
+	db,
+	accountName,
+	pointsToAdd
+} = {}) {
+	try {
+		await db.query(`
+		UPDATE users
+		SET
+			points = points + $[pointsToAdd],
+		WHERE accountName = $[accountName];
+		`, {
+			pointsToAdd,
+			accountName
+		});
+		return true;
+	}
+	catch (e) {
+		err(e);
+		return null;
+	}
+}
+/**
 * Registers that a users has captured a flag
 * @param {object} options
 * 	An option object

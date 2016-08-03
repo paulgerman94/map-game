@@ -8,7 +8,8 @@ import {
 	captureFlag,
 	retrievePOIs,
 	getTeam as getPlayerTeam,
-	queryUserInformation
+	queryUserInformation,
+	addScore
 } from "../db";
 import { log, err } from "../util";
 import { createToken } from "../crypto";
@@ -267,6 +268,11 @@ export async function capture({
 			if (result) {
 				log(`"${accountName}" has captured the flag ${id}.`);
 				message.reply(result);
+				result = await addScore({
+					db,
+					accountName,
+					100
+				});
 				/* Tell the loser that his flag was stolen */
 				const lastOwnerClients = Array.from(server.clients).filter(c => c.properties.user.accountName === flagInfo.owner);
 				if (lastOwnerClients.length) {
