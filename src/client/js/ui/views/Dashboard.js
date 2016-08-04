@@ -4,7 +4,9 @@ import L from "client/ui/LeafletWrapper";
 import client from "client/client";
 import { capitalize } from "client/util";
 import { capture } from "client/api/index";
-import ConnectionStore from "../stores/ConnectionStore";
+import {
+	default as ConnectionStore
+} from "../stores/ConnectionStore";
 import {
 	default as LocationStore,
 	AREA_UPDATED,

@@ -273,6 +273,8 @@ export async function capture({
 					accountName,
 					pointsToAdd: CAPTURE_FLAG_POINTS
 				});
+				client.properties.user.score += CAPTURE_FLAG_POINTS;
+				client.scoreUpdate({ score: client.properties.user.score });
 				/* Tell the loser that his flag was stolen */
 				const lastOwnerClients = Array.from(server.clients).filter(c => c.properties.user.accountName === flagInfo.owner);
 				if (lastOwnerClients.length) {

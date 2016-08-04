@@ -37,6 +37,11 @@ export const SERVICE_WORKER_REGISTERED = Symbol("Service worker registered");
 */
 export const USER_RECEIVED = Symbol("User received");
 /**
+* A symbol that denotes that player's score has been updated
+* @type {symbol}
+*/
+export const SCORE_UPDATED = Symbol("Score updated");
+/**
 * This class is a flux store that keeps a global view of the connection state.
 * It encompasses information about when the user registers, logs in, etc.
 */
@@ -116,6 +121,13 @@ class ConnectionStore extends EventEmitter {
 				this.user = user;
 				cache.save("user", user);
 				this.emit(type, this.user);
+				break;
+			}
+			case SCORE_UPDATED: {
+				const { score, type } = action;
+				this.user.score = score;
+				cache.save("user", this.user);
+				this.emit(type, score);
 				break;
 			}
 			default: {

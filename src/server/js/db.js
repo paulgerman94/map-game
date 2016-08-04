@@ -477,7 +477,7 @@ export async function addScore({
 			pointsToAdd,
 			accountName
 		});
-		log(`Added ${pointsToAdd} to user "${accountName}".`);
+		log(`Added ${pointsToAdd} points to score of user "${accountName}".`);
 		return true;
 	}
 	catch (e) {
@@ -573,7 +573,7 @@ export async function queryUserInformation({
 } = {}) {
 	try {
 		const result = await db.one(`
-		SELECT account_name, display_name, team
+		SELECT account_name, display_name, team, score
 		FROM users
 		WHERE account_name = $[accountName];
 		`, {

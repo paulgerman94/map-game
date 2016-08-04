@@ -1,5 +1,8 @@
 import ClientCore from "./ClientCore";
-import ConnectionStore from "./ui/stores/ConnectionStore";
+import {
+	ConnectionStore,
+	SCORE_UPDATED
+} from "./ui/stores/ConnectionStore";
 import SplashScreen from "./ui/SplashScreen";
 import { s } from "server/units";
 import {
@@ -78,6 +81,20 @@ class Client extends ClientCore {
 				capturedAt: capturedDate,
 				lockedUntil: lockedDate
 			}]
+		});
+	}
+	/**
+	* Updates the score of the player
+	* @param {Message} message
+	* 	The message that was sent over the {@link RPCClient} containing the new flag information
+	*/
+	onScoreUpdate(message) {
+		message.reply();
+		const { payload } = message;
+		const [data] = payload.args;
+		const { score } = data;
+		publish(SCORE_UPDATED, {
+			score
 		});
 	}
 	/**

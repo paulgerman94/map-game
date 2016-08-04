@@ -24,7 +24,8 @@ import {
 	CONNECTION_DISRUPTED,
 	CONNECTION_ESTABLISHED,
 	LOGIN,
-	LOGOUT
+	LOGOUT,
+	SCORE_UPDATED
 } from "../stores/ConnectionStore";
 // import SettingsStore from "../stores/SettingsStore";
 import * as API from "client/api/index";
@@ -270,6 +271,7 @@ export default class Layout extends Component {
 				}
 			}
 		});
+		ConnectionStore.on(SCORE_UPDATED, this.updateScore.bind(this));
 		setInterval(::this.checkConnection, s);
 	}
 	/**
@@ -293,12 +295,21 @@ export default class Layout extends Component {
 		publish(MENU_TOGGLED);
 	}
 	/**
+	* Updates the score
+	* @param {number} score
+	* 	The old flag to update
+	*/
+	updateScore(){
+		this.forceUpdate();
+	}
+	/**
 	* Renders a {@link Layout} component with a menu, the navigation bar and all components that this component contains.
 	* @return {ReactComponent}
 	* 	The component that will be displayed
 	*/
 	render() {
 		let logoutButton;
+		let scoreDisplay;
 		if (this.state.isLoggedIn || API.isLoggedIn()) {
 			logoutButton =
 			<IconButton onClick={() => {
@@ -307,6 +318,13 @@ export default class Layout extends Component {
 			}} tooltip="Logout">
 				<ExitIcon/>
 			</IconButton>;
+			if (ConnectionStore.user !== null){
+				scoreDisplay = <span style={ {
+					color: "whitesmoke",
+					fontSize: "30px",
+					fontWeight: "bold"
+				} }>Score: {ConnectionStore.user.score}</span>;
+			}
 		}
 		return (
 			<div>
@@ -339,6 +357,7 @@ export default class Layout extends Component {
 					browserHistory.push(HOME_ROUTE);
 				}} iconElementRight={
 					<div>
+						{scoreDisplay}
 						<IconButton tooltip="Settings" onClick={() => {
 							browserHistory.push(SETTINGS_ROUTE);
 						}}>
