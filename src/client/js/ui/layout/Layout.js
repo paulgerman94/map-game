@@ -321,8 +321,9 @@ export default class Layout extends Component {
 			if (ConnectionStore.user !== null){
 				scoreDisplay = <span style={ {
 					color: "whitesmoke",
-					fontSize: "30px",
-					fontWeight: "bold"
+					fontSize: "1.5rem",
+					fontWeight: "bold",
+					verticalAlign: "text-bottom"
 				} }>Score: {ConnectionStore.user.score}</span>;
 			}
 		}
