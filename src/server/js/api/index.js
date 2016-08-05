@@ -268,7 +268,7 @@ export async function capture({
 			if (result) {
 				log(`"${accountName}" has captured the flag ${id}.`);
 				message.reply(result);
-				const result = await addScore({
+				await addScore({
 					db,
 					accountName,
 					pointsToAdd: CAPTURE_FLAG_POINTS
