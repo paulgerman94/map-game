@@ -527,6 +527,41 @@ export async function captureFlag({
 	}
 }
 /**
+* Sets a user account's Telegram "chat_id" property so that the back end can send messages via Telegram
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {string} options.accountName
+* 	The user's account name in our database
+* @param {string} options.telegramChatId
+* 	The "chat_id" property that Telegram reports
+* @return {Promise}
+* 	A {@link Promise} that resolves to whether or not the configuration was successful
+*/
+export async function setTelegramChatID({
+	db,
+	accountName,
+	telegramChatID
+} = {}) {
+	console.log(telegramChatID, accountName);
+	try {
+		await db.query(`
+		UPDATE users
+		SET telegram_chat_id = $[telegramChatID]
+		WHERE account_name = $[accountName];
+		`, {
+			accountName,
+			telegramChatID
+		});
+		return true;
+	}
+	catch (e) {
+		err(e);
+		return null;
+	}
+}
+/**
 * Retrieves the team for a given account name
 * @param {object} options
 * 	An option object
@@ -573,13 +608,16 @@ export async function queryUserInformation({
 } = {}) {
 	try {
 		const result = await db.one(`
-		SELECT account_name, display_name, team, score
+		SELECT account_name, display_name, team, score, telegram_chat_id
 		FROM users
 		WHERE account_name = $[accountName];
 		`, {
 			accountName
 		});
-		return humps.camelizeKeys(result);
+		const object = humps.camelizeKeys(result);
+		object.telegramChatID = object.telegramChatId;
+		Reflect.deleteProperty(object, "telegramChatId");
+		return object;
 	}
 	catch (e) {
 		err(`Couldn't retrieve user information for account "${accountName}".`);

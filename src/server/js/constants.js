@@ -16,7 +16,7 @@ export const EARTH_RADIUS = 6371 * km;
 */
 export const OWNERSHIP_PROTECTION_TIME = "24 h";
 /**
-* How many points to add when capturing a flag
+* The amount of points to add when capturing a flag
 * @type {number}
 */
 export const CAPTURE_FLAG_POINTS = 100;

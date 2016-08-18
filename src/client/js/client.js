@@ -54,7 +54,7 @@ class Client extends ClientCore {
 	* @param {Message} message
 	* 	The message that was sent over the {@link RPCClient}
 	*/
-	async onDrawArea(message) {
+	onDrawArea(message) {
 		message.reply();
 		const { payload } = message;
 		const [centers] = payload.args;
@@ -84,11 +84,11 @@ class Client extends ClientCore {
 		});
 	}
 	/**
-	* Updates the score of the player
+	* Updates the player's score
 	* @param {Message} message
 	* 	The message that was sent over the {@link RPCClient} containing the new flag information
 	*/
-	onScoreUpdate(message) {
+	onUpdateScore(message) {
 		message.reply();
 		const { payload } = message;
 		const [data] = payload.args;

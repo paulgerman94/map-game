@@ -1,5 +1,6 @@
 import React from "react";
 import { Toggle } from "material-ui";
+import { RaisedButton } from "material-ui";
 import {
 	default as SettingsStore,
 	CAMERA_FOLLOW_CONFIGURED
@@ -13,6 +14,10 @@ import {
 	ENABLED,
 	DISABLED
 } from "../stores/PermissionStore";
+import {
+	default as ConnectionStore,
+	TELEGRAM_TOKEN_RECEIVED
+} from "../stores/ConnectionStore";
 import { publish } from "../Dispatcher";
 /**
 * The URL route where this view should be available
@@ -24,6 +29,7 @@ export const ROUTE = "settings";
 * Otherwise, it should display the general game UI.
 */
 export default class Login extends React.Component {
+	state = {};
 	/**
 	* Creates a new {@link Login} component
 	*/
@@ -80,6 +86,7 @@ export default class Login extends React.Component {
 	componentWillMount() {
 		PermissionStore.on(PREFERENCE_CHANGED, this.update);
 		PermissionStore.on(PERMISSION_CHANGED, this.update);
+		ConnectionStore.on(TELEGRAM_TOKEN_RECEIVED, this.update);
 	}
 	/**
 	* Removes all event listeners
@@ -87,6 +94,7 @@ export default class Login extends React.Component {
 	componentWillUnmount() {
 		PermissionStore.off(PREFERENCE_CHANGED, this.update);
 		PermissionStore.off(PERMISSION_CHANGED, this.update);
+		ConnectionStore.off(TELEGRAM_TOKEN_RECEIVED, this.update);
 	}
 	/**
 	* Renders a component with a simple login menu
@@ -120,6 +128,9 @@ export default class Login extends React.Component {
 						<Toggle label="Show push notifications" toggled={
 							PermissionStore.get(NOTIFICATIONS).permission === GRANTED &&
 							PermissionStore.get(NOTIFICATIONS).preference === ENABLED} style={styles.toggle} onToggle={::this.toggleNotificationsAllowed}/>
+					</div>
+					<div hidden={!ConnectionStore.user} style={styles.block}>
+						<RaisedButton style={{ margin: "0 auto" }} target="_blank" label="Link account to Telegram" primary disabled={!ConnectionStore.user || ConnectionStore.user && !ConnectionStore.user.telegramToken} href={`https://telegram.me/MapGameBot?start=${ConnectionStore.user && ConnectionStore.user.telegramToken || "#"}`}/>
 					</div>
 				</div>
 			</div>

@@ -42,6 +42,11 @@ export const USER_RECEIVED = Symbol("User received");
 */
 export const SCORE_UPDATED = Symbol("Score updated");
 /**
+* A symbol that denotes that the client has received the token needed to link his account with Telegram
+* @type {symbol}
+*/
+export const TELEGRAM_TOKEN_RECEIVED = Symbol("Telegram token received");
+/**
 * This class is a flux store that keeps a global view of the connection state.
 * It encompasses information about when the user registers, logs in, etc.
 */
@@ -128,6 +133,12 @@ class ConnectionStore extends EventEmitter {
 				this.user.score = score;
 				cache.save("user", this.user);
 				this.emit(type, score);
+				break;
+			}
+			case TELEGRAM_TOKEN_RECEIVED: {
+				const { token, type } = action;
+				this.user.telegramToken = token;
+				this.emit(type, token);
 				break;
 			}
 			default: {

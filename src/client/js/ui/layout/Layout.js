@@ -186,6 +186,8 @@ export default class Layout extends Component {
 				isLoggedIn: ConnectionStore.isLoggedIn
 			});
 			window.document.title = `Map game | ${ConnectionStore.user.accountName}`;
+			/* Request a Telegram token so we can link accounts */
+			API.getTelegramToken();
 		});
 		ConnectionStore.on(LOGOUT, () => {
 			this.setState({
@@ -271,7 +273,7 @@ export default class Layout extends Component {
 				}
 			}
 		});
-		ConnectionStore.on(SCORE_UPDATED, this.updateScore.bind(this));
+		ConnectionStore.on(SCORE_UPDATED, ::this.updateScore);
 		setInterval(::this.checkConnection, s);
 	}
 	/**

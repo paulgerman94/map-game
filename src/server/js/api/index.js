@@ -1,3 +1,4 @@
+import uuid from "uuid";
 import Point from "../Point";
 import {
 	register as registerUser,
@@ -274,9 +275,11 @@ export async function capture({
 					pointsToAdd: CAPTURE_FLAG_POINTS
 				});
 				client.properties.user.score += CAPTURE_FLAG_POINTS;
-				client.scoreUpdate({ score: client.properties.user.score });
+				client.updateScore({
+					score: client.properties.user.score
+				});
 				/* Tell the loser that his flag was stolen */
-				const lastOwnerClients = Array.from(server.clients).filter(c => c.properties.user.accountName === flagInfo.owner);
+				const lastOwnerClients = Array.from(server.clients).filter(c => c.properties.user && c.properties.user.accountName === flagInfo.owner);
 				if (lastOwnerClients.length) {
 					log(`Notifying "${lastOwnerClients[0].properties.user.accountName}" of his flag loss by "${accountName}"…`);
 					server.notifier.notify(lastOwnerClients, {
@@ -382,4 +385,23 @@ export async function getUserInformation({
 		client.properties.user = user;
 		message.reply(user);
 	})();
+}
+/**
+* Retrieves a token that our Telegram bot can forward to us so we can identify one of our users via Telegram
+* @param {object} options
+* 	An object
+* @param {string} options.client
+* 	The socket that sent the request
+* @param {Message} options.message
+* 	A message object to reply to
+*/
+export function getTelegramToken({
+	client,
+	message
+}) {
+	const token = uuid.v4();
+	client.properties.user.telegramToken = token;
+	message.reply({
+		token
+	});
 }

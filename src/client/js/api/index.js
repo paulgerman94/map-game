@@ -7,7 +7,8 @@ import {
 	LOGIN,
 	LOGOUT,
 	LOGIN_FAILED,
-	USER_RECEIVED
+	USER_RECEIVED,
+	TELEGRAM_TOKEN_RECEIVED
 } from "client/ui/stores/ConnectionStore";
 import { publish } from "client/ui/Dispatcher";
 /**
@@ -166,5 +167,12 @@ export async function getUserInformation(accountName) {
 		user
 	});
 	return user;
+}
+/**
+* Performs an API call that sets a client's Telegram token
+*/
+export async function getTelegramToken() {
+	const [reply] = await client.getTelegramToken();
+	publish(TELEGRAM_TOKEN_RECEIVED, reply);
 }
 export default from "./getPOIs";
