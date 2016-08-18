@@ -85,6 +85,7 @@
     "humps": "^1.1.0",
     "node-fetch": "^1.6.0",
     "passwd-user": "^2.1.0",
+    "telegram-bot-api": "^1.2.0",
     "uuid": "^2.0.2",
     "web-push-encryption": "^2.0.0"
   },
@@ -117,7 +118,7 @@
       "os": "github:jspm/nodelibs-os@^0.2.0-alpha",
       "path": "github:jspm/nodelibs-path@^0.2.0-alpha",
       "process": "github:jspm/nodelibs-process@^0.2.0-alpha",
-      "react": "npm:react@^15.0.0-0",
+      "react": "npm:react@^15.3.0",
       "react-dom": "npm:react-dom@^15.2.0",
       "react-tap-event-plugin": "npm:react-tap-event-plugin@^1.0.0",
       "stream": "github:jspm/nodelibs-stream@^0.2.0-alpha",
