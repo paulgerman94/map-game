@@ -283,14 +283,14 @@ export default class Point {
 	*/
 	filterPOIs(pois, minDist){
 		const arrAmenityPOIs = [];
+		for (let i = 0; i < amenitiesOrder.length; i++){
+			arrAmenityPOIs[i] = [];
+		}
 		const arrOtherPOIs = [];
 		for (let i = 0; i < pois.length; i++){
 			const amenityName = pois[i].metadata.tags.amenity;
 			const index = amenitiesOrder.indexOf(amenityName);
 			if (index >= 0){
-				if (arrAmenityPOIs[index] === undefined){
-					arrAmenityPOIs[index] = [];
-				}
 				arrAmenityPOIs[index].push(pois[i]);
 			}
 			else {
