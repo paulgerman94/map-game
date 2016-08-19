@@ -182,7 +182,7 @@ export default class Point {
 			area(around:${radius}, ${this.latitude}, ${this.longitude})["amenity"~"${disjunction}"];
 			out center;
 		`);
-		const cleanCollection = collection.elements.filter(element => element.tags.name);
+		const cleanCollection = this.filterPOIs(collection.elements.filter(element => element.tags.name), POI_MIN_DISTANCE);
 		const pois = cleanCollection.map(element => new POI(element.id, element.type, element));
 		/* Cache the results in the database */
 		await addPoint({
@@ -197,8 +197,7 @@ export default class Point {
 			db: this.db,
 			pois
 		});
-		const poisFinal = this.filterPOIs(poisDB, POI_MIN_DISTANCE);
-		return poisFinal;
+		return poisDB;
 	}
 	/**
 	* Checks whether or not the a list of POIs is contained around a radius
@@ -288,7 +287,7 @@ export default class Point {
 		}
 		const arrOtherPOIs = [];
 		for (let i = 0; i < pois.length; i++){
-			const amenityName = pois[i].metadata.tags.amenity;
+			const amenityName = pois[i].tags.amenity;
 			const index = amenitiesOrder.indexOf(amenityName);
 			if (index >= 0){
 				arrAmenityPOIs[index].push(pois[i]);
@@ -305,7 +304,7 @@ export default class Point {
 		const arrOrderedPOIsObjects = [];
 		for (let i = 0; i < arrOrderedPOIs.length; i++){
 			let point;
-			const metadata = arrOrderedPOIs[i].metadata;
+			const metadata = arrOrderedPOIs[i];
 			switch (metadata.type) {
 				default:
 				case "node": {
