@@ -1,5 +1,6 @@
 import uuid from "uuid";
 import Point from "../Point";
+import { amenities } from "../constants";
 import {
 	register as registerUser,
 	login as loginUser,
@@ -43,14 +44,11 @@ export async function getPOIs({
 			latitude,
 			longitude
 		});
-		const results = await point.closest([
-			"driving_school",
-			"language_school",
-			"music_school",
-			"restaurant",
-			"school",
-			"university"
-		], POI_RADIUS);
+		const amenitiesList = [];
+		for (let i = 0; i < amenities.length; i++){
+			amenitiesList.concat(amenities[i].list);
+		}
+		const results = await point.closest(amenitiesList, POI_RADIUS);
 		message.reply(results);
 	}
 	catch (e) {

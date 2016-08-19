@@ -1,6 +1,7 @@
 import L from "./LeafletWrapper";
 import { publish } from "./Dispatcher";
 import { FLAG_SELECTED } from "./stores/LocationStore";
+import { amenities } from "./constants";
 /**
 * This class models a flag on the dashboard map. All flags have a latitude and a longitude; specialized flags (e.g. Restaurant flags) can set an icon and a color property.
 */
@@ -86,21 +87,28 @@ export class Flag {
 	*/
 	get specialized() {
 		const { metadata } = this;
-		if (metadata.tags.amenity === "restaurant") {
-			return new Restaurant(this.descriptor);
+		let found = false;
+		for (let i = 0; i < amenities.length; i++){
+			for (let j = 0; j < amenities[i].list.length; j++){
+				if (amenities[i].list[j] === metadata.tags.amenity) {
+					/**
+					* The flag icon, given by a `font-awesome` string
+					* @type {string}
+					*/
+					this.icon = amenities[i].typeIcon;
+					/**
+					* The flag's type name
+					* @type {string}
+					*/
+					this.typeName = amenities[i].typeName;
+					found = true;
+				}
+			}
 		}
-		if (metadata.tags.amenity === "music_school" ||
-			metadata.tags.amenity === "dancing_school" ||
-			metadata.tags.amenity === "driving_school" ||
-			metadata.tags.amenity === "language_school" ||
-			metadata.tags.amenity === "school" ||
-			metadata.tags.amenity === "university"
-		) {
-			return new School(this.descriptor);
+		if (!found){
+			console.log(`Icon not found for ${metadata.tags.amenity}`);
 		}
-		else {
-			return this;
-		}
+		return this;
 	}
 	/**
 	* Retrieves a marker to draw on the dashboard
@@ -132,52 +140,6 @@ export class Flag {
 	updateDescriptor(property, value) {
 		this[property] = value;
 		this.descriptor[property] = value;
-	}
-}
-/**
-* This class is a flag that will be displayed for restaurants
-*/
-export class Restaurant extends Flag {
-	/**
-	* Creates a new Restaurant {@link Flag}
-	* @param {object} descriptor
-	* 	An object containing an OSM primitive and the game information about the flag
-	*/
-	constructor(descriptor) {
-		super(descriptor);
-		/**
-		* The flag icon, given by a `font-awesome` string
-		* @type {string}
-		*/
-		this.icon = "cutlery";
-		/**
-		* The flag's type name
-		* @type {string}
-		*/
-		this.typeName = "restaurant";
-	}
-}
-/**
-* This class is a flag that will be displayed for schools
-*/
-export class School extends Flag {
-	/**
-	* Creates a new School {@link Flag}
-	* @param {object} descriptor
-	* 	An object containing an OSM primitive and the game information about the flag
-	*/
-	constructor(descriptor) {
-		super(descriptor);
-		/**
-		* The flag icon, given by a `font-awesome` string
-		* @type {string}
-		*/
-		this.icon = "university";
-		/**
-		* The flag's type name
-		* @type {string}
-		*/
-		this.typeName = "school";
 	}
 }
 /**
