@@ -1,5 +1,5 @@
 import { execute } from "./Query";
-import { EARTH_RADIUS, amenitiesOrder, POI_MIN_DISTANCE } from "./constants";
+import { EARTH_RADIUS, prioritizedAmenities, MINIMUM_POI_DISTANCE } from "./constants";
 import { addPoint, searchAround, retrievePOIs, checkPoint } from "./db";
 import { log } from "./util";
 import POI from "./types/POI";
@@ -182,8 +182,10 @@ export default class Point {
 			area(around:${radius}, ${this.latitude}, ${this.longitude})["amenity"~"${disjunction}"];
 			out center;
 		`);
-		const cleanCollection = this.filterPOIs(collection.elements.filter(element => element.tags.name), POI_MIN_DISTANCE);
-		const pois = cleanCollection.map(element => new POI(element.id, element.type, element));
+		/* We don't care about POIs that don't even have a `name` attribute associated to them */
+		const cleanCollection = collection.elements.filter(element => element.tags.name);
+		const spacedCollection = this.spacePOIs(cleanCollection, MINIMUM_POI_DISTANCE);
+		const pois = spacedCollection.map(element => new POI(element.id, element.type, element));
 		/* Cache the results in the database */
 		await addPoint({
 			db: this.db,
@@ -193,11 +195,11 @@ export default class Point {
 			pois
 		});
 		/* Some of the POIs might already be in the database; if so, they might have an owner. Fetch! */
-		const poisDB = await retrievePOIs({
+		const retrievedPOIs = await retrievePOIs({
 			db: this.db,
 			pois
 		});
-		return poisDB;
+		return retrievedPOIs;
 	}
 	/**
 	* Checks whether or not the a list of POIs is contained around a radius
@@ -211,31 +213,7 @@ export default class Point {
 	checkContainment(pois, radius) {
 		/* Only the inner POIs will be contained in the player's POI radius */
 		const contained = pois.map(poi => poi.metadata).filter(metadata => {
-			let point = null;
-			switch (metadata.type) {
-				default:
-				case "node": {
-					point = new Point({
-						latitude: metadata.lat,
-						longitude: metadata.lon
-					});
-					break;
-				}
-				case "way": {
-					point = new Point({
-						latitude: metadata.center.lat,
-						longitude: metadata.center.lon
-					});
-					break;
-				}
-				case "area": {
-					/* TODO: Where to map areas? */
-					point = new Point({
-						latitude: metadata.center.lat,
-						longitude: metadata.center.lon
-					});
-				}
-			}
+			const point = this.fromMetadata(metadata);
 			return point.measureDistance(this) <= radius;
 		});
 		return pois.filter(poi => contained.includes(poi.metadata));
@@ -271,78 +249,84 @@ export default class Point {
 		}
 	}
 	/**
-	* Filter POIs so that they are not closer than `minDist` to eachother
-	* The filtering is done by first ordering the POIs in amenitiesOrder order so that the most important ones survive the filtering proccess
-	* @param {Array} pois
-	*   The list of POIs from the DB
-	* @param {Integer} minDist
-	*   minimum distance in meters between POIs
-	* @return {Array}
+	* Creates a point from POI metadata (which can vary for different OSM primitives)
+	* @param {object} metadata
+	* 	A POI metadata object from the database
+	* @return {Point}
+	* 	A Point that represents the POI's game position
+	*/
+	fromMetadata(metadata) {
+		let point;
+		switch (metadata.type) {
+			default:
+			case "node": {
+				point = new Point({
+					latitude: metadata.lat,
+					longitude: metadata.lon
+				});
+				break;
+			}
+			case "way": {
+				point = new Point({
+					latitude: metadata.center.lat,
+					longitude: metadata.center.lon
+				});
+				break;
+			}
+			case "area": {
+				/* TODO: Where to map areas? */
+				point = new Point({
+					latitude: metadata.center.lat,
+					longitude: metadata.center.lon
+				});
+			}
+		}
+		return point;
+	}
+	/**
+	* Filters POIs so that they are not closer than `minimumDistance` to each other
+	* The filtering is done by first ordering the POIs as specified in `prioritizedAmenities`, so that the most important ones survive the filtering proccess
+	* @param {Array.<object>} pois
+	*   An array of of POIs, fetched from the database
+	* @param {number} minimumDistance
+	*   The minimum distance that should lie between two POIs
+	* @return {Array.<object>}
 	*   List of filtered POIs
 	*/
-	filterPOIs(pois, minDist){
-		const arrAmenityPOIs = [];
-		for (let i = 0; i < amenitiesOrder.length; i++){
-			arrAmenityPOIs[i] = [];
-		}
-		const arrOtherPOIs = [];
-		for (let i = 0; i < pois.length; i++){
-			const amenityName = pois[i].tags.amenity;
-			const index = amenitiesOrder.indexOf(amenityName);
-			if (index >= 0){
-				arrAmenityPOIs[index].push(pois[i]);
+	spacePOIs(pois, minimumDistance) {
+		const prioritizedPOIs = new Array(prioritizedAmenities.length).fill([]);
+		const unprioritizedPOIs = [];
+		for (const poi of pois) {
+			const { amenity } = poi.tags;
+			if (prioritizedAmenities.includes(amenity)) {
+				const priority = prioritizedAmenities.indexOf(amenity);
+				prioritizedPOIs[priority].push(poi);
 			}
 			else {
-				arrOtherPOIs.push(pois[i]);
+				unprioritizedPOIs.push(poi);
 			}
 		}
-		let arrOrderedPOIs = [];
-		for (let i = 0; i < arrAmenityPOIs.length; i++){
-			arrOrderedPOIs = arrOrderedPOIs.concat(arrAmenityPOIs[i]);
+		const flattenedPriorizations = [].concat(...prioritizedPOIs);
+		const orderedPOIs = [...flattenedPriorizations, ...unprioritizedPOIs];
+		const orderedPoints = [];
+		for (const metadata of orderedPOIs) {
+			const point = this.fromMetadata(metadata);
+			orderedPoints.push(point);
 		}
-		arrOrderedPOIs = arrOrderedPOIs.concat(arrOtherPOIs);
-		const arrOrderedPOIsObjects = [];
-		for (let i = 0; i < arrOrderedPOIs.length; i++){
-			let point;
-			const metadata = arrOrderedPOIs[i];
-			switch (metadata.type) {
-				default:
-				case "node": {
-					point = new Point({
-						latitude: metadata.lat,
-						longitude: metadata.lon
-					});
-					break;
-				}
-				case "way": {
-					point = new Point({
-						latitude: metadata.center.lat,
-						longitude: metadata.center.lon
-					});
-					break;
-				}
-				case "area": {
-					/* TODO: Where to map areas? */
-					point = new Point({
-						latitude: metadata.center.lat,
-						longitude: metadata.center.lon
-					});
-				}
-			}
-			arrOrderedPOIsObjects.push(point);
-		}
-		const arrPOIsToRemove = [];
-		for (let i = 0; i < arrOrderedPOIsObjects.length - 1; i++){
-			for (let j = i + 1; j < arrOrderedPOIsObjects.length; j++){
+		const pointsToRemove = [];
+		for (let i = 0; i < orderedPoints.length - 1; ++i) {
+			for (let j = i + 1; j < orderedPoints.length; ++j) {
+				const firstPoint = orderedPoints[i];
+				const secondPoint = orderedPoints[j];
 				if (
-					arrPOIsToRemove.indexOf(i) === -1
-					&& arrPOIsToRemove.indexOf(j) === -1
-					&& arrOrderedPOIsObjects[i].measureDistance(arrOrderedPOIsObjects[j]) < minDist
-				){
-					arrPOIsToRemove.push(j);
+					!pointsToRemove.includes(i) &&
+					!pointsToRemove.includes(j) &&
+					firstPoint.measureDistance(secondPoint) < minimumDistance
+				) {
+					pointsToRemove.push(j);
 				}
 			}
 		}
-		return arrOrderedPOIs.filter((item, idx) => arrPOIsToRemove.indexOf(idx) === -1);
+		return orderedPOIs.filter((point, i) => !pointsToRemove.includes(i));
 	}
 }

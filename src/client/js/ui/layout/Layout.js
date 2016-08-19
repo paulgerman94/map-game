@@ -301,7 +301,7 @@ export default class Layout extends Component {
 	* @param {number} score
 	* 	The old flag to update
 	*/
-	updateScore(){
+	updateScore() {
 		this.forceUpdate();
 	}
 	/**
@@ -320,13 +320,13 @@ export default class Layout extends Component {
 			}} tooltip="Logout">
 				<ExitIcon/>
 			</IconButton>;
-			if (ConnectionStore.user !== null){
-				scoreDisplay = <span style={ {
+			if (ConnectionStore.user !== null) {
+				scoreDisplay = <span style={{
 					color: "whitesmoke",
 					fontSize: "1.5rem",
 					fontWeight: "bold",
 					verticalAlign: "text-bottom"
-				} }>Score: {ConnectionStore.user.score}</span>;
+				}}>Score: {ConnectionStore.user.score}</span>;
 			}
 		}
 		return (

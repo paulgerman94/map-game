@@ -211,7 +211,9 @@
 		],
 		"no-multiple-empty-lines": [
 			"warn", {
-				"max": 0
+				"max": 0,
+				"maxBOF": 0,
+				"maxEOF": 0
 			}
 		],
 		"no-negated-in-lhs": [
@@ -284,7 +286,7 @@
 		],
 		"no-underscore-dangle": [
 			"warn",
-			allow: ["_rawDBType"]
+			"allow": ["_rawDBType"]
 		],
 		"no-unneeded-ternary": [
 			"warn"
@@ -385,6 +387,10 @@
 			}
 		],
 		"semi": [
+			"error",
+			"always"
+		],
+		"space-before-blocks": [
 			"error",
 			"always"
 		],

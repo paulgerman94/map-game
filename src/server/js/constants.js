@@ -1,4 +1,5 @@
 import {
+	m,
 	km
 } from "./units";
 /**
@@ -23,54 +24,55 @@ export const OWNERSHIP_PROTECTION_TIME = "24 h";
  */
 export const CAPTURE_FLAG_POINTS = 100;
 /**
- * The minimum distance between 2 POIs
+ * The minimum distance that should lie between two POIs (so that they don't clutter in big cities)
  * @type {number}
  */
-export const POI_MIN_DISTANCE = 100;
+export const MINIMUM_POI_DISTANCE = 100 * m;
 /**
- * http://wiki.openstreetmap.org/wiki/Key:amenity
+ * The list of amenities that the game recognizes; check out http://wiki.openstreetmap.org/wiki/Key:amenity for more information.
  */
 export const amenities = [{
 	typeName: "school",
 	typeIcon: "university",
 	list: [
-		"music_school",
 		"dancing_school",
 		"driving_school",
 		"language_school",
+		"music_school",
 		"school",
 		"university"
 	]
 }, {
-	typeName: "food / drinks",
+	typeName: "foods and drinks",
 	typeIcon: "cutlery",
 	list: [
-		"restaurant",
 		"bar",
+		"cafe",
+		"drinking_water",
 		"fast_food",
 		"food_court",
 		"pub",
-		"cafe",
-		"drinking_water"
+		"restaurant"
 	]
 }, {
-	typeName: "culture / entertaining",
+	typeName: "culture and entertainment",
 	typeIcon: "map-o",
 	list: [
-		"library",
 		"arts_centre",
 		"cinema",
 		"community_centre",
-		"planetarium",
-		"theatre",
 		"courthouse",
 		"embassy",
 		"fire_station",
 		"gym",
+		"library",
 		"marketplace",
+		"planetarium",
 		"police",
 		"post_office",
 		"prison",
+		"public_building",
+		"theatre",
 		"townhall"
 	]
 }, {
@@ -81,10 +83,10 @@ export const amenities = [{
 	]
 }];
 /**
- * List of amenties in order of importance.
- * If a amenty is not is the list it will be cosidered with the least priority
+ * This is a list of amenties, ordered from most important to least important.
+ * If an amenity is not is the list, it will be have the least priority.
  */
-export const amenitiesOrder = [
+export const prioritizedAmenities = [
 	"school",
 	"university",
 	"restaurant"

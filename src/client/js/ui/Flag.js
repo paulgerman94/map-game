@@ -1,7 +1,7 @@
 import L from "./LeafletWrapper";
 import { publish } from "./Dispatcher";
 import { FLAG_SELECTED } from "./stores/LocationStore";
-import { amenities } from "./constants";
+import { amenities } from "server/constants";
 /**
 * This class models a flag on the dashboard map. All flags have a latitude and a longitude; specialized flags (e.g. Restaurant flags) can set an icon and a color property.
 */
@@ -86,27 +86,32 @@ export class Flag {
 	* 	A specialized instance of a subclass of {@link Flag}
 	*/
 	get specialized() {
+		/* TODO: Rename `list` */
 		const { metadata } = this;
-		let found = false;
-		for (let i = 0; i < amenities.length; i++){
-			for (let j = 0; j < amenities[i].list.length; j++){
-				if (amenities[i].list[j] === metadata.tags.amenity) {
+		let specializationFound = false;
+		for (const amenity of amenities) {
+			for (const amenityType of amenity.list) {
+				if (amenityType === metadata.tags.amenity) {
 					/**
 					* The flag icon, given by a `font-awesome` string
 					* @type {string}
 					*/
-					this.icon = amenities[i].typeIcon;
+					this.icon = amenity.typeIcon;
 					/**
 					* The flag's type name
 					* @type {string}
 					*/
-					this.typeName = amenities[i].typeName;
-					found = true;
+					this.typeName = amenity.typeName;
+					specializationFound = true;
+					break;
 				}
 			}
+			if (specializationFound) {
+				break;
+			}
 		}
-		if (!found){
-			console.log(`Icon not found for ${metadata.tags.amenity}`);
+		if (!specializationFound) {
+			console.log(`Failed to specialize amenity "${metadata.tags.amenity}"`);
 		}
 		return this;
 	}

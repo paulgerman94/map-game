@@ -44,11 +44,8 @@ export async function getPOIs({
 			latitude,
 			longitude
 		});
-		const amenitiesList = [];
-		for (let i = 0; i < amenities.length; i++){
-			amenitiesList.concat(amenities[i].list);
-		}
-		const results = await point.closest(amenitiesList, POI_RADIUS);
+		const amenityList = [].concat(...amenities.map(amenity => amenity.list));
+		const results = await point.closest(amenityList, POI_RADIUS);
 		message.reply(results);
 	}
 	catch (e) {
