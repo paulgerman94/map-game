@@ -16,6 +16,9 @@ export default class PushNotifier {
 		* A reference to a {@link Server} object that can be used when a broadcast should be performed
 		*/
 		this.server = server;
+		/**
+		* A reference to a an instance of `telegram-bot-api` that can be used to message a user via Telegram
+		*/
 		this.telegram = new Telegram({
 			token: process.env.TELEGRAM_KEY,
 			updates: {
