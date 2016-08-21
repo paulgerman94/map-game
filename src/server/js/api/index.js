@@ -286,14 +286,6 @@ export async function capture({
 				});
 				const lastOwner = flagInfo.owner;
 				/* Tell the loser that his flag was stolen */
-// 				const lastOwnerClients = Array.from(server.clients).filter(c => c.properties.user && c.properties.user.accountName === flagInfo.owner);
-// 				if (lastOwnerClients.length) {
-// 					log(`Notifying "${lastOwnerClients[0].properties.user.accountName}" of his flag loss by "${accountName}"…`);
-// 					server.notifier.notifyClients(lastOwnerClients, {
-// 						subject: `You've lost a flag`,
-// 						body: `A flag of yours has been captured by ${accountName}!`
-// 					});
-// 				}
 				if (lastOwner) {
 					log(`Notifying "${lastOwner}" of his flag loss by "${accountName}"…`);
 					server.notifier.notifyAccounts([lastOwner], {
@@ -302,14 +294,15 @@ export async function capture({
 					});
 					await addScore({
 						db,
-						accountName: lastOwnerClients[0].properties.user.accountName,
+						accountName: lastOwner,
 						pointsToAdd: LOSE_FLAG_POINTS
 					});
-					for (const bystander of server.clients) {
-						if (bystander.properties.user && bystander.properties.user.accountName === lastOwnerClients[0].properties.user.accountName) {
-							bystander.properties.user.score += LOSE_FLAG_POINTS;
-							bystander.updateScore({
-								score: bystander.properties.user.score
+					for (const client of server.clients) {
+						const { user } = client.properties;
+						if (user && user.accountName === lastOwner) {
+							user.score += LOSE_FLAG_POINTS;
+							client.updateScore({
+								score: user.score
 							});
 						}
 					}
