@@ -24,6 +24,11 @@ export const OWNERSHIP_PROTECTION_TIME = "10 s";
  */
 export const CAPTURE_FLAG_POINTS = 100;
 /**
+ * The amount of points to add when losing a flag
+ * @type {number}
+ */
+export const LOSE_FLAG_POINTS = -90;
+/**
  * The minimum distance that should lie between two POIs (so that they don't clutter in big cities)
  * @type {number}
  */
