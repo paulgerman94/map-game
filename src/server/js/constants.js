@@ -17,7 +17,7 @@ export const EARTH_RADIUS = 6371 * km;
  * Note that internally, this is a SQL `interval` type , which is why it this type should not use a `number` type.
  * @type {string}
  */
-export const OWNERSHIP_PROTECTION_TIME = "0 h";
+export const OWNERSHIP_PROTECTION_TIME = "24 h";
 /**
  * The amount of points to add when capturing a flag
  * @type {number}
