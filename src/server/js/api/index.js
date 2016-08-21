@@ -15,7 +15,7 @@ import {
 } from "../db";
 import { log, err } from "../util";
 import { createToken } from "../crypto";
-import { POI_RADIUS, CAPTURE_FLAG_POINTS } from "../constants";
+import { POI_RADIUS, CAPTURE_FLAG_POINTS, LOSE_FLAG_POINTS } from "../constants";
 import POI from "../types/POI";
 /**
 * @param {object} options An object
@@ -281,6 +281,19 @@ export async function capture({
 						subject: `You've lost a flag`,
 						body: `A flag of yours has been captured by ${accountName}!`
 					});
+					await addScore({
+						db,
+						accountName: lastOwnerClients[0].properties.user.accountName,
+						pointsToAdd: LOSE_FLAG_POINTS
+					});
+					for (const bystander of server.clients) {
+						if (bystander.properties.user && bystander.properties.user.accountName === lastOwnerClients[0].properties.user.accountName) {
+							bystander.properties.user.score += LOSE_FLAG_POINTS;
+							bystander.updateScore({
+								score: bystander.properties.user.score
+							});
+						}
+					}
 				}
 				/* Search for online players around the capturer */
 				const [descriptor] = await retrievePOIs({

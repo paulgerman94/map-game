@@ -17,12 +17,17 @@ export const EARTH_RADIUS = 6371 * km;
  * Note that internally, this is a SQL `interval` type , which is why it this type should not use a `number` type.
  * @type {string}
  */
-export const OWNERSHIP_PROTECTION_TIME = "24 h";
+export const OWNERSHIP_PROTECTION_TIME = "0 h";
 /**
  * The amount of points to add when capturing a flag
  * @type {number}
  */
 export const CAPTURE_FLAG_POINTS = 100;
+/**
+ * The amount of points to add when losing a flag
+ * @type {number}
+ */
+export const LOSE_FLAG_POINTS = -90;
 /**
  * The minimum distance that should lie between two POIs (so that they don't clutter in big cities)
  * @type {number}
