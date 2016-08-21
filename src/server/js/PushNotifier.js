@@ -1,6 +1,6 @@
 import WebPush from "web-push-encryption";
 import Telegram from "telegram-bot-api";
-import { setTelegramChatID } from "./db";
+import { setTelegramChatID, queryUserInformation } from "./db";
 WebPush.setGCMAPIKey(process.env.GCM_KEY);
 /**
 * The sole purpose of this class is to send out push notifications to users' phones and browsers.
@@ -26,7 +26,6 @@ export default class PushNotifier {
 			}
 		});
 		this.telegram.on("message", message => {
-			console.log(message);
 			try {
 				const telegramChatID = message.chat.id;
 				const [, telegramToken] = message.text.match(/\/start (.*)/);
@@ -63,18 +62,18 @@ export default class PushNotifier {
 	* @param {string} options.body
 	* 	The content of the notification
 	*/
-	notify(clients, {
+	notifyClients(clients, {
 		subject = "Notification",
-		image,
+		icon = "img/logo-192.png",
 		body
 	} = {}) {
 		for (const client of clients) {
-			if (client.properties.subscription) {
+			if (client.properties.user && client.properties.user.subscription) {
 				WebPush.sendWebPush(JSON.stringify({
 					subject,
-					image,
+					icon,
 					body
-				}), client.properties.subscription);
+				}), client.properties.user.subscription);
 			}
 			if (client.properties.user && client.properties.user.telegramChatID) {
 				this.telegram.sendMessage({
@@ -84,5 +83,50 @@ export default class PushNotifier {
 				});
 			}
 		}
+	}
+	/**
+	* Sends a push notification to a list of account names
+	* @param {Array<string>|Set<string>} accountNames
+	* 	The accountNames to send the notification to
+	* @param {object} options
+	* 	An object that defines how the push notification will look like
+	* @param {string} [options.subject="Notification"]
+	* 	The title of the notification
+	* @param {string} options.image
+	* 	A string that encodes the image that should be displayed in the notification
+	* @param {string} options.body
+	* 	The content of the notification
+	*/
+	async notifyAccounts(accountNames, {
+		subject = "Notification",
+		icon = "img/logo-192.png",
+		body
+	} = {}) {
+		const { db } = this.server;
+		const accountInfos = accountNames.map(async accountName => queryUserInformation({
+			accountName,
+			db
+		}));
+		Promise.all(accountInfos).then(accountInfos => {
+			for (const accountName of accountNames) {
+				const accountInfo = accountInfos.find(accountInfo => accountInfo.accountName === accountName);
+				const webPushSubscription = JSON.parse(accountInfo.webpushSubscription);
+				const telegramChatID = accountInfo.telegramChatID;
+				if (webPushSubscription) {
+					WebPush.sendWebPush(JSON.stringify({
+						subject,
+						icon,
+						body
+					}), webPushSubscription);
+				}
+				if (telegramChatID) {
+					this.telegram.sendMessage({
+						text: `*${subject}*\n${body}`,
+						"chat_id": telegramChatID,
+						"parse_mode": "Markdown"
+					});
+				}
+			}
+		});
 	}
 }

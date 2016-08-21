@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS users (
 	"hash" TEXT NOT NULL,
 	"team" team NOT NULL,
 	"score" INT NOT NULL DEFAULT 0,
-	"telegram_chat_id" TEXT UNIQUE
+	"telegram_chat_id" TEXT UNIQUE,
+	"webpush_subscription" TEXT UNIQUE
 );

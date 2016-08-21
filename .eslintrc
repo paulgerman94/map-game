@@ -210,9 +210,8 @@
 			"warn"
 		],
 		"no-multiple-empty-lines": [
-			"warn", {
+			"error", {
 				"max": 0,
-				"maxBOF": 0,
 				"maxEOF": 0
 			}
 		],
@@ -285,8 +284,9 @@
 			"warn"
 		],
 		"no-underscore-dangle": [
-			"warn",
-			"allow": ["_rawDBType"]
+			"warn", {
+				"allow": ["_rawDBType"]
+			}
 		],
 		"no-unneeded-ternary": [
 			"warn"

@@ -11,6 +11,7 @@ import {
 	retrievePOIs,
 	getTeam as getPlayerTeam,
 	queryUserInformation,
+	setSubscription,
 	addScore
 } from "../db";
 import { log, err } from "../util";
@@ -208,14 +209,24 @@ export async function isFree({
 export function updateSubscription({
 	args,
 	client,
+	db,
 	message
 }) {
 	const [, data] = args;
 	const {
 		subscription
 	} = data;
-	client.properties.subscription = subscription;
-	message.reply({});
+	const user = client.properties.user;
+	user.subscription = subscription;
+	const { accountName } = user;
+	(async () => {
+		await setSubscription({
+			db,
+			accountName,
+			subscription
+		});
+		message.reply({});
+	})();
 }
 /**
 * Captures a flag
@@ -273,11 +284,19 @@ export async function capture({
 				client.updateScore({
 					score: client.properties.user.score
 				});
+				const lastOwner = flagInfo.owner;
 				/* Tell the loser that his flag was stolen */
-				const lastOwnerClients = Array.from(server.clients).filter(c => c.properties.user && c.properties.user.accountName === flagInfo.owner);
-				if (lastOwnerClients.length) {
-					log(`Notifying "${lastOwnerClients[0].properties.user.accountName}" of his flag loss by "${accountName}"…`);
-					server.notifier.notify(lastOwnerClients, {
+// 				const lastOwnerClients = Array.from(server.clients).filter(c => c.properties.user && c.properties.user.accountName === flagInfo.owner);
+// 				if (lastOwnerClients.length) {
+// 					log(`Notifying "${lastOwnerClients[0].properties.user.accountName}" of his flag loss by "${accountName}"…`);
+// 					server.notifier.notifyClients(lastOwnerClients, {
+// 						subject: `You've lost a flag`,
+// 						body: `A flag of yours has been captured by ${accountName}!`
+// 					});
+// 				}
+				if (lastOwner) {
+					log(`Notifying "${lastOwner}" of his flag loss by "${accountName}"…`);
+					server.notifier.notifyAccounts([lastOwner], {
 						subject: `You've lost a flag`,
 						body: `A flag of yours has been captured by ${accountName}!`
 					});

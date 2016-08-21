@@ -544,7 +544,6 @@ export async function setTelegramChatID({
 	accountName,
 	telegramChatID
 } = {}) {
-	console.log(telegramChatID, accountName);
 	try {
 		await db.query(`
 		UPDATE users
@@ -553,6 +552,40 @@ export async function setTelegramChatID({
 		`, {
 			accountName,
 			telegramChatID
+		});
+		return true;
+	}
+	catch (e) {
+		err(e);
+		return null;
+	}
+}
+/**
+* Sets a user account's "webpush_subscription" property so that the back end can send messages via WebPush
+* @param {object} options
+* 	An option object
+* @param {object} options.db
+* 	A `pg-promise` database instance
+* @param {string} options.accountName
+* 	The user's account name in our database
+* @param {string} options.subscription
+* 	The WebPush subscription from the browser
+* @return {Promise}
+* 	A {@link Promise} that resolves to whether or not the configuration was successful
+*/
+export async function setSubscription({
+	db,
+	accountName,
+	subscription
+} = {}) {
+	try {
+		await db.query(`
+		UPDATE users
+		SET webpush_subscription = $[subscription]
+		WHERE account_name = $[accountName];
+		`, {
+			accountName,
+			subscription: JSON.stringify(subscription)
 		});
 		return true;
 	}
@@ -608,7 +641,7 @@ export async function queryUserInformation({
 } = {}) {
 	try {
 		const result = await db.one(`
-		SELECT account_name, display_name, team, score, telegram_chat_id
+		SELECT account_name, display_name, team, score, telegram_chat_id, webpush_subscription
 		FROM users
 		WHERE account_name = $[accountName];
 		`, {
