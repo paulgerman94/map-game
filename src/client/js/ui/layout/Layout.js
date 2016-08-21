@@ -311,15 +311,24 @@ export default class Layout extends Component {
 	*/
 	render() {
 		let logoutButton;
+		let settingsButton;
 		let scoreDisplay;
 		if (this.state.isLoggedIn || API.isLoggedIn()) {
-			logoutButton =
-			<IconButton onClick={() => {
-				API.logout();
-				browserHistory.push(HOME_ROUTE);
-			}} tooltip="Logout">
-				<ExitIcon/>
-			</IconButton>;
+			logoutButton = (
+				<IconButton onClick={() => {
+					API.logout();
+					browserHistory.push(HOME_ROUTE);
+				}} tooltip="Logout">
+					<ExitIcon/>
+				</IconButton>
+			);
+			settingsButton = (
+				<IconButton tooltip="Settings" onClick={() => {
+					browserHistory.push(SETTINGS_ROUTE);
+				}}>
+					<SettingsIcon/>
+				</IconButton>
+			);
 			if (ConnectionStore.user !== null) {
 				scoreDisplay = <span style={{
 					color: "whitesmoke",
@@ -361,11 +370,7 @@ export default class Layout extends Component {
 				}} iconElementRight={
 					<div>
 						{scoreDisplay}
-						<IconButton tooltip="Settings" onClick={() => {
-							browserHistory.push(SETTINGS_ROUTE);
-						}}>
-							<SettingsIcon/>
-						</IconButton>
+						{settingsButton}
 						{logoutButton}
 					</div>
 				}
