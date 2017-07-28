@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://github.com/kdex/map-game/blob/master/img/logo-192.png?raw=true">
 </p>
+
 [![Build Status](https://travis-ci.org/kdex/map-game.svg?branch=master)](https://travis-ci.org/kdex/map-game)
 [![Documentation coverage](https://doc.esdoc.org/github.com/kdex/map-game/badge.svg)](https://doc.esdoc.org/github.com/kdex/map-game/)
 [![Coverage Status](https://coveralls.io/repos/github/kdex/map-game/badge.svg?branch=master)](https://coveralls.io/github/kdex/map-game?branch=master)
